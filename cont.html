@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medilink AI — Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'] },
+                    colors: {
+                        slate: {
+                            950: '#020617',
+                            900: '#0f172a',
+                            850: '#111c32',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                            500: '#64748b',
+                            400: '#94a3b8',
+                            300: '#cbd5e1',
+                            200: '#e2e8f0',
+                            100: '#f1f5f9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #020617; }
+
+        /* ===== GRADIENT TEXT ===== */
+        .gradient-text {
+            background: linear-gradient(135deg, #34d399 0%, #2dd4bf 25%, #22d3ee 50%, #34d399 75%, #10b981 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 6s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ===== AI PULSE ICON ===== */
+        .ai-pulse {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px; height: 20px;
+            position: relative;
+        }
+        .ai-pulse::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: #34d399;
+            animation: aiPulseRing 2s ease-out infinite;
+        }
+        .ai-pulse::after {
+            content: '';
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 8px #34d399, 0 0 16px #34d39940;
+        }
+        @keyframes aiPulseRing {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* ===== GLASSMORPHISM CARD ===== */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1.5px;
+            background: linear-gradient(135deg, transparent 30%, rgba(52, 211, 153, 0) 50%, transparent 70%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: background 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .glass-card:hover::before {
+            background: linear-gradient(135deg, #34d399 0%, #22d3ee 50%, #34d399 100%);
+            background-size: 200% 200%;
+            animation: borderTrace 2s linear infinite;
+        }
+        @keyframes borderTrace {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        .glass-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 25px 60px -15px rgba(16, 185, 129, 0.15), 0 0 40px -10px rgba(16, 185, 129, 0.08);
+            border-color: rgba(52, 211, 153, 0.15);
+        }
+
+        /* ===== ICON CONTAINERS ===== */
+        .icon-phone { animation: phonePulse 2s ease-in-out infinite; }
+        @keyframes phonePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        .icon-envelope { animation: floatEnvelope 3s ease-in-out infinite; }
+        @keyframes floatEnvelope {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .icon-instagram-hover {
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover .icon-instagram-hover {
+            filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.6));
+        }
+
+        /* ===== FORM FLOATING LABELS ===== */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 18px 16px 8px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            color: #e2e8f0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+        }
+        .form-input:focus {
+            border-color: #34d399;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1), 0 0 20px -5px rgba(52, 211, 153, 0.2);
+        }
+        .form-label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 15px;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label {
+            top: 10px;
+            transform: translateY(0);
+            font-size: 11px;
+            color: #34d399;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        textarea.form-input ~ .form-label {
+            top: 18px;
+            transform: translateY(0);
+        }
+        textarea.form-input:focus ~ .form-label,
+        textarea.form-input:not(:placeholder-shown) ~ .form-label {
+            top: 10px;
+            font-size: 11px;
+            color: #34d399;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* ===== MAGNETIC SEND BUTTON ===== */
+        .send-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+            background-size: 200% 200%;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: none;
+            border-radius: 14px;
+            padding: 16px 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+        }
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #34d399 0%, #06b6d4 50%, #10b981 100%);
+            background-size: 200% 200%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.4), 0 0 30px -5px rgba(52, 211, 153, 0.2);
+        }
+        .send-btn:hover::before {
+            opacity: 1;
+            animation: btnGradientShift 2s ease infinite;
+        }
+        @keyframes btnGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .send-btn span, .send-btn i {
+            position: relative;
+            z-index: 2;
+        }
+        .send-btn .plane-icon {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            display: inline-block;
+        }
+        .send-btn:hover .plane-icon {
+            transform: translateX(4px) translateY(-4px) rotate(-12deg);
+        }
+        .send-btn.sending .plane-icon {
+            animation: flyPlane 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+        @keyframes flyPlane {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+            50% { transform: translateX(30px) translateY(-30px) rotate(-25deg); opacity: 1; }
+            100% { transform: translateX(80px) translateY(-60px) rotate(-35deg); opacity: 0; }
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== AMBIENT GLOW ORBS ===== */
+        .orb-emerald {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbFloat1 12s ease-in-out infinite;
+        }
+        .orb-red {
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbFloat2 15s ease-in-out infinite;
+        }
+        .orb-cyan {
+            position: absolute;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbFloat3 10s ease-in-out infinite;
+        }
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-30px, 40px) scale(1.05); }
+            66% { transform: translate(25px, -15px) scale(0.9); }
+        }
+        @keyframes orbFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 30px) scale(1.08); }
+        }
+
+        /* ===== GRID PATTERN OVERLAY ===== */
+        .grid-pattern {
+            background-image:
+                linear-gradient(rgba(52, 211, 153, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 14px;
+            padding: 16px 28px;
+            color: #34d399;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 20px 60px -15px rgba(16, 185, 129, 0.2);
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== EMERGENCY BANNER GLOW ===== */
+        .emergency-glow {
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 40px rgba(239, 68, 68, 0.2);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        /* ===== SUBTLE NOISE TEXTURE ===== */
+        .noise::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.015;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body class="font-inter text-slate-200 antialiased overflow-x-hidden">
+
+    <!-- ============================================= -->
+    <!--          MEDILINK AI — CONTACT SECTION         -->
+    <!-- ============================================= -->
+    <section id="contact" class="relative min-h-screen flex flex-col justify-center py-24 md:py-32 px-5 md:px-8 noise">
+
+        <!-- === AMBIENT GLOW ORBS === -->
+        <div class="orb-emerald" style="top: -10%; left: -10%;"></div>
+        <div class="orb-red" style="bottom: 5%; right: -8%;"></div>
+        <div class="orb-cyan" style="top: 40%; left: 50%; transform: translateX(-50%);"></div>
+
+        <!-- === GRID PATTERN OVERLAY === -->
+        <div class="grid-pattern absolute inset-0 pointer-events-none z-0"></div>
+
+        <!-- === MAIN CONTENT WRAPPER === -->
+        <div class="relative z-10 max-w-7xl mx-auto w-full">
+
+            <!-- ============================== -->
+            <!--  1. BRANDING & INTRO HEADER    -->
+            <!-- ============================== -->
+            <div class="text-center mb-16 md:mb-20 reveal">
+                <!-- Small Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-emerald-400 text-xs font-medium uppercase tracking-wider">Contact Hub</span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6">
+                    <span class="gradient-text">Get In Touch</span>
+                </h1>
+
+                <!-- Bengali Subtitle -->
+                <p class="text-slate-400 text-lg md:text-xl font-light mb-4">
+                    যোগাযোগ করুন
+                </p>
+
+                <!-- Club Branding -->
+                <div class="flex items-center justify-center gap-3 mt-6">
+                    <div class="ai-pulse flex-shrink-0"></div>
+                    <p class="text-slate-300 text-sm md:text-base font-medium tracking-wide">
+                        Developed by
+                        <span class="text-emerald-400 font-semibold">Sylhet Robotics Club</span>
+                        <span class="text-slate-500 font-light ml-1">(সিলেট রোবোটিক্স ক্লাব)</span>
+                    </p>
+                    <div class="ai-pulse flex-shrink-0"></div>
+                </div>
+            </div>
+
+
+            <!-- ============================== -->
+            <!--  2 & 3. CARDS + FORM LAYOUT    -->
+            <!-- ============================== -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+                <!-- ===== CONTACT CARDS GRID (Left) ===== -->
+                <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                    <!-- CARD 1: Phone Support -->
+                    <a href="tel:01897797237" class="glass-card p-6 group reveal" style="transition-delay: 0.1s;">
+                        <div class="relative z-10">
+                            <!-- Icon -->
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center mb-5 group-hover:bg-emerald-500/20 transition-colors duration-500">
+                                <i class="fa-solid fa-phone text-emerald-400 text-xl icon-phone"></i>
+                            </div>
+                            <!-- Label -->
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Phone Support</p>
+                            <!-- Value -->
+                            <p class="text-slate-200 text-base font-semibold tracking-wide group-hover:text-emerald-300 transition-colors duration-300">
+                                01897-797237
+                            </p>
+                            <!-- Hover indicator -->
+                            <div class="mt-4 flex items-center gap-2 text-emerald-500/0 group-hover:text-emerald-400 transition-all duration-500">
+                                <span class="text-xs font-medium">Tap to call</span>
+                                <i class="fa-solid fa-arrow-right text-[10px] -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- CARD 2: Official Email -->
+                    <a href="mailto:yafixh@gmail.com" class="glass-card p-6 group reveal" style="transition-delay: 0.2s;">
+                        <div class="relative z-10">
+                            <!-- Icon -->
+                            <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 transition-colors duration-500">
+                                <i class="fa-solid fa-envelope text-cyan-400 text-xl icon-envelope"></i>
+                            </div>
+                            <!-- Label -->
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Official Email</p>
+                            <!-- Value -->
+                            <p class="text-slate-200 text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors duration-300 break-all">
+                                yafixh@gmail.com
+                            </p>
+                            <!-- Hover indicator -->
+                            <div class="mt-4 flex items-center gap-2 text-cyan-500/0 group-hover:text-cyan-400 transition-all duration-500">
+                                <span class="text-xs font-medium">Send email</span>
+                                <i class="fa-solid fa-arrow-right text-[10px] -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- CARD 3: Facebook Page -->
+                    <a href="https://www.facebook.com/profile.php?id=61587520773135" target="_blank" rel="noopener noreferrer" class="glass-card p-6 group reveal" style="transition-delay: 0.3s;">
+                        <div class="relative z-10">
+                            <!-- Icon -->
+                            <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center mb-5 group-hover:bg-blue-500/20 transition-colors duration-500">
+                                <i class="fa-brands fa-facebook-f text-blue-400 text-xl"></i>
+                            </div>
+                            <!-- Label -->
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Facebook Page</p>
+                            <!-- Value -->
+                            <p class="text-slate-200 text-base font-semibold tracking-wide group-hover:text-blue-300 transition-colors duration-300">
+                                Sylhet Robotics Club
+                            </p>
+                            <!-- Hover indicator -->
+                            <div class="mt-4 flex items-center gap-2 text-blue-500/0 group-hover:text-blue-400 transition-all duration-500">
+                                <span class="text-xs font-medium">Visit page</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- CARD 4: Instagram Profile -->
+                    <a href="https://www.instagram.com/sylhetroboticsclub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="glass-card p-6 group reveal" style="transition-delay: 0.4s;">
+                        <div class="relative z-10">
+                            <!-- Icon with gradient mesh bg on hover -->
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 border border-pink-500/15 transition-all duration-500 bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-orange-500/10 group-hover:from-pink-500/25 group-hover:via-purple-500/20 group-hover:to-orange-500/20 group-hover:shadow-[0_0_30px_-5px_rgba(236,72,153,0.3)]">
+                                <i class="fa-brands fa-instagram text-xl icon-instagram-hover" style="background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                            </div>
+                            <!-- Label -->
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-2">Instagram</p>
+                            <!-- Value -->
+                            <p class="text-slate-200 text-base font-semibold tracking-wide group-hover:text-pink-300 transition-colors duration-300">
+                                @sylhetroboticsclub
+                            </p>
+                            <!-- Hover indicator -->
+                            <div class="mt-4 flex items-center gap-2 text-pink-500/0 group-hover:text-pink-400 transition-all duration-500">
+                                <span class="text-xs font-medium">Follow us</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+
+                <!-- ===== CONTACT FORM (Right) ===== -->
+                <div class="lg:col-span-7 reveal" style="transition-delay: 0.3s;">
+                    <div class="glass-card p-8 md:p-10">
+                        <div class="relative z-10">
+                            <!-- Form Header -->
+                            <div class="mb-8">
+                                <h2 class="text-2xl md:text-3xl font-bold text-slate-100 tracking-tight mb-2">
+                                    Send a Message
+                                </h2>
+                                <p class="text-slate-500 text-sm font-light leading-relaxed">
+                                    Have a question about Medilink AI? We'd love to hear from you. Our team typically responds within 24 hours.
+                                </p>
+                            </div>
+
+                            <!-- Form -->
+                            <form id="contactForm" autocomplete="off" novalidate>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+                                    <!-- Name Field -->
+                                    <div class="form-group">
+                                        <input
+                                            type="text"
+                                            id="nameInput"
+                                            class="form-input"
+                                            placeholder=" "
+                                            required
+                                        >
+                                        <label for="nameInput" class="form-label">Your Name</label>
+                                    </div>
+
+                                    <!-- Email Field -->
+                                    <div class="form-group">
+                                        <input
+                                            type="email"
+                                            id="emailInput"
+                                            class="form-input"
+                                            placeholder=" "
+                                            required
+                                        >
+                                        <label for="emailInput" class="form-label">Email Address</label>
+                                    </div>
+                                </div>
+
+                                <!-- Message Field -->
+                                <div class="form-group">
+                                    <textarea
+                                        id="messageInput"
+                                        class="form-input resize-none"
+                                        rows="5"
+                                        placeholder=" "
+                                        required
+                                    ></textarea>
+                                    <label for="messageInput" class="form-label">Your Message</label>
+                                </div>
+
+                                <!-- Error Message Area -->
+                                <div id="formError" class="hidden mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-exclamation text-xs"></i>
+                                    <span id="formErrorText"></span>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <p class="text-slate-600 text-xs">
+                                        <i class="fa-solid fa-lock text-[10px] mr-1"></i>
+                                        Your data is encrypted & secure
+                                    </p>
+                                    <button type="submit" class="send-btn" id="sendBtn">
+                                        <span class="flex items-center gap-3">
+                                            <span>Send Message</span>
+                                            <i class="fa-solid fa-paper-plane plane-icon"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- End Cards + Form Grid -->
+
+        </div><!-- End Main Content Wrapper -->
+
+
+        <!-- ============================== -->
+        <!--  5. 24/7 EMERGENCY FOOTER      -->
+        <!-- ============================== -->
+        <div class="relative z-10 mt-16 md:mt-20 w-full max-w-4xl mx-auto text-center reveal" style="transition-delay: 0.5s;">
+            <div class="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-red-500/5 border border-red-500/10">
+                <i class="fa-solid fa-heart-pulse text-red-500 text-lg animate-pulse"></i>
+                <span class="text-red-500 font-bold text-sm md:text-base emergency-glow animate-pulse tracking-wide">
+                    24/7 Emergency Medical Support — Always Free & Available for Everyone
+                </span>
+                <i class="fa-solid fa-heart-pulse text-red-500 text-lg animate-pulse"></i>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ===== TOAST NOTIFICATION ===== -->
+    <div id="toast" class="toast">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toastText">Message sent successfully!</span>
+        </div>
+    </div>
+
+
+    <!-- ============================================= -->
+    <!--            VANILLA JAVASCRIPT                 -->
+    <!-- ============================================= -->
+    <script>
+        // ============================================
+        // 1. SCROLL REVEAL — IntersectionObserver
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Apply staggered delay from inline style if present
+                        const delay = entry.target.style.transitionDelay || '0s';
+                        entry.target.style.transitionDelay = delay;
+                        entry.target.classList.add('active');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -60px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+
+            // ============================================
+            // 2. MAGNETIC BUTTON EFFECT
+            // ============================================
+            const sendBtn = document.getElementById('sendBtn');
+
+            sendBtn.addEventListener('mousemove', (e) => {
+                const rect = sendBtn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                // Subtle magnetic pull (max 4px)
+                sendBtn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+
+            sendBtn.addEventListener('mouseleave', () => {
+                sendBtn.style.transform = 'translate(0, 0)';
+            });
+
+
+            // ============================================
+            // 3. FORM VALIDATION & SUBMISSION
+            // ============================================
+            const contactForm = document.getElementById('contactForm');
+            const formError = document.getElementById('formError');
+            const formErrorText = document.getElementById('formErrorText');
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+
+            /**
+             * Show inline error message
+             */
+            function showError(message) {
+                formErrorText.textContent = message;
+                formError.classList.remove('hidden');
+                formError.classList.add('flex');
+                // Shake animation
+                formError.style.animation = 'none';
+                formError.offsetHeight; // Trigger reflow
+                formError.style.animation = 'shake 0.4s ease';
+            }
+
+            /**
+             * Hide inline error message
+             */
+            function hideError() {
+                formError.classList.add('hidden');
+                formError.classList.remove('flex');
+            }
+
+            /**
+             * Show toast notification
+             */
+            function showToast(message, duration = 3500) {
+                toastText.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, duration);
+            }
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideError();
+
+                const name = document.getElementById('nameInput').value.trim();
+                const email = document.getElementById('emailInput').value.trim();
+                const message = document.getElementById('messageInput').value.trim();
+
+                // Validation
+                if (!name) {
+                    showError('Please enter your name.');
+                    return;
+                }
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showError('Please enter a valid email address.');
+                    return;
+                }
+                if (!message || message.length < 10) {
+                    showError('Message must be at least 10 characters.');
+                    return;
+                }
+
+                // Simulate sending — trigger plane animation
+                sendBtn.classList.add('sending');
+                sendBtn.disabled = true;
+                sendBtn.querySelector('span').style.opacity = '0.5';
+
+                setTimeout(() => {
+                    // Reset button
+                    sendBtn.classList.remove('sending');
+                    sendBtn.disabled = false;
+                    sendBtn.querySelector('span').style.opacity = '1';
+
+                    // Clear form
+                    contactForm.reset();
+
+                    // Show success toast
+                    showToast('✨ Message sent successfully! We\'ll get back to you soon.');
+                }, 1200);
+            });
+
+
+            // ============================================
+            // 4. PARALLAX ORB MOVEMENT ON MOUSE
+            // ============================================
+            const section = document.getElementById('contact');
+            const orbs = section.querySelectorAll('.orb-emerald, .orb-red, .orb-cyan');
+
+            section.addEventListener('mousemove', (e) => {
+                const rect = section.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 to 0.5
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                orbs.forEach((orb, i) => {
+                    const factor = (i + 1) * 15; // Different intensity per orb
+                    orb.style.transform += ''; // Keep CSS animation, add subtle offset via margin
+                    orb.style.marginLeft = `${x * factor}px`;
+                    orb.style.marginTop = `${y * factor}px`;
+                });
+            });
+
+
+            // ============================================
+            // 5. INPUT FOCUS RIPPLE EFFECT
+            // ============================================
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.style.transform = 'scale(1.01)';
+                    input.parentElement.style.transition = 'transform 0.3s ease';
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+
+        // ============================================
+        // 6. SHAKE ANIMATION (for error)
+        // ============================================
+        const shakeStyle = document.createElement('style');
+        shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20% { transform: translateX(-8px); }
+                40% { transform: translateX(8px); }
+                60% { transform: translateX(-5px); }
+                80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(shakeStyle);
+    </script>
+
+</body>
+</html>

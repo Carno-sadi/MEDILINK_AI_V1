@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medilink AI Advisor</title>
+    <!-- Tailwind CSS for layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Premium Typography: Cabinet Grotesk & Satoshi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Unified Design System -->
+    <link rel="stylesheet" href="ai.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0D9488",
+              "primary-light": "#14B8A6",
+              accent: "#2563EB",
+              warning: "#F59E0B",
+              emergency: "#DC2626",
+            },
+          },
+        },
+      };
+    </script>
+    <base target="_blank" />
+  </head>
+  <body class="h-screen overflow-hidden flex flex-col bg-[#F0FDF4]">
+    <!-- ==========================================
+       FIXED TOP NAVIGATION BAR
+       ========================================== -->
+    <nav
+      class="fixed top-0 left-0 right-0 h-16 glass-nav z-50 flex items-center justify-between px-6"
+    >
+      <a href="index.html"
+        ><div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold font-heading shadow-lg shadow-primary/20"
+          >
+            M
+          </div>
+          <span
+            class="font-heading text-lg font-bold text-slate-800 tracking-tight"
+            >Medilink AI Advisor</span
+          >
+        </div></a
+      >
+      <div class="flex items-center gap-4">
+        <div
+          id="profileGreeting"
+          class="font-body text-sm text-slate-600 font-medium"
+        >
+          Welcome
+        </div>
+        <div id="bloodBadge" class="blood-badge">O+</div>
+      </div>
+    </nav>
+
+    <!-- ==========================================
+       MAIN WORKSPACE: 50/50 SPLIT GRID
+       ========================================== -->
+    <main
+      id="mainWorkspace"
+      class="flex-1 min-h-0 pt-16 grid grid-cols-2 h-full main-grid phase-1"
+    >
+      <!-- LEFT PANEL: Guided Click-to-Query Chatbot -->
+      <section id="leftPanel" class="left-panel flex flex-col h-full relative">
+        <button
+          id="btnShowMore"
+          class="md:hidden absolute top-4 right-4 z-[60] bg-white/90 backdrop-blur border border-primary/20 text-primary px-4 py-2 rounded-full text-sm font-bold shadow-md hover:bg-primary hover:text-white transition-colors"
+        >
+          Show more detail
+        </button>
+        <!-- Scrollable Chat History Canvas -->
+        <div
+          id="chatCanvas"
+          class="chat-canvas flex-1 overflow-y-auto p-6 space-y-4"
+        >
+          <!-- Dynamic messages injected by advisor.js -->
+        </div>
+
+        <!-- Phase 1: Simulated Deep Processing Orb -->
+        <div id="orbOverlay" class="orb-overlay">
+          <div class="orb-container">
+            <div class="orb-core"></div>
+            <div class="orb-ring orb-ring-1"></div>
+            <div class="orb-ring orb-ring-2"></div>
+            <div class="orb-ring orb-ring-3"></div>
+            <div id="orbText" class="orb-text font-heading">
+              Scanning molecular contraindications...
+            </div>
+          </div>
+        </div>
+
+        <!-- Locked Bottom Tray: Predefined Action Chips -->
+        <div class="bottom-tray">
+          <div class="flex flex-wrap gap-2" id="chipContainer">
+            <!-- Chips rendered by advisor.js -->
+          </div>
+          <div
+            class="text-xs text-slate-400 mt-2 font-body text-center select-none"
+          >
+            Dr. Medilink can make mistakes. Always consult a real doctor in
+            emergencies.
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT PANEL: Analytical Data Dashboard -->
+      <section
+        id="rightPanel"
+        class="right-panel h-full overflow-y-auto p-6 relative"
+      >
+        <button
+          id="btnBackToChat"
+          class="md:hidden sticky top-0 left-0 mb-4 z-[60] bg-white/90 backdrop-blur border border-primary/20 text-primary px-4 py-2 rounded-full text-sm font-bold shadow-md hover:bg-primary hover:text-white transition-colors"
+        >
+          &larr; Back to Chat
+        </button>
+        <!-- PHASE 1: Prevention Guidelines Viewport -->
+        <div id="preventionPanel" class="prevention-panel">
+          <div class="glass-card p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+              <h2 class="font-heading text-xl font-bold text-slate-800">
+                Prevention Guidelines
+              </h2>
+            </div>
+            <div
+              id="preventionContent"
+              class="font-body text-slate-700 leading-relaxed text-sm"
+            ></div>
+          </div>
+        </div>
+
+        <!-- PHASE 2: Core 3 Hero Components -->
+        <div id="heroPanel" class="hero-panel space-y-6">
+          <!-- HERO COMPONENT 1: AI Specialist & Medication Recommendation -->
+          <div
+            id="hero1"
+            class="glass-card hero-card border-l-4 border-primary"
+          >
+            <div class="hero-title text-primary">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Dedicated AI Specialist & Medication Recommendation
+            </div>
+            <div id="hero1Content"></div>
+          </div>
+
+          <!-- HERO COMPONENT 2: Multi-Level Medication & Care Matrix -->
+          <div id="hero2" class="glass-card hero-card">
+            <div class="hero-title text-slate-800">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+              </svg>
+              Multi-Level Medication & Care Matrix
+            </div>
+            <div id="hero2Content"></div>
+          </div>
+
+          <!-- HERO COMPONENT 3: Critical Allergy Guard & SOS Protocol -->
+          <div id="hero3" class="glass-card hero-card allergy-card">
+            <div class="hero-title text-emergency">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              Critical Allergy Guard & SOS Protocol
+            </div>
+            <div id="hero3Content"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Limit Modal -->
+    <div
+      id="limit-modal"
+      class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+    >
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onclick="this.parentElement.style.display = 'none'"
+      ></div>
+      <div
+        class="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl z-10 text-center"
+      >
+        <svg
+          class="w-16 h-16 text-warning mx-auto mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">
+          Daily Limit Reached
+        </h2>
+        <p class="text-slate-600 mb-6">
+          Basic plan users are limited to 1 chat per day. Upgrade to Ultra Care
+          for unlimited AI Advisor access and more premium features!
+        </p>
+        <a
+          href="price.html"
+          class="block w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-lg hover:shadow-lg transition-all"
+          >Upgrade to Ultra Care</a
+        >
+      </div>
+    </div>
+
+    <!-- Core Application Logic -->
+    <script src="ai.js"></script>
+  </body>
+</html>

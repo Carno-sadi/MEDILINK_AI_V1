@@ -1,0 +1,3659 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="theme-color" content="#0D9488" />
+    <title>Medilink AI — Online Pharmacy</title>
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* ── CSS Variables ── */
+      :root {
+        --bg: #f0fdf4;
+        --surface: #ffffff;
+        --surface-alt: #f7fffe;
+        --glass-bg: rgba(255, 255, 255, 0.72);
+        --glass-bg-heavy: rgba(255, 255, 255, 0.88);
+        --glass-border: rgba(13, 148, 136, 0.18);
+        --glass-border-inner: rgba(20, 184, 166, 0.1);
+        --glass-blur: blur(20px);
+        --primary: #0d9488;
+        --primary-dark: #0b7d72;
+        --primary-light: #14b8a8;
+        --primary-xlight: rgba(13, 148, 136, 0.08);
+        --primary-glow: rgba(13, 148, 136, 0.28);
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --accent-xlight: rgba(37, 99, 235, 0.08);
+        --navy: #1e3a6e;
+        --violet: #7c3aed;
+        --whatsapp: #22c55e;
+        --whatsapp-dark: #16a34a;
+        --whatsapp-xlight: rgba(34, 197, 94, 0.1);
+        --bkash: #e2136e;
+        --bkash-light: rgba(226, 19, 110, 0.1);
+        --heading: #0f2e2a;
+        --body: #52706c;
+        --muted: #94a3b8;
+        --label: #0d9488;
+        --label-bg: rgba(13, 148, 136, 0.1);
+        --success: #16a34a;
+        --success-bg: rgba(22, 163, 74, 0.08);
+        --warning: #f59e0b;
+        --warning-bg: rgba(245, 158, 11, 0.08);
+        --error: #dc2626;
+        --error-bg: rgba(220, 38, 38, 0.06);
+        --card-bg: #ffffff;
+        --card-border: rgba(13, 148, 136, 0.14);
+        --card-border-hover: #0d9488;
+        --card-shadow: 0 8px 32px -8px rgba(13, 148, 136, 0.12);
+        --card-shadow-hover: 0 20px 48px -10px rgba(13, 148, 136, 0.22);
+        --cart-badge-bg: #0d9488;
+        --cart-bar-bg: rgba(255, 255, 255, 0.95);
+        --cart-bar-border: rgba(13, 148, 136, 0.2);
+        --discount-badge-bg: rgba(22, 163, 74, 0.1);
+        --discount-badge-text: #16a34a;
+        --shadow-soft: 0 40px 80px -15px rgba(13, 148, 136, 0.08);
+        --shadow-nav: 0 4px 24px -4px rgba(13, 148, 136, 0.1);
+        --shadow-modal: 0 48px 96px -20px rgba(13, 148, 136, 0.2);
+        --shadow-btn: 0 12px 28px -6px rgba(13, 148, 136, 0.32);
+        --shadow-btn-wa: 0 12px 28px -6px rgba(34, 197, 94, 0.3);
+        --shadow-cart: 0 -8px 32px -8px rgba(13, 148, 136, 0.14);
+        --shadow-card-add: 0 0 0 4px rgba(13, 148, 136, 0.2);
+        --reveal-distance: 32px;
+        --reveal-duration: 0.85s;
+        --reveal-blur: blur(6px);
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* ── Base ── */
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      body {
+        margin: 0;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 400;
+        color: var(--body);
+        background: var(--bg);
+        line-height: 1.75;
+        overflow-x: hidden;
+        text-rendering: optimizeLegibility;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .font-heading {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        color: var(--heading);
+        line-height: 1.15;
+        word-break: break-word;
+      }
+      .font-heading-700 {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .font-body {
+        font-family: "Satoshi", sans-serif;
+        font-weight: 400;
+        color: var(--body);
+      }
+      .font-label {
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+      }
+
+      /* ── Keyframes ── */
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeDown {
+        from {
+          transform: translateY(-16px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeLeft {
+        from {
+          transform: translateX(-24px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeRight {
+        from {
+          transform: translateX(24px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          transform: translateY(16px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.92);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+      @keyframes popBadge {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes shine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 200%;
+        }
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      @keyframes floatParticle {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-40px);
+          opacity: 0;
+        }
+      }
+      @keyframes btnFlash {
+        0% {
+          transform: scale(1);
+          background: var(--primary);
+        }
+        30% {
+          transform: scale(0.93);
+          background: var(--primary-dark);
+        }
+        60% {
+          transform: scale(1.06);
+          background: var(--primary-dark);
+        }
+        100% {
+          transform: scale(1);
+          background: var(--primary);
+        }
+      }
+      @keyframes drawerSlide {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      @keyframes backdropFade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* ── Reduced Motion ── */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+        .hero-orb {
+          animation: none;
+        }
+        .marquee-track {
+          animation: none;
+        }
+      }
+
+      /* ── Reveal System ── */
+      .reveal-up,
+      .reveal-left,
+      .reveal-right,
+      .reveal-scale {
+        opacity: 0;
+        filter: blur(6px);
+        transition: all var(--reveal-duration) var(--ease);
+        will-change: transform, opacity;
+      }
+      .reveal-up {
+        transform: translateY(var(--reveal-distance));
+      }
+      .reveal-left {
+        transform: translateX(-24px);
+      }
+      .reveal-right {
+        transform: translateX(24px);
+      }
+      .reveal-scale {
+        transform: scale(0.94);
+      }
+      .reveal-up.visible,
+      .reveal-left.visible,
+      .reveal-right.visible,
+      .reveal-scale.visible {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(0) scale(1);
+      }
+
+      @media (max-width: 640px) {
+        .reveal-up,
+        .reveal-left,
+        .reveal-right,
+        .reveal-scale {
+          filter: blur(3px);
+          --reveal-distance: 20px;
+        }
+      }
+
+      /* ── Navbar ── */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border-bottom: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-nav);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        animation: slideDown 0.8s var(--ease) 0.2s both;
+      }
+      @media (max-width: 640px) {
+        .navbar {
+          height: 56px;
+          padding: 0 16px;
+        }
+      }
+      .logo-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        color: var(--primary);
+        transition: transform 0.5s var(--ease);
+        flex-shrink: 0;
+      }
+      @media (max-width: 640px) {
+        .logo-icon {
+          width: 28px;
+          height: 28px;
+        }
+      }
+      .logo-link:hover .logo-icon {
+        transform: rotate(90deg);
+      }
+      .logo-text {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--heading);
+        white-space: nowrap;
+      }
+      @media (max-width: 640px) {
+        .logo-text {
+          font-size: 18px;
+        }
+      }
+      .logo-text span {
+        color: var(--primary);
+      }
+
+      .cart-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        color: var(--heading);
+        transition: color 0.3s var(--ease);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        min-width: 44px;
+        justify-content: center;
+      }
+      .cart-btn:hover {
+        color: var(--primary);
+      }
+      .cart-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 20px;
+        height: 20px;
+        background: var(--cart-badge-bg);
+        color: #fff;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        transition: transform 0.3s var(--ease);
+      }
+      .cart-badge.pop {
+        animation: popBadge 0.3s var(--ease);
+      }
+      .cart-badge.hidden {
+        display: none;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        overflow: hidden;
+        padding: 120px 24px 80px;
+      }
+      @media (max-width: 768px) {
+        .hero {
+          padding: 100px 16px 60px;
+        }
+      }
+      .hero-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        opacity: 0.7;
+      }
+      .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: var(--primary-xlight);
+        top: 10%;
+        left: -5%;
+        animation: float 8s ease-in-out infinite;
+      }
+      .orb-2 {
+        width: 300px;
+        height: 300px;
+        background: var(--accent-xlight);
+        top: 40%;
+        right: -5%;
+        animation: float 8s ease-in-out 2s infinite;
+      }
+      .orb-3 {
+        width: 250px;
+        height: 250px;
+        background: rgba(124, 58, 237, 0.05);
+        bottom: 10%;
+        left: 30%;
+        animation: float 8s ease-in-out 4s infinite;
+      }
+      @media (max-width: 640px) {
+        .orb-1 {
+          width: 250px;
+          height: 250px;
+        }
+        .orb-2 {
+          width: 180px;
+          height: 180px;
+        }
+        .orb-3 {
+          width: 150px;
+          height: 150px;
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 720px;
+        text-align: center;
+        width: 100%;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--label-bg);
+        color: var(--label);
+        padding: 10px 20px;
+        border-radius: 99px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        margin-bottom: 24px;
+        opacity: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      @media (max-width: 640px) {
+        .hero-badge {
+          font-size: 12px;
+          padding: 8px 14px;
+          margin-bottom: 16px;
+        }
+      }
+      .hero-title {
+        font-size: clamp(32px, 6vw, 68px);
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        color: var(--heading);
+        margin-bottom: 16px;
+      }
+      @media (max-width: 640px) {
+        .hero-title {
+          font-size: clamp(28px, 9vw, 40px);
+          margin-bottom: 12px;
+        }
+      }
+      .hero-title .wa {
+        color: var(--whatsapp);
+      }
+      .hero-title-line {
+        display: block;
+        opacity: 0;
+      }
+      .hero-sub {
+        font-size: 18px;
+        color: var(--body);
+        max-width: 560px;
+        margin: 0 auto 40px;
+        opacity: 0;
+        padding: 0 8px;
+      }
+      @media (max-width: 640px) {
+        .hero-sub {
+          font-size: 16px;
+          margin-bottom: 28px;
+          line-height: 1.6;
+        }
+      }
+      .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary);
+        color: #fff;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: var(--shadow-btn);
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          transform 0.3s var(--ease),
+          box-shadow 0.3s var(--ease);
+        min-height: 48px;
+      }
+      @media (max-width: 640px) {
+        .hero-cta {
+          padding: 14px 24px;
+          font-size: 15px;
+          width: 90%;
+          max-width: 320px;
+          justify-content: center;
+        }
+      }
+      .hero-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px -6px rgba(13, 148, 136, 0.38);
+      }
+      .hero-cta::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.25),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.6s var(--ease);
+      }
+      .hero-cta:hover::after {
+        left: 200%;
+      }
+
+      /* Hero entrance animations */
+      body.loaded .hero-badge {
+        animation: fadeDown 0.8s var(--ease) 0.3s both;
+      }
+      body.loaded .hero-title-line:nth-child(1) {
+        animation: fadeLeft 1s var(--ease) 0.6s both;
+      }
+      body.loaded .hero-title-line:nth-child(2) {
+        animation: fadeRight 1s var(--ease) 0.8s both;
+      }
+      body.loaded .hero-sub {
+        animation: fadeUp 0.9s var(--ease) 1s both;
+      }
+      body.loaded .hero-cta {
+        animation: scaleIn 0.8s var(--ease) 2s both;
+      }
+
+      /* ── How It Works ── */
+      .how-section {
+        background: var(--surface-alt);
+        padding: 100px 24px;
+      }
+      @media (max-width: 768px) {
+        .how-section {
+          padding: 60px 16px;
+        }
+      }
+      .how-title {
+        font-size: clamp(28px, 4vw, 42px);
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      @media (max-width: 640px) {
+        .how-title {
+          margin-bottom: 36px;
+          font-size: clamp(24px, 6vw, 32px);
+        }
+      }
+      .how-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .how-line {
+        position: absolute;
+        top: 50%;
+        left: 12.5%;
+        right: 12.5%;
+        border-top: 2px dashed var(--glass-border);
+        z-index: 0;
+        transform: translateY(-50%);
+      }
+      @media (max-width: 1024px) {
+        .how-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .how-line {
+          display: none;
+        }
+      }
+      @media (max-width: 640px) {
+        .how-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+      .step-card {
+        background: var(--surface);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 40px 24px 32px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        transition:
+          transform 0.4s var(--ease),
+          box-shadow 0.4s var(--ease),
+          border-color 0.4s var(--ease);
+        transform-style: preserve-3d;
+        perspective: 800px;
+      }
+      @media (max-width: 640px) {
+        .step-card {
+          padding: 28px 20px 24px;
+          border-radius: 16px;
+        }
+      }
+      .step-card:hover {
+        transform: translateY(-6px) rotateX(4deg) rotateY(-4deg);
+        box-shadow: var(--card-shadow-hover);
+        border-color: var(--card-border-hover);
+      }
+      @media (max-width: 1024px) {
+        .step-card:hover {
+          transform: translateY(-4px);
+        }
+      }
+      .step-num {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: clamp(48px, 8vw, 96px);
+        color: var(--primary-xlight);
+        line-height: 1;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .step-icon {
+        position: relative;
+        z-index: 1;
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 16px;
+        color: var(--primary);
+      }
+      .step-title {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--heading);
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .step-desc {
+        font-size: 14px;
+        color: var(--body);
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ── Stats ── */
+      .stats-section {
+        background: var(--bg);
+        padding: 80px 24px;
+      }
+      @media (max-width: 768px) {
+        .stats-section {
+          padding: 60px 16px;
+        }
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+        max-width: 1000px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 24px;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+      .stat-block {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(4px);
+        transition: all 0.8s var(--ease);
+      }
+      .stat-block.visible {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+      .stat-value {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: clamp(32px, 4vw, 48px);
+        color: var(--primary);
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+      .stat-label {
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: var(--body);
+      }
+
+      /* ── Products ── */
+      .products-section {
+        background: var(--surface-alt);
+        padding: 100px 24px;
+      }
+      @media (max-width: 768px) {
+        .products-section {
+          padding: 60px 16px;
+        }
+      }
+      .products-title {
+        font-size: clamp(28px, 4vw, 48px);
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      @media (max-width: 640px) {
+        .products-title {
+          font-size: clamp(24px, 6vw, 32px);
+        }
+      }
+      .search-wrap {
+        max-width: 600px;
+        margin: 0 auto 24px;
+        position: relative;
+      }
+      .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        color: var(--muted);
+        pointer-events: none;
+      }
+      .search-input {
+        width: 100%;
+        padding: 14px 20px 14px 48px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        font-family: "Satoshi", sans-serif;
+        font-size: 15px;
+        color: var(--heading);
+        outline: none;
+        transition:
+          border-color 0.3s var(--ease),
+          box-shadow 0.3s var(--ease);
+        -webkit-appearance: none;
+      }
+      .search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+      }
+      @media (max-width: 640px) {
+        .search-input {
+          font-size: 16px;
+          padding: 12px 16px 12px 44px;
+        }
+        .search-icon {
+          left: 14px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 48px;
+      }
+      @media (max-width: 640px) {
+        .chips {
+          gap: 8px;
+          margin-bottom: 32px;
+        }
+      }
+      .chip {
+        padding: 8px 18px;
+        border-radius: 99px;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--body);
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+      }
+      @media (max-width: 640px) {
+        .chip {
+          padding: 6px 14px;
+          font-size: 12px;
+        }
+      }
+      .chip:hover,
+      .chip.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        box-shadow: var(--shadow-btn);
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        perspective: 1200px;
+      }
+      @media (max-width: 640px) {
+        .products-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+      }
+      @media (min-width: 641px) and (max-width: 1024px) {
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .product-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition:
+          transform 0.5s var(--ease),
+          box-shadow 0.5s var(--ease),
+          border-color 0.4s var(--ease);
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateY(32px);
+        filter: blur(4px);
+        transform-style: preserve-3d;
+      }
+      .product-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+        transition:
+          opacity 0.7s var(--ease),
+          transform 0.7s var(--ease),
+          filter 0.7s var(--ease),
+          border-color 0.4s var(--ease),
+          box-shadow 0.5s var(--ease);
+      }
+      .product-card:hover {
+        transform: translateY(-8px) rotateX(6deg) rotateY(-4deg);
+        border-color: var(--card-border-hover);
+        box-shadow: var(--card-shadow-hover);
+      }
+      @media (max-width: 1024px) {
+        .product-card:hover {
+          transform: translateY(-4px);
+        }
+      }
+      .product-img {
+        height: 140px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-xlight),
+          rgba(20, 184, 166, 0.04)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      @media (max-width: 640px) {
+        .product-img {
+          height: 120px;
+        }
+      }
+      .product-img svg {
+        width: 56px;
+        height: 56px;
+        color: var(--primary);
+        opacity: 0.8;
+      }
+      .product-chip {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--label-bg);
+        color: var(--label);
+        padding: 4px 12px;
+        border-radius: 99px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 11px;
+      }
+      .product-body {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-width: 640px) {
+        .product-body {
+          padding: 16px;
+        }
+      }
+      .product-name {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--heading);
+        margin-bottom: 6px;
+      }
+      .product-desc {
+        font-size: 13px;
+        color: var(--body);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 16px;
+        flex: 1;
+      }
+      .product-price-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .product-price {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--primary);
+      }
+      .add-btn {
+        width: 100%;
+        padding: 12px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          background 0.3s var(--ease),
+          transform 0.3s var(--ease);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 44px;
+        touch-action: manipulation;
+      }
+      .add-btn:hover {
+        background: var(--primary-dark);
+      }
+      .add-btn.added {
+        animation: btnFlash 0.5s var(--ease);
+      }
+      .add-btn .btn-text {
+        display: inline-block;
+      }
+
+      .load-more-wrap {
+        text-align: center;
+        margin-top: 48px;
+      }
+      .load-more-btn {
+        padding: 14px 32px;
+        background: var(--surface);
+        color: var(--primary);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+        min-height: 48px;
+        touch-action: manipulation;
+      }
+      .load-more-btn:hover {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: var(--shadow-btn);
+      }
+
+      /* ── Cart Drawer ── */
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 46, 42, 0.35);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 1050;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s var(--ease);
+      }
+      .drawer-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .cart-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        max-width: 420px;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--surface);
+        border-left: 1px solid var(--glass-border);
+        box-shadow: -20px 0 60px -10px rgba(13, 148, 136, 0.18);
+        z-index: 1060;
+        transform: translateX(100%);
+        transition: transform 0.5s var(--ease);
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-width: 480px) {
+        .cart-drawer {
+          max-width: 100%;
+          border-left: none;
+        }
+      }
+      .cart-drawer.active {
+        transform: translateX(0);
+      }
+      .drawer-header {
+        padding: 24px;
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      @media (max-width: 640px) {
+        .drawer-header {
+          padding: 16px 20px;
+        }
+      }
+      .drawer-title {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .drawer-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--glass-border);
+        background: var(--bg);
+        color: var(--heading);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s var(--ease);
+        min-height: 44px;
+        min-width: 44px;
+      }
+      .drawer-close:hover {
+        background: var(--primary-xlight);
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+      .drawer-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 24px;
+        -webkit-overflow-scrolling: touch;
+      }
+      @media (max-width: 640px) {
+        .drawer-body {
+          padding: 12px 16px;
+        }
+      }
+      .drawer-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+      }
+      .drawer-empty svg {
+        width: 64px;
+        height: 64px;
+        color: var(--glass-border);
+        margin-bottom: 16px;
+      }
+      .drawer-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .drawer-item-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-xlight),
+          rgba(20, 184, 166, 0.06)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .drawer-item-img svg {
+        width: 24px;
+        height: 24px;
+        color: var(--primary);
+      }
+      .drawer-item-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .drawer-item-name {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--heading);
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .drawer-item-price {
+        font-size: 13px;
+        color: var(--primary);
+        font-weight: 500;
+      }
+      .drawer-qty-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .qty-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        color: var(--heading);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s var(--ease);
+        padding: 0;
+        min-height: 32px;
+        min-width: 32px;
+        touch-action: manipulation;
+      }
+      .qty-btn:hover {
+        background: var(--primary-xlight);
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .qty-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+      .qty-value {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--heading);
+        min-width: 24px;
+        text-align: center;
+      }
+      .remove-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: none;
+        background: var(--error-bg);
+        color: var(--error);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s var(--ease);
+        padding: 0;
+        min-height: 36px;
+        min-width: 36px;
+        flex-shrink: 0;
+        touch-action: manipulation;
+      }
+      .remove-btn:hover {
+        background: var(--error);
+        color: #fff;
+      }
+      .remove-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .drawer-footer {
+        padding: 20px 24px 24px;
+        border-top: 1px solid var(--glass-border);
+        background: var(--surface-alt);
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+      }
+      @media (max-width: 640px) {
+        .drawer-footer {
+          padding: 16px 16px 20px;
+          padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+      }
+      .drawer-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 10px;
+        color: var(--body);
+      }
+      .drawer-row.total {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--heading);
+        margin-top: 4px;
+        padding-top: 10px;
+        border-top: 1px solid var(--glass-border);
+      }
+      .drawer-delivery {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-xlight),
+          rgba(20, 184, 166, 0.04)
+        );
+        border: 1px dashed var(--primary-light);
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 14px;
+      }
+      .drawer-delivery svg {
+        width: 20px;
+        height: 20px;
+        color: var(--primary);
+        flex-shrink: 0;
+      }
+      .drawer-delivery-text {
+        font-size: 13px;
+        color: var(--heading);
+        font-weight: 500;
+      }
+      .drawer-delivery-text span {
+        color: var(--primary);
+        font-weight: 700;
+      }
+      .drawer-checkout {
+        width: 100%;
+        padding: 14px;
+        background: var(--whatsapp);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        box-shadow: var(--shadow-btn-wa);
+        transition: transform 0.3s var(--ease);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 48px;
+        touch-action: manipulation;
+      }
+      .drawer-checkout:hover {
+        transform: scale(1.02);
+      }
+
+      /* ── Modal ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 46, 42, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s var(--ease);
+        overflow-y: auto;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      @media (max-width: 640px) {
+        .modal-overlay {
+          padding: 0;
+          align-items: flex-end;
+        }
+      }
+      .modal-card {
+        background: var(--glass-bg-heavy);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: var(--shadow-modal);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        max-width: 520px;
+        width: 100%;
+        max-height: 90vh;
+        max-height: 90dvh;
+        overflow-y: auto;
+        position: relative;
+        padding: 32px;
+        transform: scale(0.92) translateY(20px);
+        opacity: 0;
+        transition: all 0.5s var(--ease);
+        -webkit-overflow-scrolling: touch;
+      }
+      @media (max-width: 640px) {
+        .modal-card {
+          max-width: 100%;
+          border-radius: 20px 20px 0 0;
+          padding: 24px 20px;
+          max-height: 85vh;
+          max-height: 85dvh;
+          transform: translateY(100%);
+        }
+      }
+      .modal-overlay.active .modal-card {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      @media (max-width: 640px) {
+        .modal-overlay.active .modal-card {
+          transform: translateY(0);
+        }
+      }
+      .modal-card::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: 18px;
+        border: 1px solid var(--glass-border-inner);
+        pointer-events: none;
+      }
+      @media (max-width: 640px) {
+        .modal-card::after {
+          border-radius: 14px 14px 0 0;
+          inset: 6px 6px 0 6px;
+        }
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .modal-title {
+        font-size: 24px;
+      }
+      @media (max-width: 640px) {
+        .modal-title {
+          font-size: 20px;
+        }
+      }
+      .modal-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        color: var(--heading);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s var(--ease);
+        min-height: 44px;
+        min-width: 44px;
+        flex-shrink: 0;
+      }
+      .modal-close:hover {
+        background: var(--primary-xlight);
+        color: var(--primary);
+      }
+
+      .order-summary {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        border: 1px solid var(--glass-border);
+      }
+      .order-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--glass-border);
+        gap: 12px;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-item span:first-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .order-total {
+        display: flex;
+        justify-content: space-between;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--heading);
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 2px solid var(--glass-border);
+      }
+      .delivery-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: var(--body);
+        padding: 6px 0;
+      }
+      .delivery-line .delivery-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--primary-xlight);
+        color: var(--primary);
+        padding: 2px 10px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 500;
+        flex-shrink: 0;
+      }
+      .delivery-line .delivery-badge svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-label {
+        display: block;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--heading);
+        margin-bottom: 6px;
+      }
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        font-family: "Satoshi", sans-serif;
+        font-size: 14px;
+        color: var(--heading);
+        outline: none;
+        transition:
+          border-color 0.3s var(--ease),
+          box-shadow 0.3s var(--ease);
+        -webkit-appearance: none;
+      }
+      .form-input:focus,
+      .form-textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+      }
+      .form-textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      @media (max-width: 640px) {
+        .form-input,
+        .form-textarea {
+          font-size: 16px;
+          padding: 12px 14px;
+        }
+      }
+      .form-error {
+        color: var(--error);
+        font-size: 12px;
+        margin-top: 4px;
+        display: none;
+      }
+      .form-error.visible {
+        display: block;
+      }
+
+      .payment-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .payment-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        background: var(--surface);
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+        min-height: 60px;
+      }
+      .payment-card:hover {
+        border-color: var(--primary);
+      }
+      .payment-card.active {
+        border-color: var(--primary);
+        background: var(--primary-xlight);
+      }
+      .payment-card.bkash-active {
+        border-color: var(--bkash);
+        background: var(--bkash-light);
+      }
+      .payment-icon {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+      .payment-icon svg {
+        width: 100%;
+        height: 100%;
+      }
+      .payment-title {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--heading);
+      }
+      .payment-desc {
+        font-size: 13px;
+        color: var(--body);
+      }
+
+      .bkash-details {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.4s var(--ease),
+          opacity 0.4s var(--ease);
+        opacity: 0;
+      }
+      .bkash-details.open {
+        max-height: 300px;
+        opacity: 1;
+        margin-bottom: 20px;
+      }
+      .bkash-box {
+        background: var(--surface);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .bkash-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 8px;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .copy-btn {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background: var(--bkash-light);
+        color: var(--bkash);
+        border: 1px solid var(--bkash);
+        border-radius: 8px;
+        font-family: "Satoshi", sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+        min-height: 36px;
+        touch-action: manipulation;
+      }
+      .copy-btn:hover {
+        background: var(--bkash);
+        color: #fff;
+      }
+      .copy-btn.copied {
+        background: var(--success);
+        color: #fff;
+        border-color: var(--success);
+      }
+
+      .confirm-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--whatsapp);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: var(--shadow-btn-wa);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s var(--ease);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 52px;
+        touch-action: manipulation;
+      }
+      @media (max-width: 640px) {
+        .confirm-btn {
+          font-size: 15px;
+          padding: 14px;
+        }
+      }
+      .confirm-btn:hover {
+        transform: scale(1.02);
+      }
+      .confirm-btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.6s var(--ease);
+      }
+      .confirm-btn:hover::after {
+        left: 200%;
+      }
+
+      /* ── Reviews ── */
+      .reviews-section {
+        background: var(--bg);
+        padding: 100px 24px;
+        overflow: hidden;
+      }
+      @media (max-width: 768px) {
+        .reviews-section {
+          padding: 60px 16px;
+        }
+      }
+      .reviews-title {
+        font-size: clamp(28px, 4vw, 42px);
+        text-align: center;
+        margin-bottom: 48px;
+      }
+      @media (max-width: 640px) {
+        .reviews-title {
+          font-size: clamp(24px, 6vw, 32px);
+          margin-bottom: 32px;
+        }
+      }
+      .marquee-wrap {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 5%,
+          black 95%,
+          transparent
+        );
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 5%,
+          black 95%,
+          transparent
+        );
+      }
+      .marquee-track {
+        display: flex;
+        gap: 24px;
+        width: max-content;
+        animation: marquee 40s linear infinite;
+      }
+      @media (max-width: 640px) {
+        .marquee-track {
+          gap: 16px;
+          animation-duration: 30s;
+        }
+      }
+      .marquee-wrap:hover .marquee-track {
+        animation-play-state: paused;
+      }
+      .review-card {
+        width: 320px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: var(--card-shadow);
+        transition:
+          transform 0.4s var(--ease),
+          box-shadow 0.4s var(--ease);
+        transform-style: preserve-3d;
+      }
+      @media (max-width: 640px) {
+        .review-card {
+          width: 280px;
+          padding: 20px;
+        }
+      }
+      .review-card:hover {
+        transform: translateY(-6px) rotateX(4deg) rotateY(-3deg);
+        box-shadow: var(--card-shadow-hover);
+      }
+      @media (max-width: 1024px) {
+        .review-card:hover {
+          transform: translateY(-4px);
+        }
+      }
+      .review-stars {
+        color: #f59e0b;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .review-text {
+        font-size: 14px;
+        color: var(--body);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+      .review-author {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--heading);
+      }
+      .review-location {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* ── Footer ── */
+      .footer {
+        background: var(--navy);
+        padding: 60px 24px 40px;
+        text-align: center;
+        padding-bottom: max(40px, env(safe-area-inset-bottom));
+      }
+      @media (max-width: 640px) {
+        .footer {
+          padding: 48px 16px 32px;
+          padding-bottom: max(32px, env(safe-area-inset-bottom));
+        }
+      }
+      .footer-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 24px;
+        color: #fff;
+        text-decoration: none;
+      }
+      .footer-logo svg {
+        color: #fff;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .footer-logo span {
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: #fff;
+      }
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      @media (max-width: 640px) {
+        .footer-links {
+          gap: 16px;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+      .footer-links a {
+        font-family: "Satoshi", sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: color 0.3s var(--ease);
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+      }
+      .footer-links a:hover {
+        color: #fff;
+      }
+      .footer-copy {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ── Utilities ── */
+      .particle {
+        position: absolute;
+        pointer-events: none;
+        font-family: "Cabinet Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--primary);
+        animation: floatParticle 0.6s var(--ease) forwards;
+      }
+
+      /* ── Scrollbar Styling ── */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--glass-border);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-light);
+      }
+
+      /* ── Selection ── */
+      ::selection {
+        background: var(--primary-xlight);
+        color: var(--primary-dark);
+      }
+    </style>
+    <base target="_blank" />
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════
+     SVG ICONS (Hidden Sprite)
+     ═══════════════════════════════════════ -->
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol
+          id="icon-pill"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"
+          />
+          <path d="m8.5 8.5 7 7" />
+        </symbol>
+        <symbol
+          id="icon-search"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </symbol>
+        <symbol
+          id="icon-cart"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path
+            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+          />
+        </symbol>
+        <symbol
+          id="icon-hospital"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"
+          />
+          <path d="M12 7v10M8 11h8" />
+        </symbol>
+        <symbol
+          id="icon-whatsapp"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"
+          />
+        </symbol>
+        <symbol
+          id="icon-cash"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="20" height="12" x="2" y="6" rx="2" />
+          <circle cx="12" cy="12" r="2" />
+          <path d="M6 12h.01M18 12h.01" />
+        </symbol>
+        <symbol
+          id="icon-phone"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+          <path d="M12 18h.01" />
+        </symbol>
+        <symbol
+          id="icon-truck"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M10 17h4V5H2v12h3" />
+          <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5" />
+          <circle cx="7.5" cy="17.5" r="2.5" />
+          <circle cx="17.5" cy="17.5" r="2.5" />
+        </symbol>
+        <symbol
+          id="icon-plus"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14M12 5v14" />
+        </symbol>
+        <symbol
+          id="icon-minus"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14" />
+        </symbol>
+        <symbol
+          id="icon-trash"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 6h18" />
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+        </symbol>
+        <symbol
+          id="icon-arrow"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </symbol>
+        <symbol
+          id="icon-check"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </symbol>
+        <symbol
+          id="icon-browse"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </symbol>
+        <symbol
+          id="icon-bag"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+          <path d="M3 6h18" />
+          <path d="M16 10a4 4 0 0 1-8 0" />
+        </symbol>
+        <symbol
+          id="icon-chat"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          />
+        </symbol>
+        <symbol
+          id="icon-rocket"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"
+          />
+          <path
+            d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"
+          />
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+        </symbol>
+        <symbol
+          id="icon-empty"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="8" cy="21" r="1" />
+          <circle cx="19" cy="21" r="1" />
+          <path
+            d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+          />
+        </symbol>
+        <symbol
+          id="icon-user"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </symbol>
+        <symbol
+          id="icon-map-pin"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
+        </symbol>
+        <symbol
+          id="icon-credit-card"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="20" height="14" x="2" y="5" rx="2" />
+          <path d="M2 10h20" />
+        </symbol>
+        <symbol
+          id="icon-copy"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- ═══════════════════════════════════════
+     NAVBAR
+     ═══════════════════════════════════════ -->
+    <nav class="navbar">
+      <a href="index.html" class="logo-link">
+        <svg
+          class="logo-icon"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M16 2V30M2 16H30"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M8 8L24 24M24 8L8 24"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.4"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            r="4"
+            fill="currentColor"
+            fill-opacity="0.15"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <circle cx="16" cy="16" r="1.5" fill="currentColor" />
+        </svg>
+        <span class="logo-text">Medilink <span>AI</span></span>
+      </a>
+      <button class="cart-btn" id="navCartBtn" aria-label="Cart">
+        <svg width="22" height="22"><use href="#icon-cart" /></svg>
+        <span
+          style="
+            font-family: &quot;Cabinet Grotesk&quot;, sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--heading);
+            display: none;
+          "
+          class="cart-label-desktop"
+          >Cart</span
+        >
+        <span class="cart-badge hidden" id="navBadge">0</span>
+      </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════ -->
+    <section class="hero" id="hero">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="16" height="16"><use href="#icon-hospital" /></svg>
+          Bangladesh's Smartest Online Pharmacy
+        </div>
+        <h1 class="hero-title">
+          <span class="hero-title-line">Order Your Medicines</span>
+          <span class="hero-title-line"
+            >Instantly via <span class="wa">WhatsApp</span></span
+          >
+        </h1>
+        <p class="hero-sub">
+          No app needed. Select medicines, add to cart, and complete your order
+          via WhatsApp in under 2 minutes.
+        </p>
+        <a href="#products" class="hero-cta">
+          Browse Medicines
+          <svg width="18" height="18"><use href="#icon-arrow" /></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+     HOW IT WORKS
+     ═══════════════════════════════════════ -->
+    <section class="how-section" id="how">
+      <h2 class="how-title reveal-up">How to Order</h2>
+      <div class="how-grid">
+        <div class="how-line"></div>
+        <div class="step-card reveal-up" data-delay="0">
+          <div class="step-num">01</div>
+          <div class="step-icon">
+            <svg width="100%" height="100%"><use href="#icon-browse" /></svg>
+          </div>
+          <div class="step-title">Browse & Select</div>
+          <div class="step-desc">
+            Find your medicines from our catalog of 40+ products.
+          </div>
+        </div>
+        <div class="step-card reveal-up" data-delay="100">
+          <div class="step-num">02</div>
+          <div class="step-icon">
+            <svg width="100%" height="100%"><use href="#icon-bag" /></svg>
+          </div>
+          <div class="step-title">Add to Cart</div>
+          <div class="step-desc">
+            Add items to your cart. Discounts apply automatically.
+          </div>
+        </div>
+        <div class="step-card reveal-up" data-delay="200">
+          <div class="step-num">03</div>
+          <div class="step-icon">
+            <svg width="100%" height="100%"><use href="#icon-chat" /></svg>
+          </div>
+          <div class="step-title">Checkout via WhatsApp</div>
+          <div class="step-desc">
+            Review your order and confirm payment — COD or bKash.
+          </div>
+        </div>
+        <div class="step-card reveal-up" data-delay="300">
+          <div class="step-num">04</div>
+          <div class="step-icon">
+            <svg width="100%" height="100%"><use href="#icon-rocket" /></svg>
+          </div>
+          <div class="step-title">Fast Delivery</div>
+          <div class="step-desc">
+            Your medicines arrive at your doorstep — same day where available.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+     STATS
+     ═══════════════════════════════════════ -->
+    <section class="stats-section" id="stats">
+      <div class="stats-grid">
+        <div class="stat-block" data-target="40" data-suffix="+">
+          <div class="stat-value">0+</div>
+          <div class="stat-label">Medicines Available</div>
+        </div>
+        <div class="stat-block" data-target="10000" data-suffix="+">
+          <div class="stat-value">0+</div>
+          <div class="stat-label">Orders Delivered</div>
+        </div>
+        <div class="stat-block" data-target="98" data-suffix="%">
+          <div class="stat-value">0%</div>
+          <div class="stat-label">Customer Satisfaction</div>
+        </div>
+        <div class="stat-block" data-target="2" data-suffix=" hrs">
+          <div class="stat-value">0 hrs</div>
+          <div class="stat-label">Average Delivery Time</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+     PRODUCTS
+     ═══════════════════════════════════════ -->
+    <section class="products-section" id="products">
+      <h2 class="products-title reveal-up">Our Medicine Catalog</h2>
+      <div class="search-wrap reveal-up" data-delay="100">
+        <svg class="search-icon"><use href="#icon-search" /></svg>
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          placeholder="Search medicines..."
+          enterkeyhint="search"
+        />
+      </div>
+      <div class="chips reveal-up" data-delay="200">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="Antibiotic">Antibiotic</button>
+        <button class="chip" data-filter="Antacid">Antacid</button>
+        <button class="chip" data-filter="Painkiller">Painkiller</button>
+        <button class="chip" data-filter="Vitamin">Vitamin</button>
+        <button class="chip" data-filter="Antihistamine">Antihistamine</button>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+      <div class="load-more-wrap" id="loadMoreWrap">
+        <button class="load-more-btn" id="loadMoreBtn">
+          Load More Medicines
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+     REVIEWS
+     ═══════════════════════════════════════ -->
+    <section class="reviews-section" id="reviews">
+      <h2 class="reviews-title reveal-up">What Our Customers Say</h2>
+      <div class="marquee-wrap reveal-up" data-delay="100">
+        <div class="marquee-track" id="marqueeTrack"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════ -->
+    <footer class="footer">
+      <a href="index.html" class="footer-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M16 2V30M2 16H30"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M8 8L24 24M24 8L8 24"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.4"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            r="4"
+            fill="currentColor"
+            fill-opacity="0.15"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <circle cx="16" cy="16" r="1.5" fill="currentColor" />
+        </svg>
+        <span>Medilink AI</span>
+      </a>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://wa.me/8801811389672">+8801811389672 (WhatsApp)</a>
+      </div>
+      <div class="footer-copy">© 2026 Medilink AI</div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════
+     CART DRAWER
+     ═══════════════════════════════════════ -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title font-heading">
+          <svg width="22" height="22" style="color: var(--primary)">
+            <use href="#icon-cart" />
+          </svg>
+          Your Cart
+        </div>
+        <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+          ✕
+        </button>
+      </div>
+      <div class="drawer-body" id="drawerBody">
+        <div class="drawer-empty" id="drawerEmpty">
+          <svg><use href="#icon-empty" /></svg>
+          <div
+            style="
+              font-size: 16px;
+              font-weight: 500;
+              color: var(--heading);
+              margin-bottom: 4px;
+            "
+          >
+            Your cart is empty
+          </div>
+          <div style="font-size: 13px">Add medicines to get started.</div>
+        </div>
+        <div id="drawerItems"></div>
+      </div>
+      <div class="drawer-footer" id="drawerFooter" style="display: none">
+        <div id="premium-banner"></div>
+        <div class="drawer-delivery">
+          <svg><use href="#icon-truck" /></svg>
+          <div class="drawer-delivery-text">
+            Express Delivery: <span>৳10</span> flat rate
+          </div>
+        </div>
+        <div class="drawer-row">
+          <span>Subtotal</span><span id="drawerSubtotal">৳0</span>
+        </div>
+        <div
+          class="drawer-row"
+          id="discount-row"
+          style="display: none; color: #0d9488; font-weight: 500"
+        >
+          <span>Discount (20%)</span><span id="discount-amount">-৳0</span>
+        </div>
+        <div class="drawer-row"><span>Delivery</span><span>৳10</span></div>
+        <div class="drawer-row total">
+          <span>Total</span><span id="drawerTotal">৳0</span>
+        </div>
+        <button class="drawer-checkout" id="drawerCheckout">
+          <svg width="18" height="18"><use href="#icon-whatsapp" /></svg>
+          Checkout Now
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+     CHECKOUT MODAL
+     ═══════════════════════════════════════ -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title font-heading">Complete Your Order</h3>
+          <button class="modal-close" id="modalClose" aria-label="Close modal">
+            ✕
+          </button>
+        </div>
+        <div class="order-summary" id="orderSummary"></div>
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="14"
+              height="14"
+              style="
+                color: var(--primary);
+                vertical-align: middle;
+                margin-right: 4px;
+              "
+            >
+              <use href="#icon-user" />
+            </svg>
+            Full Name
+          </label>
+          <input
+            type="text"
+            class="form-input"
+            id="fullName"
+            placeholder="Enter your full name"
+            enterkeyhint="next"
+          />
+          <div class="form-error" id="nameError">
+            Please enter your full name.
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="14"
+              height="14"
+              style="
+                color: var(--primary);
+                vertical-align: middle;
+                margin-right: 4px;
+              "
+            >
+              <use href="#icon-map-pin" />
+            </svg>
+            Delivery Address
+          </label>
+          <textarea
+            class="form-textarea"
+            id="address"
+            rows="4"
+            placeholder="Enter your delivery address"
+            enterkeyhint="done"
+          ></textarea>
+          <div class="form-error" id="addressError">
+            Please enter your delivery address.
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <svg
+              width="14"
+              height="14"
+              style="
+                color: var(--primary);
+                vertical-align: middle;
+                margin-right: 4px;
+              "
+            >
+              <use href="#icon-credit-card" />
+            </svg>
+            Payment Method
+          </label>
+          <div class="payment-options">
+            <div class="payment-card" id="payCOD" role="button" tabindex="0">
+              <div class="payment-icon" style="color: var(--primary)">
+                <svg><use href="#icon-cash" /></svg>
+              </div>
+              <div>
+                <div class="payment-title">Cash on Delivery</div>
+                <div class="payment-desc">Pay when your order arrives</div>
+              </div>
+            </div>
+            <div class="payment-card" id="payBkash" role="button" tabindex="0">
+              <div class="payment-icon" style="color: var(--bkash)">
+                <svg><use href="#icon-phone" /></svg>
+              </div>
+              <div>
+                <div class="payment-title">bKash</div>
+                <div class="payment-desc">Send payment digitally</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bkash-details" id="bkashDetails">
+          <div class="bkash-box">
+            <div class="bkash-row">
+              <span>Send ৳<span id="bkashTotal">0</span> to:</span
+              ><strong>01811389672</strong>
+            </div>
+            <div class="bkash-row">
+              <span>Account Type:</span><strong>Personal</strong>
+            </div>
+            <button class="copy-btn" id="copyBtn">
+              <svg
+                width="14"
+                height="14"
+                style="vertical-align: middle; margin-right: 4px"
+              >
+                <use href="#icon-copy" />
+              </svg>
+              Copy Number
+            </button>
+            <div style="margin-top: 12px">
+              <label class="form-label">bKash Transaction ID</label>
+              <input
+                type="text"
+                class="form-input"
+                id="txnId"
+                placeholder="Enter bKash Transaction ID"
+                enterkeyhint="done"
+              />
+              <div class="form-error" id="txnError">
+                Please enter the bKash Transaction ID.
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="confirm-btn" id="confirmBtn">
+          <svg width="18" height="18"><use href="#icon-whatsapp" /></svg>
+          Confirm & Order via WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <script>
+      /* ═══════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════ */
+      const products = [
+        {
+          id: 1,
+          name: "Napa 500mg",
+          category: "Painkiller",
+          price: 12,
+          desc: "Paracetamol tablet for fever and mild to moderate pain relief.",
+          stock: true,
+        },
+        {
+          id: 2,
+          name: "Napa Extra",
+          category: "Painkiller",
+          price: 18,
+          desc: "Paracetamol + Caffeine for stronger headache and pain relief.",
+          stock: true,
+        },
+        {
+          id: 3,
+          name: "Seclo 20mg",
+          category: "Antacid",
+          price: 55,
+          desc: "Omeprazole capsule for acid reflux, GERD, and gastric ulcer.",
+          stock: true,
+        },
+        {
+          id: 4,
+          name: "Sergel 20mg",
+          category: "Antacid",
+          price: 60,
+          desc: "Esomeprazole for long-term management of acid-related disorders.",
+          stock: true,
+        },
+        {
+          id: 5,
+          name: "Fexo 120mg",
+          category: "Antihistamine",
+          price: 75,
+          desc: "Fexofenadine for non-drowsy allergy, hay fever, and urticaria.",
+          stock: true,
+        },
+        {
+          id: 6,
+          name: "Alatrol 10mg",
+          category: "Antihistamine",
+          price: 35,
+          desc: "Cetirizine for seasonal allergies, sneezing, and skin reactions.",
+          stock: true,
+        },
+        {
+          id: 7,
+          name: "Monas 10mg",
+          category: "Antihistamine",
+          price: 90,
+          desc: "Montelukast for allergic rhinitis and asthma symptom control.",
+          stock: true,
+        },
+        {
+          id: 8,
+          name: "Azithral 500mg",
+          category: "Antibiotic",
+          price: 120,
+          desc: "Azithromycin for respiratory, ear, and throat bacterial infections.",
+          stock: true,
+        },
+        {
+          id: 9,
+          name: "Ciproflox 500mg",
+          category: "Antibiotic",
+          price: 110,
+          desc: "Ciprofloxacin broad-spectrum antibiotic for UTI and GI infections.",
+          stock: true,
+        },
+        {
+          id: 10,
+          name: "Amoxil 500mg",
+          category: "Antibiotic",
+          price: 85,
+          desc: "Amoxicillin for skin, ear, throat, and urinary tract infections.",
+          stock: true,
+        },
+        {
+          id: 11,
+          name: "Metronid 400mg",
+          category: "Antibiotic",
+          price: 40,
+          desc: "Metronidazole for anaerobic bacterial and protozoal infections.",
+          stock: true,
+        },
+        {
+          id: 12,
+          name: "Losectil 20mg",
+          category: "Antacid",
+          price: 65,
+          desc: "Omeprazole for peptic ulcer and Helicobacter pylori combination therapy.",
+          stock: true,
+        },
+        {
+          id: 13,
+          name: "Ranitid 150mg",
+          category: "Antacid",
+          price: 22,
+          desc: "Ranitidine H2-blocker for acute heartburn and gastric acid reduction.",
+          stock: true,
+        },
+        {
+          id: 14,
+          name: "Calcium D3",
+          category: "Vitamin",
+          price: 150,
+          desc: "Calcium with Vitamin D3 for bone density and musculoskeletal health.",
+          stock: true,
+        },
+        {
+          id: 15,
+          name: "Vitamin C 500mg",
+          category: "Vitamin",
+          price: 80,
+          desc: "High-dose Vitamin C for immune support and antioxidant protection.",
+          stock: true,
+        },
+        {
+          id: 16,
+          name: "Zinc B",
+          category: "Vitamin",
+          price: 95,
+          desc: "Zinc and Vitamin B complex for immune function and energy metabolism.",
+          stock: true,
+        },
+        {
+          id: 17,
+          name: "Neurobion Forte",
+          category: "Vitamin",
+          price: 130,
+          desc: "B1, B6, B12 neurotropic vitamins for neuropathy and nerve regeneration.",
+          stock: true,
+        },
+        {
+          id: 18,
+          name: "Atorva 20mg",
+          category: "Painkiller",
+          price: 200,
+          desc: "Atorvastatin for high cholesterol and cardiovascular risk reduction.",
+          stock: true,
+        },
+        {
+          id: 19,
+          name: "Metformin 500mg",
+          category: "Painkiller",
+          price: 45,
+          desc: "First-line oral antidiabetic for blood glucose management in Type 2 DM.",
+          stock: true,
+        },
+        {
+          id: 20,
+          name: "Glucovance",
+          category: "Painkiller",
+          price: 180,
+          desc: "Metformin + Glibenclamide combination for advanced Type 2 diabetes control.",
+          stock: true,
+        },
+        {
+          id: 21,
+          name: "Losartan 50mg",
+          category: "Painkiller",
+          price: 95,
+          desc: "ARB antihypertensive for high blood pressure and kidney protection.",
+          stock: true,
+        },
+        {
+          id: 22,
+          name: "Amlodipine 5mg",
+          category: "Painkiller",
+          price: 55,
+          desc: "Calcium channel blocker for hypertension and angina management.",
+          stock: true,
+        },
+        {
+          id: 23,
+          name: "Ibuprofen 400mg",
+          category: "Painkiller",
+          price: 30,
+          desc: "NSAID for pain, inflammation, and fever in adults.",
+          stock: true,
+        },
+        {
+          id: 24,
+          name: "Diclofenac 50mg",
+          category: "Painkiller",
+          price: 35,
+          desc: "Potent NSAID for musculoskeletal pain, arthritis, and backache.",
+          stock: true,
+        },
+        {
+          id: 25,
+          name: "Nasotec Spray",
+          category: "Antihistamine",
+          price: 220,
+          desc: "Fluticasone nasal spray for chronic allergic rhinitis and nasal polyps.",
+          stock: true,
+        },
+        {
+          id: 26,
+          name: "Salbutamol Inhaler",
+          category: "Antihistamine",
+          price: 280,
+          desc: "Short-acting bronchodilator rescue inhaler for acute asthma attacks.",
+          stock: true,
+        },
+        {
+          id: 27,
+          name: "Pantoprazole 40mg",
+          category: "Antacid",
+          price: 70,
+          desc: "Proton pump inhibitor for erosive esophagitis and severe acid reflux.",
+          stock: true,
+        },
+        {
+          id: 28,
+          name: "Domperidone 10mg",
+          category: "Antacid",
+          price: 28,
+          desc: "Antiemetic for nausea, vomiting, and delayed gastric emptying.",
+          stock: true,
+        },
+        {
+          id: 29,
+          name: "ORS Saline",
+          category: "Vitamin",
+          price: 15,
+          desc: "Oral Rehydration Solution for dehydration from diarrhea and vomiting.",
+          stock: true,
+        },
+        {
+          id: 30,
+          name: "Ambrox 30mg",
+          category: "Antibiotic",
+          price: 42,
+          desc: "Ambroxol mucolytic for productive cough and respiratory secretion clearance.",
+          stock: true,
+        },
+        {
+          id: 31,
+          name: "Roxithromycin",
+          category: "Antibiotic",
+          price: 135,
+          desc: "Macrolide antibiotic for upper and lower respiratory tract infections.",
+          stock: true,
+        },
+        {
+          id: 32,
+          name: "Doxycycline 100mg",
+          category: "Antibiotic",
+          price: 98,
+          desc: "Tetracycline-class antibiotic for acne, malaria prophylaxis, and Lyme disease.",
+          stock: true,
+        },
+        {
+          id: 33,
+          name: "Clotrimazole Cream",
+          category: "Antibiotic",
+          price: 75,
+          desc: "Topical antifungal cream for ringworm, athlete's foot, and candidiasis.",
+          stock: true,
+        },
+        {
+          id: 34,
+          name: "Fluconazole 150mg",
+          category: "Antibiotic",
+          price: 110,
+          desc: "Oral antifungal for candidiasis and cryptococcal infections.",
+          stock: true,
+        },
+        {
+          id: 35,
+          name: "Loratadine 10mg",
+          category: "Antihistamine",
+          price: 32,
+          desc: "Non-sedating antihistamine for chronic allergic rhinitis and urticaria.",
+          stock: true,
+        },
+        {
+          id: 36,
+          name: "Vitamin D3 1000IU",
+          category: "Vitamin",
+          price: 120,
+          desc: "Cholecalciferol supplement for bone health, immunity, and mood regulation.",
+          stock: true,
+        },
+        {
+          id: 37,
+          name: "Iron + Folic Acid",
+          category: "Vitamin",
+          price: 85,
+          desc: "Iron and Folate supplement for anemia prevention and pregnancy support.",
+          stock: true,
+        },
+        {
+          id: 38,
+          name: "Omega-3 1000mg",
+          category: "Vitamin",
+          price: 190,
+          desc: "Fish oil capsule for cardiovascular health and triglyceride reduction.",
+          stock: true,
+        },
+        {
+          id: 39,
+          name: "Probiotics Plus",
+          category: "Vitamin",
+          price: 160,
+          desc: "Multi-strain probiotic for gut microbiome restoration after antibiotic use.",
+          stock: true,
+        },
+        {
+          id: 40,
+          name: "Povidone Iodine",
+          category: "Antibiotic",
+          price: 48,
+          desc: "Antiseptic solution for wound cleaning and surgical site preparation.",
+          stock: true,
+        },
+      ];
+
+      const reviews = [
+        {
+          name: "Rashed K.",
+          location: "Dhaka",
+          quote:
+            "Ordered Seclo and Napa at midnight, delivered before 9am. Incredible service.",
+        },
+        {
+          name: "Fatema B.",
+          location: "Chittagong",
+          quote:
+            "The WhatsApp checkout is so simple. No app, no hassle. Will order again.",
+        },
+        {
+          name: "Tariq H.",
+          location: "Sylhet",
+          quote:
+            "Medicine prices are fair and the bKash payment was confirmed instantly.",
+        },
+        {
+          name: "Nusrat J.",
+          location: "Rajshahi",
+          quote:
+            "Ultra Care discount saved me ৳240 on my monthly order. Absolutely worth it.",
+        },
+        {
+          name: "Imran A.",
+          location: "Khulna",
+          quote:
+            "Received my antibiotics same day. The delivery speed is genuinely impressive.",
+        },
+        {
+          name: "Sabrina R.",
+          location: "Barishal",
+          quote:
+            "Clean website, easy cart, fast WhatsApp response. Medilink AI pharmacy is the best.",
+        },
+        {
+          name: "Mahmudul I.",
+          location: "Comilla",
+          quote:
+            "I love that it checks my allergy profile before suggesting medicines. Smart system.",
+        },
+        {
+          name: "Sumaiya N.",
+          location: "Mymensingh",
+          quote:
+            "Ordered 6 items for my parents. Everything arrived correctly within 3 hours.",
+        },
+      ];
+
+      /* ═══════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════ */
+      let cart = [];
+      let visibleCount = 12;
+      let currentFilter = "all";
+      let searchQuery = "";
+      let paymentMethod = "cod";
+      const DELIVERY_CHARGE = 10;
+
+      const userPlan = localStorage.getItem("medilink_user_plan") || "basic";
+      const isUltra = userPlan === "ultra";
+
+      function getDiscountedPrice(price) {
+        return price; // Discount is now applied to subtotal
+      }
+
+      /* ═══════════════════════════════════════
+   DOM REFS
+   ═══════════════════════════════════════ */
+      const productsGrid = document.getElementById("productsGrid");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
+      const loadMoreWrap = document.getElementById("loadMoreWrap");
+      const searchInput = document.getElementById("searchInput");
+      const chipBtns = document.querySelectorAll(".chip");
+      const navBadge = document.getElementById("navBadge");
+      const navCartBtn = document.getElementById("navCartBtn");
+
+      const drawerOverlay = document.getElementById("drawerOverlay");
+      const cartDrawer = document.getElementById("cartDrawer");
+      const drawerClose = document.getElementById("drawerClose");
+      const drawerItems = document.getElementById("drawerItems");
+      const drawerEmpty = document.getElementById("drawerEmpty");
+      const drawerFooter = document.getElementById("drawerFooter");
+      const drawerSubtotal = document.getElementById("drawerSubtotal");
+      const drawerTotal = document.getElementById("drawerTotal");
+      const drawerCheckout = document.getElementById("drawerCheckout");
+
+      const modalOverlay = document.getElementById("modalOverlay");
+      const modalClose = document.getElementById("modalClose");
+      const orderSummary = document.getElementById("orderSummary");
+      const payCOD = document.getElementById("payCOD");
+      const payBkash = document.getElementById("payBkash");
+      const bkashDetails = document.getElementById("bkashDetails");
+      const bkashTotal = document.getElementById("bkashTotal");
+      const copyBtn = document.getElementById("copyBtn");
+      const confirmBtn = document.getElementById("confirmBtn");
+      const fullName = document.getElementById("fullName");
+      const address = document.getElementById("address");
+      const txnId = document.getElementById("txnId");
+      const nameError = document.getElementById("nameError");
+      const addressError = document.getElementById("addressError");
+      const txnError = document.getElementById("txnError");
+      const marqueeTrack = document.getElementById("marqueeTrack");
+
+      /* ═══════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════ */
+      function formatCurrency(n) {
+        return "৳" + n.toLocaleString("en-BD");
+      }
+
+      function getFilteredProducts() {
+        return products.filter((p) => {
+          const matchesFilter =
+            currentFilter === "all" || p.category === currentFilter;
+          const matchesSearch =
+            p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.desc.toLowerCase().includes(searchQuery.toLowerCase());
+          return matchesFilter && matchesSearch;
+        });
+      }
+
+      function getCartSubtotal() {
+        return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      }
+      function getDiscountAmount() {
+        return isUltra ? Math.round(getCartSubtotal() * 0.2) : 0;
+      }
+      function getCartTotal() {
+        return (
+          getCartSubtotal() -
+          getDiscountAmount() +
+          (cart.length > 0 ? DELIVERY_CHARGE : 0)
+        );
+      }
+      function getCartCount() {
+        return cart.reduce((sum, item) => sum + item.qty, 0);
+      }
+
+      /* ═══════════════════════════════════════
+   RENDER PRODUCTS
+   ═══════════════════════════════════════ */
+      function renderProducts(append = false) {
+        const filtered = getFilteredProducts();
+        const toShow = filtered.slice(0, visibleCount);
+
+        if (!append) {
+          productsGrid.innerHTML = "";
+        }
+
+        const startIndex = append ? productsGrid.children.length : 0;
+
+        toShow.slice(startIndex).forEach((p, i) => {
+          const discounted = getDiscountedPrice(p.price);
+
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.style.transitionDelay = `${i * 60}ms`;
+          card.innerHTML = `
+      <div class="product-img">
+        <svg><use href="#icon-pill"/></svg>
+        <span class="product-chip">${p.category}</span>
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price-row">
+          <span class="product-price">${formatCurrency(discounted)}</span>
+        </div>
+        <button class="add-btn" data-id="${p.id}" aria-label="Add ${p.name} to cart">
+          <svg width="16" height="16"><use href="#icon-bag"/></svg>
+          <span class="btn-text">Add to Cart</span>
+        </button>
+      </div>
+    `;
+          productsGrid.appendChild(card);
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              card.classList.add("visible");
+            });
+          });
+
+          const btn = card.querySelector(".add-btn");
+          btn.addEventListener("click", (e) => {
+            addToCart(p);
+            animateButton(btn);
+            spawnParticle(btn, "+1");
+          });
+        });
+
+        loadMoreWrap.style.display =
+          visibleCount >= filtered.length ? "none" : "block";
+      }
+
+      function animateButton(btn) {
+        btn.classList.add("added");
+        const text = btn.querySelector(".btn-text");
+        const original = text.textContent;
+        text.textContent = "Added!";
+        setTimeout(() => {
+          btn.classList.remove("added");
+          text.textContent = original;
+        }, 1200);
+      }
+
+      function spawnParticle(target, text) {
+        const rect = target.getBoundingClientRect();
+        const p = document.createElement("span");
+        p.className = "particle";
+        p.textContent = text;
+        p.style.left = rect.left + rect.width / 2 + "px";
+        p.style.top = rect.top + "px";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 600);
+      }
+
+      /* ═══════════════════════════════════════
+   CART LOGIC
+   ═══════════════════════════════════════ */
+      function addToCart(product) {
+        const existing = cart.find((item) => item.id === product.id);
+        if (existing) {
+          existing.qty++;
+        } else {
+          cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            qty: 1,
+          });
+        }
+        updateCartUI();
+      }
+
+      function removeFromCart(id) {
+        cart = cart.filter((item) => item.id !== id);
+        updateCartUI();
+        renderDrawerItems();
+      }
+
+      function changeQty(id, delta) {
+        const item = cart.find((i) => i.id === id);
+        if (!item) return;
+        item.qty += delta;
+        if (item.qty <= 0) {
+          removeFromCart(id);
+          return;
+        }
+        updateCartUI();
+        renderDrawerItems();
+      }
+
+      function updateCartUI() {
+        const count = getCartCount();
+        navBadge.textContent = count;
+
+        if (count > 0) {
+          navBadge.classList.remove("hidden");
+          navBadge.classList.add("pop");
+          setTimeout(() => navBadge.classList.remove("pop"), 300);
+        } else {
+          navBadge.classList.add("hidden");
+        }
+
+        renderDrawerItems();
+      }
+
+      /* ═══════════════════════════════════════
+   CART DRAWER
+   ═══════════════════════════════════════ */
+      function openDrawer() {
+        drawerOverlay.classList.add("active");
+        cartDrawer.classList.add("active");
+        document.body.style.overflow = "hidden";
+        renderDrawerItems();
+      }
+
+      function closeDrawer() {
+        drawerOverlay.classList.remove("active");
+        cartDrawer.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      function renderDrawerItems() {
+        const count = getCartCount();
+
+        if (count === 0) {
+          drawerEmpty.style.display = "block";
+          drawerItems.style.display = "none";
+          drawerFooter.style.display = "none";
+          return;
+        }
+
+        drawerEmpty.style.display = "none";
+        drawerItems.style.display = "block";
+        drawerFooter.style.display = "block";
+
+        let html = "";
+        cart.forEach((item) => {
+          const dPrice = getDiscountedPrice(item.price);
+          html += `
+      <div class="drawer-item">
+        <div class="drawer-item-img"><svg><use href="#icon-pill"/></svg></div>
+        <div class="drawer-item-info">
+          <div class="drawer-item-name">${item.name}</div>
+          <div class="drawer-item-price">${formatCurrency(dPrice)} each</div>
+          <div class="drawer-qty-row">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)" aria-label="Decrease quantity"><svg><use href="#icon-minus"/></svg></button>
+            <span class="qty-value">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)" aria-label="Increase quantity"><svg><use href="#icon-plus"/></svg></button>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeFromCart(${item.id})" aria-label="Remove ${item.name}"><svg><use href="#icon-trash"/></svg></button>
+      </div>
+    `;
+        });
+
+        drawerItems.innerHTML = html;
+        drawerSubtotal.textContent = formatCurrency(getCartSubtotal());
+        drawerTotal.textContent = formatCurrency(getCartTotal());
+
+        const discountAmountEl = document.getElementById("discount-amount");
+        const discountRow = document.getElementById("discount-row");
+        const premiumBanner = document.getElementById("premium-banner");
+
+        const discountAmount = getDiscountAmount();
+
+        if (discountAmountEl && discountRow && premiumBanner) {
+          if (isUltra && getCartSubtotal() > 0) {
+            discountAmountEl.textContent = "-" + formatCurrency(discountAmount);
+            discountRow.style.display = "flex";
+            premiumBanner.innerHTML = `<div class="bg-teal-500/10 border border-teal-500 text-teal-400 p-2 rounded mb-4 text-center text-sm font-bold animate-pulse">Ultra Care 20% Discount Applied!</div>`;
+          } else {
+            discountRow.style.display = "none";
+            premiumBanner.innerHTML = "";
+          }
+        }
+      }
+
+      navCartBtn.addEventListener("click", openDrawer);
+      drawerClose.addEventListener("click", closeDrawer);
+      drawerOverlay.addEventListener("click", closeDrawer);
+
+      // Swipe to close drawer on mobile
+      let drawerTouchStartX = 0;
+      cartDrawer.addEventListener(
+        "touchstart",
+        (e) => {
+          drawerTouchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true },
+      );
+
+      cartDrawer.addEventListener(
+        "touchend",
+        (e) => {
+          const endX = e.changedTouches[0].screenX;
+          if (drawerTouchStartX - endX > 80) {
+            closeDrawer();
+          }
+        },
+        { passive: true },
+      );
+
+      drawerCheckout.addEventListener("click", () => {
+        closeDrawer();
+        openModal();
+      });
+
+      /* ═══════════════════════════════════════
+   MODAL & CHECKOUT
+   ═══════════════════════════════════════ */
+      function openModal() {
+        if (cart.length === 0) return;
+        modalOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+        renderOrderSummary();
+        bkashTotal.textContent = getCartTotal();
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove("active");
+        document.body.style.overflow = "";
+        nameError.classList.remove("visible");
+        addressError.classList.remove("visible");
+        txnError.classList.remove("visible");
+      }
+
+      function renderOrderSummary() {
+        let html = "";
+        cart.forEach((item) => {
+          const dPrice = getDiscountedPrice(item.price);
+          html += `<div class="order-item"><span>${item.name} x${item.qty}</span><span>${formatCurrency(dPrice * item.qty)}</span></div>`;
+        });
+        const subtotal = getCartSubtotal();
+        const total = getCartTotal();
+        html += `<div class="delivery-line"><span>Delivery Charge</span><span class="delivery-badge"><svg><use href="#icon-truck"/></svg> Flat ৳10</span></div>`;
+        html += `<div class="order-total"><span>Total</span><span>${formatCurrency(total)}</span></div>`;
+        orderSummary.innerHTML = html;
+      }
+
+      function selectPayment(method) {
+        paymentMethod = method;
+        if (method === "cod") {
+          payCOD.classList.add("active");
+          payCOD.classList.remove("bkash-active");
+          payBkash.classList.remove("active", "bkash-active");
+          bkashDetails.classList.remove("open");
+        } else {
+          payBkash.classList.add("active", "bkash-active");
+          payCOD.classList.remove("active");
+          bkashDetails.classList.add("open");
+          bkashTotal.textContent = getCartTotal();
+        }
+      }
+
+      payCOD.addEventListener("click", () => selectPayment("cod"));
+      payBkash.addEventListener("click", () => selectPayment("bkash"));
+      payCOD.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") selectPayment("cod");
+      });
+      payBkash.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") selectPayment("bkash");
+      });
+
+      modalClose.addEventListener("click", closeModal);
+      modalOverlay.addEventListener("click", (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      /* Copy bKash number */
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText("01811389672");
+          copyBtn.classList.add("copied");
+          copyBtn.innerHTML =
+            '<svg width="14" height="14" style="vertical-align:middle;margin-right:4px"><use href="#icon-check"/></svg> Copied!';
+          setTimeout(() => {
+            copyBtn.classList.remove("copied");
+            copyBtn.innerHTML =
+              '<svg width="14" height="14" style="vertical-align:middle;margin-right:4px"><use href="#icon-copy"/></svg> Copy Number';
+          }, 2000);
+        } catch (err) {
+          const ta = document.createElement("textarea");
+          ta.value = "01811389672";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          copyBtn.classList.add("copied");
+          copyBtn.innerHTML =
+            '<svg width="14" height="14" style="vertical-align:middle;margin-right:4px"><use href="#icon-check"/></svg> Copied!';
+          setTimeout(() => {
+            copyBtn.classList.remove("copied");
+            copyBtn.innerHTML =
+              '<svg width="14" height="14" style="vertical-align:middle;margin-right:4px"><use href="#icon-copy"/></svg> Copy Number';
+          }, 2000);
+        }
+      });
+
+      /* Confirm order */
+      confirmBtn.addEventListener("click", () => {
+        let valid = true;
+        if (!fullName.value.trim()) {
+          nameError.classList.add("visible");
+          valid = false;
+        } else {
+          nameError.classList.remove("visible");
+        }
+
+        if (!address.value.trim()) {
+          addressError.classList.add("visible");
+          valid = false;
+        } else {
+          addressError.classList.remove("visible");
+        }
+
+        if (paymentMethod === "bkash" && !txnId.value.trim()) {
+          txnError.classList.add("visible");
+          valid = false;
+        } else {
+          txnError.classList.remove("visible");
+        }
+
+        if (!valid) return;
+
+        const items = cart
+          .map((item) => {
+            const dPrice = getDiscountedPrice(item.price);
+            return `• ${item.name} x${item.qty} — ${formatCurrency(dPrice)}`;
+          })
+          .join("\n");
+
+        const total = getCartTotal();
+        let message = "";
+        if (paymentMethod === "cod") {
+          message = `🏥 New Medilink AI Order!\n👤 Name: ${fullName.value}\n📍 Address: ${address.value}\n💊 Items:\n${items}\n💰 Subtotal: ${formatCurrency(getCartSubtotal())}\n🚚 Delivery: ৳${DELIVERY_CHARGE}\n💰 Total: ${formatCurrency(total)}\n💵 Payment: Cash on Delivery`;
+        } else {
+          message = `🏥 New Medilink AI Order!\n👤 Name: ${fullName.value}\n📍 Address: ${address.value}\n💊 Items:\n${items}\n💰 Subtotal: ${formatCurrency(getCartSubtotal())}\n🚚 Delivery: ৳${DELIVERY_CHARGE}\n💰 Total: ${formatCurrency(total)}\n📱 Payment: bKash\n🔖 TXN ID: ${txnId.value}`;
+        }
+
+        const url =
+          "https://wa.me/8801811389672?text=" + encodeURIComponent(message);
+        window.open(url, "_blank");
+      });
+
+      /* ═══════════════════════════════════════
+   SEARCH & FILTER
+   ═══════════════════════════════════════ */
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        visibleCount = 12;
+        renderProducts(false);
+      });
+
+      chipBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          chipBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.dataset.filter;
+          visibleCount = 12;
+          renderProducts(false);
+        });
+      });
+
+      loadMoreBtn.addEventListener("click", () => {
+        visibleCount += 12;
+        renderProducts(true);
+      });
+
+      /* ═══════════════════════════════════════
+   REVIEWS MARQUEE
+   ═══════════════════════════════════════ */
+      function renderReviews() {
+        const cards = reviews
+          .map(
+            (r) => `
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"${r.quote}"</div>
+      <div class="review-author">${r.name}</div>
+      <div class="review-location">${r.location}</div>
+    </div>
+  `,
+          )
+          .join("");
+        marqueeTrack.innerHTML = cards + cards;
+      }
+
+      /* ═══════════════════════════════════════
+   COUNT UP
+   ═══════════════════════════════════════ */
+      function easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
+      }
+
+      function countUp(el, target, suffix, duration = 1600) {
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const current = Math.round(easeOutQuart(progress) * target);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      }
+
+      /* ═══════════════════════════════════════
+   INTERSECTION OBSERVER
+   ═══════════════════════════════════════ */
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target;
+              const delay = el.dataset.delay || 0;
+              setTimeout(() => {
+                el.classList.add("visible");
+                if (el.classList.contains("stat-block")) {
+                  const target = parseInt(el.dataset.target);
+                  const suffix = el.dataset.suffix;
+                  const valEl = el.querySelector(".stat-value");
+                  countUp(valEl, target, suffix);
+                }
+              }, parseInt(delay));
+              observer.unobserve(el);
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+
+      document
+        .querySelectorAll(
+          ".reveal-up, .reveal-left, .reveal-right, .reveal-scale, .stat-block",
+        )
+        .forEach((el) => {
+          observer.observe(el);
+        });
+
+      /* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+      window.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("loaded");
+        renderProducts(false);
+        renderReviews();
+        selectPayment("cod");
+      });
+    </script>
+  </body>
+</html>

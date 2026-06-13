@@ -1,0 +1,683 @@
+/* ============================================
+   MEDILINK AI ADVISOR — DESIGN SYSTEM & MOTION
+   Glassmorphic Healthcare Interface Tokens
+   ============================================ */
+
+:root {
+  --bg: #f0fdf4;
+  --surface: #ffffff;
+  --surface-alt: #f7fffe;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(13, 148, 136, 0.18);
+  --glass-blur: blur(18px);
+  --primary: #0d9488;
+  --primary-light: #14b8a6;
+  --primary-glow: rgba(13, 148, 136, 0.28);
+  --accent: #2563eb;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.08);
+  --care-1-border: #16a34a;
+  --care-1-bg: rgba(22, 163, 74, 0.05);
+  --care-2-border: #f59e0b;
+  --care-2-bg: rgba(245, 158, 11, 0.05);
+  --care-3-border: #dc2626;
+  --care-3-bg: rgba(220, 38, 38, 0.05);
+  --emergency: #dc2626;
+  --emergency-bg: rgba(220, 38, 38, 0.04);
+  --emergency-glow: rgba(220, 38, 38, 0.22);
+  --orb-core: #0d9488;
+  --orb-ring-1: rgba(13, 148, 136, 0.3);
+  --orb-ring-2: rgba(37, 99, 235, 0.18);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------
+   Font Configuration
+   -------------------------------------------- */
+.font-heading {
+  font-family: "Cabinet Grotesk", "Inter", system-ui, sans-serif;
+}
+
+.font-body {
+  font-family: "Satoshi", "Inter", system-ui, sans-serif;
+}
+
+/* --------------------------------------------
+   Reset & Base
+   -------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------
+   Glassmorphism Utilities
+   -------------------------------------------- */
+.glass-nav {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  transition: all 0.5s var(--ease);
+}
+
+/* --------------------------------------------
+   Layout: 50/50 Split Workspace
+   -------------------------------------------- */
+.left-panel {
+  background: var(--surface);
+  border-right: 1px solid var(--glass-border);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.right-panel {
+  background: var(--surface-alt);
+  overflow-y: auto;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+
+/* --------------------------------------------
+   Chat Canvas
+   -------------------------------------------- */
+.chat-canvas {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  padding-bottom: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scroll-behavior: smooth;
+}
+
+/* --------------------------------------------
+   Chat Bubbles
+   -------------------------------------------- */
+.message {
+  max-width: 88%;
+  padding: 0.875rem 1.125rem;
+  border-radius: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  animation: messageIn 0.45s var(--ease) forwards;
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: var(--primary);
+  color: white;
+  border-bottom-right-radius: 0.25rem;
+  font-weight: 500;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  color: #1e293b;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.message.thinking {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px dashed var(--glass-border);
+  color: var(--primary);
+  font-style: italic;
+}
+
+@keyframes messageIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------
+   Bottom Tray & Query Chips
+   -------------------------------------------- */
+.bottom-tray {
+  background: var(--surface);
+  border-top: 1px solid var(--glass-border);
+  padding: 1rem 1.25rem;
+  z-index: 10;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  user-select: none;
+  white-space: nowrap;
+  font-family: "Satoshi", sans-serif;
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--primary-glow);
+}
+
+.chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.7);
+  transform: none;
+  box-shadow: none;
+}
+
+/* --------------------------------------------
+   Breathing Orb — Phase 1 Processing
+   -------------------------------------------- */
+.orb-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  background: rgba(240, 253, 244, 0.65);
+  backdrop-filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease),
+    visibility 0.9s;
+  will-change: opacity, visibility;
+}
+
+.orb-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.orb-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orb-core {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--orb-core);
+  box-shadow:
+    0 0 24px var(--orb-core),
+    0 0 64px var(--orb-ring-1);
+  animation: orbBreathe 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
+  position: relative;
+  z-index: 2;
+}
+
+.orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--orb-ring-1);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  animation: orbRingExpand 3s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.orb-ring-1 {
+  animation-delay: 0s;
+}
+.orb-ring-2 {
+  border-color: var(--orb-ring-2);
+  animation-delay: 1s;
+}
+.orb-ring-3 {
+  border-color: var(--primary-glow);
+  animation-delay: 2s;
+}
+
+.orb-text {
+  position: absolute;
+  bottom: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  white-space: nowrap;
+  animation: textFade 0.4s var(--ease);
+  will-change: opacity, transform;
+}
+
+@keyframes orbBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 20px var(--orb-core),
+      0 0 60px var(--orb-ring-1);
+  }
+  50% {
+    transform: scale(1.14);
+    box-shadow:
+      0 0 40px var(--orb-core),
+      0 0 100px var(--orb-ring-1),
+      0 0 140px var(--orb-ring-2);
+  }
+}
+
+@keyframes orbRingExpand {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes textFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* --------------------------------------------
+   Dashboard Panel Transitions
+   -------------------------------------------- */
+.prevention-panel,
+.hero-panel {
+  transition: all 0.85s var(--ease);
+  will-change: transform, opacity;
+}
+
+.phase-1 .prevention-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  position: relative;
+}
+
+.phase-1 .hero-panel {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  pointer-events: none;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+}
+
+.phase-2 .prevention-panel {
+  opacity: 0;
+  transform: translateY(-24px) scale(0.98);
+  pointer-events: none;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+}
+
+.phase-2 .hero-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+}
+
+/* --------------------------------------------
+   Hero Components
+   -------------------------------------------- */
+.hero-card {
+  padding: 1.5rem;
+}
+
+.hero-title {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-text {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #334155;
+}
+
+/* --------------------------------------------
+   Critical Allergy Guard — Pulsing Red Border
+   -------------------------------------------- */
+.allergy-card {
+  border: 1px solid var(--emergency);
+  animation: allergyPulse 2.2s ease-in-out infinite;
+  background: var(--emergency-bg);
+}
+
+@keyframes allergyPulse {
+  0%,
+  100% {
+    border-color: var(--emergency);
+    box-shadow: 0 0 0 0 var(--emergency-glow);
+  }
+  50% {
+    border-color: #ff4444;
+    box-shadow: 0 0 24px 4px var(--emergency-glow);
+  }
+}
+
+/* --------------------------------------------
+   Emergency SOS Button
+   -------------------------------------------- */
+.emergency-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--emergency);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  margin-top: 1rem;
+  font-family: "Satoshi", sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.emergency-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--emergency-glow);
+  background: #b91c1c;
+}
+
+.emergency-btn:active {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------
+   Medication Matrix Tabs
+   -------------------------------------------- */
+.tab-list {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 0.75rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  font-family: "Satoshi", sans-serif;
+}
+
+.tab-btn:hover {
+  background: rgba(13, 148, 136, 0.08);
+  color: var(--primary);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.45s var(--ease) forwards;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------
+   Structured Lists
+   -------------------------------------------- */
+.clean-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.clean-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.clean-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.clean-list.red li::before {
+  background: var(--emergency);
+}
+
+/* --------------------------------------------
+   Care Level Badges
+   -------------------------------------------- */
+.care-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.care-badge.primary {
+  background: var(--care-1-bg);
+  color: var(--care-1-border);
+  border: 1px solid var(--care-1-border);
+}
+
+.care-badge.medium {
+  background: var(--care-2-bg);
+  color: var(--care-2-border);
+  border: 1px solid var(--care-2-border);
+}
+
+.care-badge.advanced {
+  background: var(--care-3-bg);
+  color: var(--care-3-border);
+  border: 1px solid var(--care-3-border);
+}
+
+/* --------------------------------------------
+   Elderly Patient Amber Callout
+   -------------------------------------------- */
+.age-callout {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.age-callout-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--warning);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.age-callout-text {
+  font-size: 0.875rem;
+  color: #92400e;
+  line-height: 1.55;
+}
+
+/* --------------------------------------------
+   Blood Group Badge
+   -------------------------------------------- */
+.blood-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  background: var(--emergency-bg);
+  border: 1px solid var(--emergency);
+  color: var(--emergency);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
+/* --------------------------------------------
+   Scrollbar Styling
+   -------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 148, 136, 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(13, 148, 136, 0.4);
+}
+
+/* --------------------------------------------
+   Responsive Guard
+   -------------------------------------------- */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 55% 45%;
+  }
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .right-panel {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .main-grid {
+    display: flex !important;
+    width: 200vw;
+    transition: transform 0.4s var(--ease);
+  }
+  .left-panel, .right-panel {
+    width: 100vw;
+    flex: 0 0 100vw;
+    border: none !important;
+  }
+  .main-grid.show-details {
+    transform: translateX(-100vw);
+  }
+}

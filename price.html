@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Plans | Medilink AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Inter", sans-serif;
+      }
+
+      /* 3D Tilt Effect Container */
+      .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.1s ease-out;
+      }
+
+      .tilt-card-inner {
+        transform: translateZ(20px);
+      }
+
+      /* Premium Glow for Ultra Card */
+      .premium-glow {
+        box-shadow:
+          0 0 20px rgba(59, 130, 246, 0.3),
+          0 0 40px rgba(59, 130, 246, 0.1),
+          inset 0 0 20px rgba(59, 130, 246, 0.05);
+        border: 2px solid rgba(59, 130, 246, 0.4);
+      }
+
+      .premium-glow:hover {
+        box-shadow:
+          0 0 30px rgba(59, 130, 246, 0.5),
+          0 0 60px rgba(59, 130, 246, 0.2),
+          inset 0 0 30px rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.7);
+      }
+
+      /* Scroll Reveal Animation */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Modal Animation */
+      .modal-enter {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+
+      .modal-enter-active {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .modal-exit {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-exit-active {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+        transition: all 0.3s ease-in;
+      }
+
+      /* Confetti-like particles */
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particle-float 1.5s ease-out forwards;
+      }
+
+      @keyframes particle-float {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-100px) scale(0);
+        }
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Background gradient mesh */
+      .bg-mesh {
+        background:
+          radial-gradient(
+            ellipse at 20% 50%,
+            rgba(59, 130, 246, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 50%,
+            rgba(16, 185, 129, 0.06) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 50% 100%,
+            rgba(139, 92, 246, 0.05) 0%,
+            transparent 50%
+          );
+      }
+
+      /* Glassmorphism enhancement */
+      .glass-nav {
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+      }
+
+      /* Badge shimmer */
+      .badge-shimmer {
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+        background-size: 200% 100%;
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      /* Checkmark animation */
+      .check-anim {
+        stroke-dasharray: 20;
+        stroke-dashoffset: 20;
+        animation: draw-check 0.5s ease forwards;
+      }
+
+      @keyframes draw-check {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      /* Locked icon style */
+      .locked-feature {
+        opacity: 0.5;
+        filter: grayscale(0.6);
+      }
+
+      /* Price strikethrough style */
+      .price-strike {
+        position: relative;
+        display: inline-block;
+      }
+
+      .price-strike::after {
+        content: "";
+        position: absolute;
+        left: -5%;
+        top: 50%;
+        width: 110%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ef4444, transparent);
+        transform: rotate(-5deg);
+      }
+
+      /* Success modal glow */
+      .success-glow {
+        box-shadow:
+          0 0 40px rgba(16, 185, 129, 0.3),
+          0 0 80px rgba(16, 185, 129, 0.1);
+      }
+    </style>
+    <base target="_blank" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 min-h-screen bg-mesh">
+    <!-- ============================================ -->
+    <!-- 1. NAVBAR: Fixed Glassmorphism Header        -->
+    <!-- ============================================ -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 glass-nav bg-white/30 border-b border-white/20"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo & Brand -->
+          <a
+            href="index.html"
+            class="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
+          >
+            <!-- Premium SVG Logo: Medical Cross + AI Neural Network -->
+            <svg
+              class="w-10 h-10"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Outer circle -->
+              <circle
+                cx="24"
+                cy="24"
+                r="22"
+                stroke="#3b82f6"
+                stroke-width="2.5"
+                fill="rgba(59,130,246,0.08)"
+              />
+              <!-- Medical cross -->
+              <rect x="20" y="12" width="8" height="24" rx="2" fill="#3b82f6" />
+              <rect x="12" y="20" width="24" height="8" rx="2" fill="#3b82f6" />
+              <!-- AI Neural nodes -->
+              <circle cx="24" cy="24" r="3" fill="white" />
+              <circle cx="14" cy="14" r="2" fill="#8b5cf6" />
+              <circle cx="34" cy="14" r="2" fill="#8b5cf6" />
+              <circle cx="14" cy="34" r="2" fill="#8b5cf6" />
+              <circle cx="34" cy="34" r="2" fill="#8b5cf6" />
+              <!-- Neural connections -->
+              <line
+                x1="24"
+                y1="24"
+                x2="14"
+                y2="14"
+                stroke="#8b5cf6"
+                stroke-width="1"
+                opacity="0.6"
+              />
+              <line
+                x1="24"
+                y1="24"
+                x2="34"
+                y2="14"
+                stroke="#8b5cf6"
+                stroke-width="1"
+                opacity="0.6"
+              />
+              <line
+                x1="24"
+                y1="24"
+                x2="14"
+                y2="34"
+                stroke="#8b5cf6"
+                stroke-width="1"
+                opacity="0.6"
+              />
+              <line
+                x1="24"
+                y1="24"
+                x2="34"
+                y2="34"
+                stroke="#8b5cf6"
+                stroke-width="1"
+                opacity="0.6"
+              />
+            </svg>
+            <span
+              class="text-xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent"
+            >
+              Medilink AI
+            </span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- Main Content Spacer (for fixed navbar)       -->
+    <!-- ============================================ -->
+    <div class="h-16"></div>
+
+    <!-- ============================================ -->
+    <!-- 2. PRICING & SUBSCRIPTION SECTION            -->
+    <!-- ============================================ -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-16 reveal">
+        <h1
+          class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight"
+        >
+          Choose Your
+          <span
+            class="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent"
+            >Care Plan</span
+          >
+        </h1>
+        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+          Unlock the full potential of AI-powered healthcare. Upgrade to Ultra
+          Care for unlimited access and premium benefits.
+        </p>
+      </div>
+
+      <!-- Pricing Cards Grid -->
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+        <!-- ===== CARD 1: BASIC PLAN ===== -->
+        <div class="tilt-card reveal" data-tilt style="transition-delay: 0.1s">
+          <div
+            class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-200/60 h-full flex flex-col hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl"
+          >
+            <div class="tilt-card-inner">
+              <!-- Plan Header -->
+              <div class="mb-6">
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">
+                  Basic Plan
+                </h3>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-5xl font-extrabold text-slate-900"
+                    >Free</span
+                  >
+                  <span class="text-slate-500 font-medium">/ forever</span>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div
+                class="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent mb-6"
+              ></div>
+
+              <!-- Features List -->
+              <ul class="space-y-4 mb-8 flex-1">
+                <!-- Active Features -->
+                <li class="flex items-start gap-3">
+                  <svg
+                    class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span class="text-slate-700 font-medium"
+                    >Doctor Medilink AI:
+                    <span class="text-slate-900 font-semibold"
+                      >1 Conversation / Day</span
+                    ></span
+                  >
+                </li>
+                <li class="flex items-start gap-3">
+                  <svg
+                    class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span class="text-slate-700 font-medium"
+                    >Pharmacy Ordering via
+                    <span class="text-slate-900 font-semibold"
+                      >WhatsApp</span
+                    ></span
+                  >
+                </li>
+
+                <!-- Locked/Inactive Features -->
+                <li class="flex items-start gap-3 locked-feature">
+                  <svg
+                    class="w-5 h-5 text-slate-400 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  <span class="text-slate-500"
+                    >No Discounts on Medicine or Appointments</span
+                  >
+                </li>
+                <li class="flex items-start gap-3 locked-feature">
+                  <svg
+                    class="w-5 h-5 text-slate-400 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  <span class="text-slate-500"
+                    >Standard Appointment Priority</span
+                  >
+                </li>
+                <li class="flex items-start gap-3 locked-feature">
+                  <svg
+                    class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                  <span class="text-slate-500 font-medium"
+                    >AI Allergy Guard
+                    <span class="text-amber-600 text-sm"
+                      >(Locked - Upgrade Required)</span
+                    ></span
+                  >
+                </li>
+              </ul>
+
+              <!-- CTA Button -->
+              <button
+                id="activate-basic-btn"
+                onclick="activateBasicPlan()"
+                class="w-full py-4 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-lg border border-slate-200 transition-all duration-200"
+              >
+                Select Basic Plan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CARD 2: ULTRA CARE PLAN (Premium) ===== -->
+        <div
+          class="tilt-card reveal relative"
+          data-tilt
+          style="transition-delay: 0.2s"
+        >
+          <!-- "Most Popular" Badge -->
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+            <div
+              class="badge-shimmer px-6 py-2 rounded-full text-white font-bold text-sm shadow-lg whitespace-nowrap"
+            >
+              ⭐ Most Popular
+            </div>
+          </div>
+
+          <div
+            class="premium-glow bg-white/90 backdrop-blur-sm rounded-3xl p-8 h-full flex flex-col hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+          >
+            <!-- Decorative background gradient -->
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-violet-50/50 pointer-events-none"
+            ></div>
+
+            <div class="tilt-card-inner relative z-10">
+              <!-- Plan Header -->
+              <div class="mb-6">
+                <h3
+                  class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent mb-2"
+                >
+                  Ultra Care
+                </h3>
+                <div class="flex items-baseline gap-3">
+                  <span class="text-5xl font-extrabold text-slate-900"
+                    >৳500</span
+                  >
+                  <span class="text-slate-500 font-medium">/ month</span>
+                </div>
+                <div
+                  class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200"
+                >
+                  <span
+                    class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+                  ></span>
+                  <span class="text-emerald-700 text-sm font-semibold"
+                    >Limited Time Promo</span
+                  >
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div
+                class="h-px bg-gradient-to-r from-blue-300 via-violet-300 to-blue-300 mb-6"
+              ></div>
+
+              <!-- Features List -->
+              <ul class="space-y-4 mb-8 flex-1">
+                <li class="flex items-start gap-3">
+                  <div
+                    class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mt-0.5 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke-width="3"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span class="text-slate-700 font-medium"
+                    >Doctor Medilink AI:
+                    <span
+                      class="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent font-bold"
+                      >Unlimited Access</span
+                    ></span
+                  >
+                </li>
+                <li class="flex items-start gap-3">
+                  <div
+                    class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mt-0.5 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke-width="3"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span class="text-slate-700 font-medium"
+                    >AI Allergy Guard:
+                    <span class="text-emerald-600 font-bold"
+                      >Fully Unlocked</span
+                    ></span
+                  >
+                </li>
+                <li class="flex items-start gap-3">
+                  <div
+                    class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mt-0.5 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke-width="3"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span class="text-slate-700 font-medium"
+                    ><span class="text-emerald-600 font-bold"
+                      >20% Global Discount</span
+                    >
+                    on Pharmacy & Appointments</span
+                  >
+                </li>
+                <li class="flex items-start gap-3">
+                  <div
+                    class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mt-0.5 flex-shrink-0"
+                  >
+                    <svg
+                      class="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke-width="3"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span class="text-slate-700 font-medium"
+                    ><span class="text-amber-600 font-bold"
+                      >Highest Priority</span
+                    >
+                    for Doctor Appointments</span
+                  >
+                </li>
+              </ul>
+
+              <!-- CTA Button -->
+              <button
+                id="upgradeBtn"
+                onclick="activateUltraCare()"
+                class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 relative overflow-hidden group"
+              >
+                <span
+                  class="relative z-10 flex items-center justify-center gap-2"
+                >
+                  <span>Upgrade to Ultra Care</span>
+                  <svg
+                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </span>
+                <!-- Button shimmer effect -->
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                ></div>
+              </button>
+
+              <!-- Trust indicator -->
+              <p class="text-center text-xs text-slate-400 mt-3">
+                Secure payment • Cancel anytime • Instant activation
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- 3. 24/7 EMERGENCY SERVICE (Bottom Section)   -->
+    <!-- ============================================ -->
+    <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto reveal">
+      <div
+        class="bg-white/60 backdrop-blur-sm rounded-2xl border border-red-100 p-6 sm:p-8 shadow-lg"
+      >
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-4 text-center"
+        >
+          <!-- Emergency Icon -->
+          <div class="relative">
+            <svg
+              class="w-10 h-10 text-red-600 animate-pulse"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"
+            ></span>
+          </div>
+
+          <!-- Emergency Text -->
+          <div>
+            <p
+              class="text-red-600 font-bold text-lg sm:text-xl tracking-wide animate-pulse"
+            >
+              24/7 Emergency Medical Support — Always Free & Available for
+              Everyone
+            </p>
+            <p class="text-red-400 text-sm mt-1">
+              No subscription required. Immediate assistance, always.
+            </p>
+          </div>
+
+          <!-- Emergency CTA -->
+          <a
+            href="tel:999"
+            class="sm:ml-4 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 hover:scale-105 transition-all duration-200 shadow-lg shadow-red-500/30 flex items-center gap-2 whitespace-nowrap"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              />
+            </svg>
+            Call Emergency
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Spacer -->
+    <div class="h-16"></div>
+
+    <!-- ============================================ -->
+    <!-- SUCCESS MODAL (Hidden by default)            -->
+    <!-- ============================================ -->
+    <div
+      id="successModal"
+      class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+    >
+      <!-- Backdrop -->
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onclick="closeModal()"
+      ></div>
+
+      <!-- Modal Content -->
+      <div
+        id="modalContent"
+        class="relative bg-white rounded-3xl p-8 sm:p-10 max-w-md w-full shadow-2xl success-glow transform scale-90 opacity-0 transition-all duration-400"
+      >
+        <!-- Particle container -->
+        <div
+          id="particleContainer"
+          class="absolute inset-0 overflow-hidden pointer-events-none rounded-3xl"
+        ></div>
+
+        <!-- Success Icon -->
+        <div
+          class="mx-auto w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-6"
+        >
+          <svg
+            class="w-10 h-10 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            stroke-width="3"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+
+        <!-- Success Text -->
+        <h2
+          class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-3"
+        >
+          Congratulations!
+        </h2>
+        <p class="text-center text-slate-600 mb-2 text-lg">
+          Ultra Care Activated for
+          <span class="text-emerald-600 font-bold">FREE</span>
+        </p>
+        <p class="text-center text-emerald-500 font-semibold mb-8">
+          (Promo Applied)
+        </p>
+
+        <!-- Features Summary -->
+        <div class="bg-slate-50 rounded-xl p-4 mb-8 space-y-2">
+          <div class="flex items-center gap-2 text-sm text-slate-700">
+            <svg
+              class="w-4 h-4 text-emerald-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span>Unlimited AI Doctor Access</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-700">
+            <svg
+              class="w-4 h-4 text-emerald-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span>AI Allergy Guard Unlocked</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-700">
+            <svg
+              class="w-4 h-4 text-emerald-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span>20% Discount Activated</span>
+          </div>
+        </div>
+
+        <!-- Close Button -->
+        <button
+          onclick="closeModal()"
+          class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+        >
+          Awesome, Let's Go!
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 4. GLOBAL JAVASCRIPT LOGIC                   -->
+    <!-- ============================================ -->
+    <script>
+      /**
+       * ================================================================
+       * MEDILINK AI - SUBSCRIPTION STATE MANAGEMENT SYSTEM
+       * ================================================================
+       *
+       * This script manages the user's subscription plan via localStorage.
+       * Key: 'medilink_user_plan' | Values: 'basic' (default) | 'ultra'
+       *
+       * INTEGRATION GUIDE FOR OTHER PAGES:
+       * ------------------------------------
+       * 1. PHARMACY PAGE: Check localStorage to apply 20% discount
+       *    const plan = localStorage.getItem('medilink_user_plan');
+       *    if (plan === 'ultra') { applyDiscount(0.20); }
+       *
+       * 2. AI CHAT PAGE: Check for unlimited access vs. 1/day limit
+       *    const plan = localStorage.getItem('medilink_user_plan');
+       *    if (plan !== 'ultra') { enforceDailyLimit(1); }
+       *
+       * 3. REGISTRATION PAGE: Check for priority queue access
+       *    const plan = localStorage.getItem('medilink_user_plan');
+       *    if (plan === 'ultra') { setPriorityQueue('highest'); }
+       *
+       * 4. ALLERGY GUARD: Lock/Unlock feature based on plan
+       *    const plan = localStorage.getItem('medilink_user_plan');
+       *    if (plan !== 'ultra') { showUpgradePrompt(); lockFeature(); }
+       * ================================================================
+       */
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if user already has Ultra Care active
+        const currentPlan = localStorage.getItem("medilink_user_plan");
+        if (currentPlan === "ultra") {
+          updateUIForUltraCare();
+        }
+
+        // Initialize scroll reveal animations
+        initScrollReveal();
+
+        // Initialize 3D tilt effect on pricing cards
+        initTiltEffect();
+      });
+
+      /**
+       * Activates Ultra Care Plan
+       * - Saves 'ultra' to localStorage under key 'medilink_user_plan'
+       * - Triggers success modal with confetti animation
+       * - Updates UI dynamically to show "Activated" state
+       * - Other pages should read this key to apply benefits
+       */
+      function activateUltraCare() {
+        // Prevent multiple activations (optional guard)
+        const existingPlan = localStorage.getItem("medilink_user_plan");
+        if (existingPlan === "ultra") {
+          showModal(); // Show modal even if already active, for UX feedback
+          showTopToast(); // Show the top popup message
+          return;
+        }
+
+        // Save subscription state to localStorage
+        // This is the GLOBAL STATE that all other pages in the Medilink AI
+        // ecosystem should check to determine user privileges
+        localStorage.setItem("medilink_user_plan", "ultra");
+
+        // Update the button and card UI immediately
+        updateUIForUltraCare();
+
+        // Show the beautiful success modal with animation
+        showModal();
+
+        // Show the top popup message
+        showTopToast();
+
+        // Trigger confetti particles
+        spawnParticles();
+      }
+
+      function activateBasicPlan() {
+        localStorage.setItem("medilink_user_plan", "basic");
+        
+        // Update UI
+        const ultraBtn = document.getElementById("upgradeBtn");
+        if (ultraBtn) {
+            ultraBtn.innerHTML = `
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                  <span>Upgrade to Ultra Care</span>
+                </span>
+            `;
+            ultraBtn.className = "w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 relative overflow-hidden group";
+            ultraBtn.setAttribute("onclick", "activateUltraCare()");
+        }
+        
+        const ultraCard = document.querySelector(".premium-glow");
+        if (ultraCard) {
+            const badge = ultraCard.querySelector(".active-badge");
+            if (badge) badge.remove();
+        }
+
+        const basicBtn = document.getElementById("activate-basic-btn");
+        if (basicBtn) {
+            basicBtn.innerHTML = "Current Plan";
+            basicBtn.className = "w-full py-4 px-6 rounded-xl bg-emerald-100 text-emerald-700 font-semibold text-lg cursor-default border border-emerald-200";
+        }
+      }
+
+      /**
+       * Shows a popup message from the top of the page
+       */
+      function showTopToast() {
+          const toast = document.createElement("div");
+          toast.className = "fixed top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-8 py-4 rounded-b-2xl shadow-2xl z-[100] flex items-center gap-3 transition-transform duration-500 ease-out font-bold text-lg";
+          toast.innerHTML = `
+              <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Congratulations! All your discounts and premium features are now activated!</span>
+          `;
+          document.body.appendChild(toast);
+          
+          // Animate in
+          requestAnimationFrame(() => {
+              toast.style.transform = "translate(-50%, 0)";
+          });
+
+          // Animate out and remove after 4 seconds
+          setTimeout(() => {
+              toast.style.transform = "translate(-50%, -100%)";
+              setTimeout(() => {
+                  toast.remove();
+              }, 500);
+          }, 4000);
+      }
+
+      /**
+       * Updates the UI to reflect Ultra Care activation
+       * Changes button text, styling, and adds visual indicators
+       */
+      function updateUIForUltraCare() {
+        const btn = document.getElementById("upgradeBtn");
+        if (!btn) return;
+
+        // Change button to "Activated" state
+        btn.innerHTML = `
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Ultra Care Activated</span>
+                </span>
+            `;
+
+        // Change button styling to success state
+        btn.className =
+          "w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-lg shadow-emerald-500/30 cursor-default transition-all duration-200";
+        btn.removeAttribute("onclick"); // Remove click handler since already activated
+
+        // Add a subtle "Active" badge to the Ultra card
+        const ultraCard = btn.closest(".premium-glow");
+        if (ultraCard && !ultraCard.querySelector(".active-badge")) {
+          const badge = document.createElement("div");
+          badge.className =
+            "active-badge absolute top-4 right-4 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-700 text-xs font-bold flex items-center gap-1";
+          badge.innerHTML = `
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    ACTIVE
+                `;
+          ultraCard.style.position = "relative";
+          ultraCard.appendChild(badge);
+        }
+      }
+
+      /**
+       * Shows the success modal with entrance animation
+       */
+      function showModal() {
+        const modal = document.getElementById("successModal");
+        const content = document.getElementById("modalContent");
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+
+        // Small delay to allow display:flex to apply before animation
+        setTimeout(() => {
+          content.style.opacity = "1";
+          content.style.transform = "scale(1) translateY(0)";
+        }, 10);
+      }
+
+      /**
+       * Closes the success modal with exit animation
+       */
+      function closeModal() {
+        const modal = document.getElementById("successModal");
+        const content = document.getElementById("modalContent");
+
+        content.style.opacity = "0";
+        content.style.transform = "scale(0.9) translateY(20px)";
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+          // Reset transform for next open
+          content.style.transform = "scale(0.9) translateY(20px)";
+          content.style.opacity = "0";
+        }, 300);
+      }
+
+      /**
+       * Spawns confetti-like particles for celebration effect
+       */
+      function spawnParticles() {
+        const container = document.getElementById("particleContainer");
+        const colors = [
+          "#3b82f6",
+          "#8b5cf6",
+          "#10b981",
+          "#f59e0b",
+          "#ef4444",
+          "#ec4899",
+        ];
+
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.top = Math.random() * 50 + 50 + "%";
+          particle.style.animationDelay = Math.random() * 0.5 + "s";
+          particle.style.animationDuration = Math.random() * 1 + 1 + "s";
+          container.appendChild(particle);
+
+          // Cleanup after animation
+          setTimeout(() => particle.remove(), 2000);
+        }
+      }
+
+      /**
+       * IntersectionObserver for scroll reveal animations
+       * Elements with class 'reveal' fade in and slide up when entering viewport
+       */
+      function initScrollReveal() {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+                // Optionally unobserve after reveal
+                // observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px",
+          },
+        );
+
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => observer.observe(el));
+      }
+
+      /**
+       * 3D Tilt Effect for Pricing Cards
+       * Adds mouse-move based rotation for premium interactive feel
+       */
+      function initTiltEffect() {
+        const cards = document.querySelectorAll("[data-tilt]");
+
+        cards.forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg rotation
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.style.transform =
+              "perspective(1000px) rotateX(0) rotateY(0) translateY(0)";
+          });
+
+          // Smooth transition on mouse enter/leave
+          card.addEventListener("mouseenter", () => {
+            card.style.transition = "transform 0.1s ease-out";
+          });
+        });
+      }
+
+      /**
+       * UTILITY: Get current plan (for use by other pages)
+       * Returns 'basic' or 'ultra'
+       */
+      function getCurrentPlan() {
+        return localStorage.getItem("medilink_user_plan") || "basic";
+      }
+
+      /**
+       * UTILITY: Check if user has Ultra Care (for use by other pages)
+       * Returns boolean
+       */
+      function hasUltraCare() {
+        return localStorage.getItem("medilink_user_plan") === "ultra";
+      }
+
+      /**
+       * UTILITY: Reset plan (for testing purposes)
+       */
+      function resetPlan() {
+        localStorage.removeItem("medilink_user_plan");
+        location.reload();
+      }
+
+      // Expose utilities to global scope for other pages
+      window.MedilinkSubscription = {
+        getPlan: getCurrentPlan,
+        hasUltra: hasUltraCare,
+        activate: activateUltraCare,
+        reset: resetPlan,
+      };
+    </script>
+  </body>
+</html>

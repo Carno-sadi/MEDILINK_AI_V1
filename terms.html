@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — Medilink AI</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Lora (serif headings) + DM Sans (body UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        surface: {
+                            50: '#F7F8FA',
+                            100: '#F0F1F4',
+                            200: '#E4E6EB',
+                        },
+                        brand: {
+                            50: '#EFFEFA',
+                            100: '#C8FFF2',
+                            200: '#91FFE6',
+                            300: '#52F5D6',
+                            400: '#1EDEC2',
+                            500: '#08C4AB',
+                            600: '#029E8D',
+                            700: '#067E72',
+                            800: '#0B645C',
+                            900: '#0E534C',
+                            950: '#003331',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ─── Global Base ─── */
+        :root {
+            --bg: #F7F8FA;
+            --fg: #111827;
+            --muted: #6B7280;
+            --accent: #029E8D;
+            --accent-light: #EFFEFA;
+            --card: #FFFFFF;
+            --border: #E4E6EB;
+            --sidebar-width: 300px;
+            --navbar-height: 64px;
+            --footer-height: 52px;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'DM Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ─── Top Accent Bar ─── */
+        .top-accent-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #067E72, #08C4AB, #52F5D6, #08C4AB, #067E72);
+            background-size: 200% 100%;
+            animation: shimmerBar 6s ease-in-out infinite;
+            z-index: 100;
+        }
+
+        @keyframes shimmerBar {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ─── Navbar Glass ─── */
+        .navbar-glass {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(255, 255, 255, 0.72);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .navbar-glass.scrolled {
+            box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        /* ─── Sidebar Navigation ─── */
+        .sidebar-link {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #6B7280;
+            line-height: 1.45;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .sidebar-link:hover {
+            color: #0E534C;
+            background: rgba(2, 158, 141, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: #029E8D;
+            background: rgba(2, 158, 141, 0.08);
+            font-weight: 600;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 3px;
+            border-radius: 3px;
+            background: #029E8D;
+        }
+
+        .sidebar-link .section-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #F0F1F4;
+            color: #9CA3AF;
+            transition: all 0.25s ease;
+        }
+
+        .sidebar-link.active .section-num {
+            background: #029E8D;
+            color: #FFFFFF;
+        }
+
+        /* ─── Mobile Horizontal Nav ─── */
+        .mobile-nav-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 16px 14px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .mobile-nav-scroll::-webkit-scrollbar { display: none; }
+
+        .mobile-nav-pill {
+            flex-shrink: 0;
+            padding: 7px 14px;
+            border-radius: 100px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #6B7280;
+            background: #FFFFFF;
+            border: 1px solid #E4E6EB;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .mobile-nav-pill.active {
+            background: #029E8D;
+            color: #FFFFFF;
+            border-color: #029E8D;
+        }
+
+        /* ─── Legal Section Styling ─── */
+        .legal-section {
+            scroll-margin-top: calc(var(--navbar-height) + 24px);
+        }
+
+        .legal-section h2 {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.02em;
+        }
+
+        .legal-section p,
+        .legal-section li {
+            color: #374151;
+            font-size: 15px;
+            line-height: 1.75;
+        }
+
+        .legal-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .legal-section ul li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 8px;
+        }
+
+        .legal-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 11px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #029E8D;
+            opacity: 0.5;
+        }
+
+        /* ─── Warning Box ─── */
+        .warning-box {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+            border: 1.5px solid #FCD34D;
+            border-radius: 12px;
+            padding: 20px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #F59E0B;
+        }
+
+        /* ─── Search Highlight ─── */
+        mark.search-highlight {
+            background: #FEF08A;
+            color: #92400E;
+            padding: 1px 3px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px rgba(254, 240, 138, 0.6);
+        }
+
+        .legal-section.dimmed {
+            opacity: 0.25;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .legal-section.highlighted {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ─── Fade-in Animation ─── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── Emergency Footer ─── */
+        .emergency-footer {
+            background: #FFFFFF;
+            border-top: 1px solid #FCA5A5;
+        }
+
+        /* ─── Scroll-to-top Button ─── */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: calc(var(--footer-height) + 16px);
+            right: 20px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #029E8D;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(2, 158, 141, 0.3);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 40;
+            border: none;
+        }
+
+        .scroll-top-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-top-btn:hover {
+            background: #067E72;
+            box-shadow: 0 6px 24px rgba(2, 158, 141, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* ─── Plan Comparison Cards ─── */
+        .plan-card {
+            border: 1.5px solid #E4E6EB;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.25s ease;
+        }
+
+        .plan-card:hover {
+            border-color: #C8FFF2;
+            box-shadow: 0 4px 20px rgba(2, 158, 141, 0.08);
+        }
+
+        .plan-card.ultra {
+            border-color: #029E8D;
+            background: linear-gradient(135deg, #EFFEFA 0%, #FFFFFF 100%);
+            position: relative;
+        }
+
+        .plan-card.ultra::after {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: -10px;
+            right: 16px;
+            background: #029E8D;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        /* ─── Reduced Motion ─── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ─── Custom Scrollbar (Desktop Sidebar) ─── */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 4px;
+        }
+
+        /* ─── Print Styles ─── */
+        @media print {
+            .navbar-glass, .sidebar-wrapper, .mobile-nav-wrapper,
+            .emergency-footer, .scroll-top-btn, .search-wrapper, .top-accent-bar {
+                display: none !important;
+            }
+            .content-wrapper {
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- TOP ACCENT BAR                                -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="top-accent-bar" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- GLASSMORPHISM NAVBAR                         -->
+    <!-- ════════════════════════════════════════════ -->
+    <nav id="navbar" class="navbar-glass fixed top-[3px] left-0 right-0 z-50" role="navigation" aria-label="Main navigation">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-[60px] flex items-center justify-between">
+            <!-- Logo + Brand -->
+            <a href="index.html" class="flex items-center gap-2.5 group" aria-label="Medilink AI — Return to homepage">
+                <!-- Custom Medilink AI Logo SVG -->
+                <div class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-800 shadow-sm group-hover:shadow-md transition-shadow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20"/>
+                        <path d="M2 12h20"/>
+                        <path d="M7 7l10 10"/>
+                        <path d="M17 7L7 17"/>
+                    </svg>
+                    <div class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white"></div>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-gray-900">
+                    Medilink <span class="text-brand-600">AI</span>
+                </span>
+            </a>
+
+            <!-- Right Side: Back to Home -->
+            <a href="index.html"
+               class="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-brand-700 transition-colors px-3 py-2 rounded-lg hover:bg-brand-50">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+                <span class="hidden sm:inline">Back to Home</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- MOBILE HORIZONTAL SECTION NAV                -->
+    <!-- ════════════════════════════════════════════ -->
+    <div class="mobile-nav-wrapper fixed top-[66px] left-0 right-0 z-40 bg-surface-50/95 backdrop-blur-sm border-b border-surface-200 lg:hidden">
+        <div class="mobile-nav-scroll" id="mobileNav" role="tablist" aria-label="Legal sections">
+            <a href="#section-1" class="mobile-nav-pill active" data-section="section-1" role="tab">1. Acceptance</a>
+            <a href="#section-2" class="mobile-nav-pill" data-section="section-2" role="tab">2. Medical Disclaimer</a>
+            <a href="#section-3" class="mobile-nav-pill" data-section="section-3" role="tab">3. Subscriptions</a>
+            <a href="#section-4" class="mobile-nav-pill" data-section="section-4" role="tab">4. Emergency SOS</a>
+            <a href="#section-5" class="mobile-nav-pill" data-section="section-5" role="tab">5. Conduct & Privacy</a>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- MAIN LAYOUT: SIDEBAR + CONTENT               -->
+    <!-- ════════════════════════════════════════════ -->
+    <main class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-[140px] lg:pt-[88px] pb-[80px]">
+
+        <div class="flex gap-8 lg:gap-12">
+
+            <!-- ─── LEFT SIDEBAR (Desktop Only) ─── -->
+            <aside class="sidebar-wrapper hidden lg:block flex-shrink-0" aria-label="Table of contents">
+                <div class="sticky top-[88px] w-[272px]">
+                    <!-- Sidebar Header -->
+                    <div class="mb-5 px-3">
+                        <p class="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1">Table of Contents</p>
+                        <div class="h-px bg-surface-200"></div>
+                    </div>
+
+                    <!-- Sidebar Navigation Links -->
+                    <nav class="sidebar-scroll space-y-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-2" id="sidebarNav" aria-label="Section navigation">
+                        <a href="#section-1" class="sidebar-link active" data-section="section-1">
+                            <span class="section-num">1</span>
+                            <span>Acceptance of Terms</span>
+                        </a>
+                        <a href="#section-2" class="sidebar-link" data-section="section-2">
+                            <span class="section-num">2</span>
+                            <span>Medical AI Disclaimer</span>
+                        </a>
+                        <a href="#section-3" class="sidebar-link" data-section="section-3">
+                            <span class="section-num">3</span>
+                            <span>Subscription &amp; Membership Rules</span>
+                        </a>
+                        <a href="#section-4" class="sidebar-link" data-section="section-4">
+                            <span class="section-num">4</span>
+                            <span>Emergency SOS &amp; Hardware Usage</span>
+                        </a>
+                        <a href="#section-5" class="sidebar-link" data-section="section-5">
+                            <span class="section-num">5</span>
+                            <span>User Conduct &amp; Data Privacy</span>
+                        </a>
+                    </nav>
+
+                    <!-- Sidebar Footer Info -->
+                    <div class="mt-6 px-3 pt-4 border-t border-surface-200">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <i class="fa-regular fa-clock"></i>
+                            <span>Estimated read: 8 min</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 mt-2">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <span>Version 2.4</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ─── RIGHT CONTENT AREA ─── -->
+            <div class="content-wrapper flex-1 min-w-0 max-w-[820px]">
+
+                <!-- Page Header -->
+                <header class="mb-8 fade-up">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
+                            Terms of Service
+                        </h1>
+                        <!-- Last Updated Badge -->
+                        <div class="flex-shrink-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                            <span class="text-xs font-semibold text-brand-700">Last Updated: June 15, 2025</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-[15px] leading-relaxed max-w-xl">
+                        Please read these Terms of Service ("Terms") carefully before using the Medilink AI platform, including Doctor Medilink AI, AI Allergy Guard, and all associated services.
+                    </p>
+                </header>
+
+                <!-- ─── SEARCH BAR ─── -->
+                <div class="search-wrapper mb-8 fade-up" role="search" aria-label="Search terms of service">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search within Terms of Service..."
+                            class="w-full pl-11 pr-10 py-3 bg-white border border-surface-200 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-400 transition-all"
+                            aria-label="Search keywords in terms"
+                            autocomplete="off"
+                        >
+                        <button
+                            id="clearSearch"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-surface-100 hover:bg-surface-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors hidden"
+                            aria-label="Clear search"
+                        >
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                    <p id="searchCount" class="text-xs text-gray-400 mt-2 ml-1 hidden"></p>
+                </div>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- SECTION 1: Acceptance of Terms         -->
+                <!-- ══════════════════════════════════════ -->
+                <section id="section-1" class="legal-section mb-10 fade-up" data-searchable>
+                    <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8">
+                        <h2 class="text-xl sm:text-2xl mb-5 flex items-center gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-sm font-bold font-sans">1</span>
+                            Acceptance of Terms
+                        </h2>
+
+                        <p class="mb-4">
+                            By accessing, registering, or using the Medilink AI platform ("Service"), including but not limited to the web application, mobile interfaces, WhatsApp integrations, and any associated features such as Doctor Medilink AI and AI Allergy Guard, you ("User", "you", or "your") explicitly acknowledge that you have read, understood, and agree to be bound by these Terms of Service, our <a href="#" class="text-brand-600 hover:text-brand-700 underline underline-offset-2 font-medium">Privacy Policy</a>, and any additional guidelines or policies referenced herein.
+                        </p>
+
+                        <p class="mb-4">
+                            These Terms constitute a legally binding agreement between you and Medilink AI (referred to as "we", "us", or "our"), a digital healthcare technology platform operating under the laws of the People's Republic of Bangladesh. If you do not agree with any part of these Terms, you must discontinue use of the Service immediately.
+                        </p>
+
+                        <p>
+                            We reserve the right to modify, amend, or update these Terms at any time. Continued use of the Service following the publication of changes constitutes your acceptance of the revised Terms. We will make reasonable efforts to notify users of material changes through in-app notifications or email correspondence.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- SECTION 2: Medical AI Disclaimer       -->
+                <!-- ══════════════════════════════════════ -->
+                <section id="section-2" class="legal-section mb-10 fade-up" data-searchable>
+                    <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8">
+                        <h2 class="text-xl sm:text-2xl mb-5 flex items-center gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold font-sans">2</span>
+                            Medical AI Disclaimer
+                        </h2>
+
+                        <!-- WARNING BOX -->
+                        <div class="warning-box mb-6">
+                            <div class="flex items-start gap-3">
+                                <div class="flex-shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-amber-900 font-semibold text-[15px] mb-1.5">Critical Medical Disclaimer</p>
+                                    <p class="text-amber-800 text-sm leading-relaxed">
+                                        <strong>Doctor Medilink AI</strong> and <strong>AI Allergy Guard</strong> are machine-learning based informational tools designed to assist users in understanding general health queries and potential allergen interactions. <strong>They are NOT a substitute for professional human medical advice, diagnosis, or treatment.</strong> Always seek the advice of a qualified healthcare provider for any medical condition.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mb-4">
+                            The AI-powered features within the Medilink AI ecosystem utilize large language models and machine learning algorithms trained on publicly available medical literature and health data. While we employ rigorous validation processes, the outputs generated by these systems may contain inaccuracies, omissions, or information that is not applicable to your specific health circumstances.
+                        </p>
+
+                        <p class="mb-4">
+                            Under no circumstances shall Medilink AI, its developers, affiliates, or partners be held liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your reliance on information provided by Doctor Medilink AI or AI Allergy Guard. This includes, but is not limited to, any delays in seeking professional medical care, misinterpretation of AI-generated suggestions, or failure to follow through with prescribed medical treatment.
+                        </p>
+
+                        <p class="mb-4">
+                            AI Allergy Guard analyzes user-submitted food, medication, or environmental inputs against a database of known allergen interactions. The results are probabilistic in nature and should be treated as preliminary screening information only. They do not replace clinical allergy testing performed by licensed immunologists or allergists.
+                        </p>
+
+                        <p>
+                            If you are experiencing a medical emergency, do not use the AI features. Instead, use the Emergency SOS button within the app or immediately contact Bangladesh emergency services at <strong>999</strong>.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- SECTION 3: Subscription & Membership   -->
+                <!-- ══════════════════════════════════════ -->
+                <section id="section-3" class="legal-section mb-10 fade-up" data-searchable>
+                    <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8">
+                        <h2 class="text-xl sm:text-2xl mb-5 flex items-center gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-sm font-bold font-sans">3</span>
+                            Subscription &amp; Membership Rules
+                        </h2>
+
+                        <p class="mb-6">
+                            Medilink AI offers two primary subscription tiers, each designed to serve different user needs. Access to specific features is strictly governed by your active subscription plan. Plan details, pricing, and availability are subject to change with prior notice.
+                        </p>
+
+                        <!-- Plan Comparison Cards -->
+                        <div class="grid sm:grid-cols-2 gap-4 mb-6">
+                            <!-- Basic Plan -->
+                            <div class="plan-card">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <div class="w-8 h-8 rounded-lg bg-surface-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-circle-dot text-gray-400 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Basic Plan</p>
+                                        <p class="text-xs text-gray-400">Free Tier</p>
+                                    </div>
+                                </div>
+                                <ul class="space-y-0">
+                                    <li class="text-sm text-gray-600 leading-relaxed">Limited to <strong class="text-gray-800">1 AI conversation per day</strong></li>
+                                    <li class="text-sm text-gray-600 leading-relaxed">Manual pharmacy ordering via <strong class="text-gray-800">WhatsApp only</strong></li>
+                                    <li class="text-sm text-gray-600 leading-relaxed">No priority queuing for doctor appointments</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed">No discount privileges on pharmacy or consultations</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed">AI Allergy Guard access limited to <strong class="text-gray-800">3 scans per day</strong></li>
+                                </ul>
+                            </div>
+
+                            <!-- Ultra Care Plan -->
+                            <div class="plan-card ultra">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <div class="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-bolt text-brand-600 text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Ultra Care Plan</p>
+                                        <p class="text-xs text-brand-600 font-medium">Premium Tier</p>
+                                    </div>
+                                </div>
+                                <ul class="space-y-0">
+                                    <li class="text-sm text-gray-600 leading-relaxed"><strong class="text-gray-800">Unlimited</strong> AI conversation access</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed"><strong class="text-gray-800">Fully unlocked</strong> AI Allergy Guard with no scan limits</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed"><strong class="text-brand-700">20% discount</strong> on all pharmacy orders</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed"><strong class="text-brand-700">20% discount</strong> on doctor finder appointment bookings</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed"><strong class="text-brand-700">Maximum priority queuing</strong> for all appointment types</li>
+                                    <li class="text-sm text-gray-600 leading-relaxed">Priority customer support channel</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <p class="mb-4">
+                            <strong>Promotional and Free Activation Clauses:</strong> Medilink AI may, at its sole discretion, offer promotional periods during which the Ultra Care Plan features are temporarily available to Basic Plan users at no additional cost. Such promotions are time-limited and do not constitute a permanent plan upgrade. Upon expiration of a promotional period, your account will automatically revert to the features associated with your subscribed plan without prior individual notification.
+                        </p>
+
+                        <p class="mb-4">
+                            <strong>Subscription Renewal & Cancellation:</strong> Paid subscriptions automatically renew at the end of each billing cycle unless cancelled at least 24 hours before the renewal date through your account settings. Cancellation does not entitle you to a prorated refund for the remainder of the billing period. Your access to Ultra Care features will continue until the end of the current paid period.
+                        </p>
+
+                        <p>
+                            <strong>Plan Downgrades:</strong> If you elect to downgrade from Ultra Care to Basic, any data, conversation history, or Allergy Guard records associated with premium features will be retained for 30 days before permanent deletion, unless you request immediate data export.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- SECTION 4: Emergency SOS & Hardware    -->
+                <!-- ══════════════════════════════════════ -->
+                <section id="section-4" class="legal-section mb-10 fade-up" data-searchable>
+                    <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8">
+                        <h2 class="text-xl sm:text-2xl mb-5 flex items-center gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center text-sm font-bold font-sans">4</span>
+                            Emergency SOS &amp; Hardware Usage
+                        </h2>
+
+                        <p class="mb-4">
+                            The Medilink AI platform includes an <strong>Emergency SOS Button</strong> designed to assist users in rapidly initiating contact with emergency medical services during critical situations. Understanding the technical behavior and limitations of this feature is essential before reliance.
+                        </p>
+
+                        <!-- Technical Breakdown Box -->
+                        <div class="bg-gray-50 rounded-xl border border-gray-200 p-5 mb-6">
+                            <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Technical Behavior of SOS Activation</p>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-md bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-volume-high text-red-500 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800">Audio Alert</p>
+                                        <p class="text-xs text-gray-500 leading-relaxed">Triggers a high-decibel audio alarm through the device's speakers to alert nearby individuals.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-md bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-mobile-screen-button text-orange-500 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800">Hardware Vibration</p>
+                                        <p class="text-xs text-gray-500 leading-relaxed">Activates sustained vibration patterns on supported devices for tactile emergency signaling.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-md bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-message text-blue-500 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800">SMS Routing</p>
+                                        <p class="text-xs text-gray-500 leading-relaxed">Redirects to the device's native SMS composer pre-filled with the Bangladesh 999 emergency number.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-md bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-location-dot text-green-500 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800">GPS Geolocation</p>
+                                        <p class="text-xs text-gray-500 leading-relaxed">Attempts to capture precise GPS coordinates to include in the emergency message body.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mb-4">
+                            <strong>GPS Geolocation Consent:</strong> Upon activating the SOS Button, the platform will request access to your device's precise geolocation data. By triggering the SOS feature, you explicitly consent to the collection and transmission of your real-time GPS coordinates for the sole purpose of facilitating emergency response. This geolocation data is not stored on our servers and is only used within the emergency communication flow.
+                        </p>
+
+                        <p class="mb-4">
+                            <strong>Limitations of the SOS Feature:</strong> The Emergency SOS Button relies on your device's hardware capabilities, operating system permissions, and network connectivity. Medilink AI does not guarantee that the SOS activation will successfully connect you to emergency services. Factors including but not limited to low battery, denied permissions, hardware malfunction, network unavailability, or operating system restrictions may prevent the feature from functioning as intended.
+                        </p>
+
+                        <p class="mb-4">
+                            <strong>SMS Routing Clarification:</strong> The SOS feature redirects you to your device's native SMS application with the Bangladesh emergency number (999) pre-populated. <strong>You must manually press the send button</strong> within the SMS app to complete the emergency communication. Medilink AI does not directly send emergency messages on your behalf.
+                        </p>
+
+                        <p>
+                            The SOS Button is provided as a supplementary convenience tool and does not replace the direct dialing of 999 or other locally available emergency numbers. We strongly recommend saving emergency contacts on your device independently of the Medilink AI platform.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- SECTION 5: User Conduct & Data Privacy -->
+                <!-- ══════════════════════════════════════ -->
+                <section id="section-5" class="legal-section mb-10 fade-up" data-searchable>
+                    <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8">
+                        <h2 class="text-xl sm:text-2xl mb-5 flex items-center gap-3">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center text-sm font-bold font-sans">5</span>
+                            User Conduct &amp; Data Privacy
+                        </h2>
+
+                        <h3 class="font-serif text-lg font-bold text-gray-800 mb-3 mt-2">5.1 Account Responsibilities</h3>
+                        <p class="mb-4">
+                            You are solely responsible for maintaining the confidentiality of your account credentials, including your password and any two-factor authentication mechanisms. You agree to immediately notify Medilink AI of any unauthorized access to or use of your account. Any activity that occurs under your account, whether authorized by you or not, shall be your responsibility until you report the unauthorized access and we have taken reasonable steps to secure the account.
+                        </p>
+                        <p class="mb-6">
+                            You must provide accurate, current, and complete information during registration and keep your profile information updated. Providing false or misleading information may result in immediate account suspension or termination.
+                        </p>
+
+                        <h3 class="font-serif text-lg font-bold text-gray-800 mb-3">5.2 Acceptable Use</h3>
+                        <p class="mb-4">
+                            When using the Medilink AI platform, you agree NOT to:
+                        </p>
+                        <ul class="mb-6">
+                            <li>Use the AI features to generate, promote, or distribute medical misinformation or harmful health advice to third parties</li>
+                            <li>Attempt to reverse-engineer, decompile, or extract the underlying machine learning models or proprietary algorithms</li>
+                            <li>Intentionally submit malicious inputs, prompts designed to bypass safety filters, or adversarial content intended to degrade system performance</li>
+                            <li>Use automated scripts, bots, or scraping tools to interact with the platform beyond normal human usage patterns</li>
+                            <li>Impersonate medical professionals or use the platform's outputs to represent yourself as a licensed healthcare provider</li>
+                            <li>Use the service for any purpose that violates applicable laws in Bangladesh or your jurisdiction of residence</li>
+                        </ul>
+
+                        <h3 class="font-serif text-lg font-bold text-gray-800 mb-3">5.3 Data Routing via WhatsApp</h3>
+                        <p class="mb-4">
+                            Pharmacy ordering through the Medilink AI platform is facilitated through routing your order details to affiliated pharmacy partners via WhatsApp Business API. By placing an order, you acknowledge and consent to the following:
+                        </p>
+                        <ul class="mb-6">
+                            <li>Your order details, including medication names, quantities, and delivery address, will be transmitted to the designated pharmacy's WhatsApp business number</li>
+                            <li>Conversation logs within the WhatsApp thread are subject to WhatsApp's own privacy policy and end-to-end encryption framework</li>
+                            <li>Medilink AI acts solely as an ordering intermediary and does not control the pharmacy's handling, fulfillment, or data retention practices within WhatsApp</li>
+                            <li>Order confirmations, delivery updates, and customer service interactions related to your order may occur entirely within the WhatsApp channel</li>
+                        </ul>
+
+                        <h3 class="font-serif text-lg font-bold text-gray-800 mb-3">5.4 Data Privacy Overview</h3>
+                        <p class="mb-4">
+                            Your privacy is critically important to us. The collection, use, storage, and sharing of your personal data is governed by our comprehensive <a href="#" class="text-brand-600 hover:text-brand-700 underline underline-offset-2 font-medium">Privacy Policy</a>, which is incorporated into these Terms by reference. Key principles include:
+                        </p>
+                        <ul class="mb-6">
+                            <li>Health-related data shared with AI features is processed with strict confidentiality measures and is not sold to third parties</li>
+                            <li>Conversation data with Doctor Medilink AI is encrypted in transit and at rest, with retention periods defined in the Privacy Policy</li>
+                            <li>You may request data access, correction, or deletion in accordance with applicable data protection regulations</li>
+                            <li>Anonymous, aggregated usage analytics may be collected to improve AI model performance and platform experience</li>
+                        </ul>
+
+                        <h3 class="font-serif text-lg font-bold text-gray-800 mb-3">5.5 Termination</h3>
+                        <p>
+                            Medilink AI reserves the right to suspend or terminate your account at any time, with or without cause, including but not limited to violations of these Terms, abusive behavior toward AI systems or support staff, or prolonged inactivity. Upon termination, your right to use the Service ceases immediately. Provisions of these Terms that by their nature should survive termination, including intellectual property rights, disclaimers, and limitation of liability, shall remain in effect.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ─── CLOSING STATEMENT ─── -->
+                <div class="bg-white rounded-2xl border border-surface-200 p-6 sm:p-8 fade-up">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-surface-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-scale-balanced text-gray-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-lg font-bold text-gray-900 mb-2">Governing Law &amp; Contact</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                                These Terms of Service are governed by and construed in accordance with the laws of the People's Republic of Bangladesh. Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts of Dhaka, Bangladesh.
+                            </p>
+                            <p class="text-sm text-gray-600 leading-relaxed">
+                                For questions, clarifications, or concerns regarding these Terms, please contact our legal team at <a href="mailto:legal@medilink.ai" class="text-brand-600 hover:text-brand-700 underline underline-offset-2 font-medium">legal@medilink.ai</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END Content Area -->
+        </div>
+        <!-- END Flex Layout -->
+    </main>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- 24/7 EMERGENCY FOOTER BANNER                 -->
+    <!-- ════════════════════════════════════════════ -->
+    <footer class="emergency-footer fixed bottom-0 left-0 right-0 z-40" style="height: var(--footer-height);" role="contentinfo" aria-label="Emergency support banner">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-center gap-2.5">
+            <i class="fa-solid fa-heart-pulse text-red-500 animate-pulse"></i>
+            <span class="text-red-600 font-bold text-sm tracking-wide animate-pulse">
+                24/7 Emergency Medical Support — Always Free &amp; Available for Everyone
+            </span>
+            <i class="fa-solid fa-heart-pulse text-red-500 animate-pulse"></i>
+        </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SCROLL TO TOP BUTTON                         -->
+    <!-- ════════════════════════════════════════════ -->
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- JAVASCRIPT                                   -->
+    <!-- ════════════════════════════════════════════ -->
+    <script>
+        /**
+         * ═══════════════════════════════════════════
+         * Medilink AI — Terms of Service Page Logic
+         * ═══════════════════════════════════════════
+         * Handles: Sidebar sync, smooth scroll,
+         * IntersectionObserver active states, search,
+         * navbar scroll effect, scroll-to-top, fade-in
+         * ═══════════════════════════════════════════
+         */
+
+        (function () {
+            'use strict';
+
+            // ─── DOM References ───
+            const navbar = document.getElementById('navbar');
+            const sidebarLinks = document.querySelectorAll('#sidebarNav .sidebar-link');
+            const mobilePills = document.querySelectorAll('#mobileNav .mobile-nav-pill');
+            const legalSections = document.querySelectorAll('.legal-section');
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            const searchCountEl = document.getElementById('searchCount');
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            const fadeElements = document.querySelectorAll('.fade-up');
+
+            // ─── 1. NAVBAR SCROLL EFFECT ───
+            // Adds shadow to navbar when user scrolls down
+            let lastScrollY = 0;
+            function handleNavbarScroll() {
+                const scrollY = window.scrollY;
+                if (scrollY > 10) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                lastScrollY = scrollY;
+            }
+            window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+
+            // ─── 2. INTERSECTION OBSERVER — ACTIVE SIDEBAR SYNC ───
+            // Dynamically highlights the active legal section in both
+            // desktop sidebar and mobile horizontal nav as user scrolls
+            const sectionIds = ['section-1', 'section-2', 'section-3', 'section-4', 'section-5'];
+
+            function setActiveSection(activeId) {
+                // Update desktop sidebar
+                sidebarLinks.forEach(link => {
+                    if (link.dataset.section === activeId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                // Update mobile pills
+                mobilePills.forEach(pill => {
+                    if (pill.dataset.section === activeId) {
+                        pill.classList.add('active');
+                        // Scroll the active pill into view in the horizontal nav
+                        pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    } else {
+                        pill.classList.remove('active');
+                    }
+                });
+            }
+
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '-100px 0px -60% 0px', // trigger when section enters upper portion
+                threshold: 0
+            };
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            }, observerOptions);
+
+            // Observe each legal section
+            legalSections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+
+            // ─── 3. SMOOTH SCROLLING — SIDEBAR & MOBILE NAV CLICKS ───
+            // Clicking a section link smoothly scrolls the content area
+            function handleNavClick(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', handleNavClick);
+            });
+
+            mobilePills.forEach(pill => {
+                pill.addEventListener('click', handleNavClick);
+            });
+
+            // ─── 4. QUICK SEARCH — KEYWORD FILTERING & HIGHLIGHTING ───
+            // Stores original innerHTML of each searchable section
+            // to restore after clearing search
+            const originalContent = new Map();
+
+            legalSections.forEach(section => {
+                originalContent.set(section.id, section.innerHTML);
+            });
+
+            // Debounce utility for search input
+            function debounce(fn, delay) {
+                let timer;
+                return function (...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.apply(this, args), delay);
+                };
+            }
+
+            function performSearch() {
+                const query = searchInput.value.trim().toLowerCase();
+                let totalMatches = 0;
+
+                // Show/hide clear button
+                if (query.length > 0) {
+                    clearSearchBtn.classList.remove('hidden');
+                    searchCountEl.classList.remove('hidden');
+                } else {
+                    clearSearchBtn.classList.add('hidden');
+                    searchCountEl.classList.add('hidden');
+                }
+
+                legalSections.forEach(section => {
+                    const originalHTML = originalContent.get(section.id);
+
+                    if (query.length === 0) {
+                        // Restore original content, remove dimming
+                        section.innerHTML = originalHTML;
+                        section.classList.remove('dimmed', 'highlighted');
+                        return;
+                    }
+
+                    // Create a temporary container to parse HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = originalHTML;
+
+                    // Find all text nodes and highlight matches
+                    const walker = document.createTreeWalker(
+                        tempDiv,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+
+                    const textNodes = [];
+                    let node;
+                    while (node = walker.nextNode()) {
+                        // Skip script/style content (shouldn't exist here, but safety)
+                        if (node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE') {
+                            textNodes.push(node);
+                        }
+                    }
+
+                    let sectionMatches = 0;
+
+                    textNodes.forEach(textNode => {
+                        const text = textNode.textContent;
+                        const lowerText = text.toLowerCase();
+                        const index = lowerText.indexOf(query);
+
+                        if (index !== -1) {
+                            sectionMatches++;
+                            // Count all occurrences in this text node
+                            let count = 0;
+                            let pos = 0;
+                            while ((pos = lowerText.indexOf(query, pos)) !== -1) {
+                                count++;
+                                pos += query.length;
+                            }
+                            totalMatches += count;
+
+                            // Build highlighted HTML fragment
+                            const fragment = document.createDocumentFragment();
+                            let lastIndex = 0;
+                            let searchPos = 0;
+
+                            while ((searchPos = lowerText.indexOf(query, searchPos)) !== -1) {
+                                // Text before match
+                                if (searchPos > lastIndex) {
+                                    fragment.appendChild(document.createTextNode(text.substring(lastIndex, searchPos)));
+                                }
+                                // Highlighted match
+                                const mark = document.createElement('mark');
+                                mark.className = 'search-highlight';
+                                mark.textContent = text.substring(searchPos, searchPos + query.length);
+                                fragment.appendChild(mark);
+
+                                lastIndex = searchPos + query.length;
+                                searchPos = lastIndex;
+                            }
+
+                            // Remaining text after last match
+                            if (lastIndex < text.length) {
+                                fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                            }
+
+                            // Replace the text node with the highlighted fragment
+                            textNode.parentNode.replaceChild(fragment, textNode);
+                        }
+                    });
+
+                    // Dim sections with no matches, highlight sections with matches
+                    if (sectionMatches > 0) {
+                        section.classList.add('highlighted');
+                        section.classList.remove('dimmed');
+                    } else {
+                        section.classList.add('dimmed');
+                        section.classList.remove('highlighted');
+                    }
+
+                    // Update the section's DOM with highlighted content
+                    section.innerHTML = tempDiv.innerHTML;
+                });
+
+                // Update match count display
+                if (query.length > 0) {
+                    if (totalMatches > 0) {
+                        searchCountEl.textContent = `Found ${totalMatches} match${totalMatches !== 1 ? 'es' : ''} across the document`;
+                        searchCountEl.classList.remove('text-red-400');
+                        searchCountEl.classList.add('text-brand-600');
+                    } else {
+                        searchCountEl.textContent = 'No matches found for "' + searchInput.value.trim() + '"';
+                        searchCountEl.classList.add('text-red-400');
+                        searchCountEl.classList.remove('text-brand-600');
+                    }
+                }
+            }
+
+            // Debounced search handler (200ms delay)
+            const debouncedSearch = debounce(performSearch, 200);
+            searchInput.addEventListener('input', debouncedSearch);
+
+            // Clear search button
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                performSearch();
+                searchInput.focus();
+            });
+
+            // Clear search on Escape key
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    performSearch();
+                    searchInput.blur();
+                }
+            });
+
+            // ─── 5. SCROLL-TO-TOP BUTTON ───
+            function handleScrollTopVisibility() {
+                if (window.scrollY > 400) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            }
+            window.addEventListener('scroll', handleScrollTopVisibility, { passive: true });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ─── 6. FADE-IN ON SCROLL ───
+            // Uses IntersectionObserver to trigger fade-up animations
+            const fadeObserverOptions = {
+                root: null,
+                rootMargin: '0px 0px -40px 0px',
+                threshold: 0.05
+            };
+
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Stagger the animation slightly for each element
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 80);
+                        fadeObserver.unobserve(entry.target);
+                    }
+                });
+            }, fadeObserverOptions);
+
+            fadeElements.forEach(el => {
+                fadeObserver.observe(el);
+            });
+
+            // ─── 7. KEYBOARD ACCESSIBILITY ───
+            // Allow Enter key to trigger sidebar/mobile nav links
+            [sidebarLinks, mobilePills].forEach(linkGroup => {
+                linkGroup.forEach(link => {
+                    link.setAttribute('tabindex', '0');
+                    link.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleNavClick.call(link, e);
+                        }
+                    });
+                });
+            });
+
+        })();
+    </script>
+
+</body>
+</html>

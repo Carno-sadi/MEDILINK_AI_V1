@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#0B0F1A" />
+    <title>SOS Emergency — Medilink AI</title>
+    <style>
+      /* Medilink AI SOS Emergency - CSS Custom Properties & Base Styles */
+      :root {
+        --ml-bg: #0b0f1a;
+        --ml-surface: rgba(255, 255, 255, 0.06);
+        --ml-glass-blur: blur(24px);
+        --ml-glass-border: rgba(255, 255, 255, 0.1);
+        --ml-red: #dc2626;
+        --ml-red-dark: #991b1b;
+        --ml-red-glow-1: rgba(220, 38, 38, 0.55);
+        --ml-red-glow-2: rgba(220, 38, 38, 0.25);
+        --ml-red-glow-3: rgba(220, 38, 38, 0.08);
+        --ml-amber: #f59e0b;
+        --ml-green: #22c55e;
+        --ml-white: #f8fafc;
+        --ml-muted: rgba(248, 250, 252, 0.5);
+        --ml-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        --ml-ease-out: cubic-bezier(0, 0, 0.2, 1);
+      }
+
+      /* Reset all elements to consistent box model */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Base body styles with mobile optimizations */
+      body {
+        background: var(--ml-bg);
+        color: var(--ml-white);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        min-height: 100dvh;
+        user-select: none;
+        -webkit-user-select: none;
+        overscroll-behavior: none;
+        overflow: hidden;
+        line-height: 1.5;
+      }
+
+      /* Glassmorphic fixed navbar */
+      #ml-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        height: 64px;
+        background: rgba(11, 15, 26, 0.65);
+        backdrop-filter: var(--ml-glass-blur);
+        -webkit-backdrop-filter: var(--ml-glass-blur);
+        border-bottom: 1px solid var(--ml-glass-border);
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+      }
+
+      /* Logo wordmark styling */
+      .ml-logo {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ml-white);
+        letter-spacing: 0.02em;
+      }
+
+      /* Full-screen preloader modal that blocks all interaction */
+      #ml-preloader-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(11, 15, 26, 0.96);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s var(--ml-ease);
+      }
+
+      /* Modal inner content container */
+      .ml-modal-inner {
+        text-align: center;
+        padding: 40px 24px;
+        max-width: 600px;
+        width: 100%;
+      }
+
+      /* Modal brand name */
+      .ml-modal-brand {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--ml-white);
+        margin-bottom: 12px;
+        letter-spacing: 0.05em;
+      }
+
+      /* Divider line below brand */
+      .ml-modal-brand::after {
+        content: "";
+        display: block;
+        width: 200px;
+        height: 1px;
+        background: var(--ml-glass-border);
+        margin: 16px auto 0;
+      }
+
+      /* Modal heading text */
+      .ml-modal-heading {
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--ml-white);
+        line-height: 1.6;
+        margin-top: 32px;
+        margin-bottom: 40px;
+      }
+
+      /* Condition button row layout */
+      .ml-condition-row {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* Condition selection buttons with distinct color borders */
+      .ml-condition-btn {
+        min-width: 140px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid transparent;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          transform 0.15s ease;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      /* Normal condition button green border */
+      .ml-condition-btn[data-condition="Normal"] {
+        border-color: rgba(34, 197, 94, 0.5);
+        color: #22c55e;
+      }
+
+      /* Medium condition button amber border */
+      .ml-condition-btn[data-condition="Medium"] {
+        border-color: rgba(245, 158, 11, 0.5);
+        color: #f59e0b;
+      }
+
+      /* Critical condition button red border */
+      .ml-condition-btn[data-condition="Critical"] {
+        border-color: rgba(220, 38, 38, 0.5);
+        color: #dc2626;
+      }
+
+      /* Hover effect on condition buttons */
+      .ml-condition-btn:hover {
+        transform: scale(1.03);
+      }
+
+      /* Active/pressed state for condition buttons */
+      .ml-condition-btn:active {
+        transform: scale(0.97);
+      }
+
+      /* Selected state for Normal button */
+      .ml-condition-btn.ml-selected[data-condition="Normal"] {
+        background: rgba(34, 197, 94, 0.15);
+      }
+
+      /* Selected state for Medium button */
+      .ml-condition-btn.ml-selected[data-condition="Medium"] {
+        background: rgba(245, 158, 11, 0.15);
+      }
+
+      /* Selected state for Critical button */
+      .ml-condition-btn.ml-selected[data-condition="Critical"] {
+        background: rgba(220, 38, 38, 0.15);
+      }
+
+      /* Main SOS UI container (hidden until permissions phase) */
+      #ml-main-ui {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 64px;
+      }
+
+      /* Primary SOS button with heartbeat animation */
+      .ml-sos-btn {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid rgba(220, 38, 38, 0.6);
+        background: radial-gradient(
+          circle at center,
+          var(--ml-red-dark),
+          var(--ml-red)
+        );
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        animation: ml-heartbeat 1.4s ease-in-out infinite;
+        will-change: transform, box-shadow;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      /* SOS button pressed state */
+      .ml-sos-btn:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+      }
+
+      /* SOS main label text */
+      .ml-sos-label {
+        font-size: 48px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: 0.08em;
+        line-height: 1;
+      }
+
+      /* SOS sub-label instruction text */
+      .ml-sos-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.65);
+        font-weight: 400;
+      }
+
+      /* Two-beat cardiac heartbeat pulse animation */
+      @keyframes ml-heartbeat {
+        0% {
+          transform: scale(1);
+          box-shadow:
+            0 0 0 0px var(--ml-red-glow-1),
+            0 0 40px 8px var(--ml-red-glow-2);
+        }
+        14% {
+          transform: scale(1.045);
+          box-shadow:
+            0 0 0 12px var(--ml-red-glow-1),
+            0 0 60px 16px var(--ml-red-glow-2);
+        }
+        28% {
+          transform: scale(1);
+          box-shadow:
+            0 0 0 0px var(--ml-red-glow-1),
+            0 0 40px 8px var(--ml-red-glow-2);
+        }
+        42% {
+          transform: scale(1.028);
+          box-shadow:
+            0 0 0 6px var(--ml-red-glow-1),
+            0 0 50px 12px var(--ml-red-glow-2);
+        }
+        70% {
+          transform: scale(1);
+          box-shadow:
+            0 0 0 0px var(--ml-red-glow-1),
+            0 0 40px 8px var(--ml-red-glow-2);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow:
+            0 0 0 0px var(--ml-red-glow-1),
+            0 0 40px 8px var(--ml-red-glow-2);
+        }
+      }
+
+      /* Glassmorphic Find Hospital pill button */
+      .ml-hospital-btn {
+        margin-top: 32px;
+        min-width: 200px;
+        height: 52px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          border-color 0.3s ease,
+          transform 0.15s ease;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      /* Hospital button hover state with green border */
+      .ml-hospital-btn:hover {
+        border-color: rgba(34, 197, 94, 0.6);
+      }
+
+      /* Hospital button pressed state */
+      .ml-hospital-btn:active {
+        transform: scale(0.97);
+      }
+
+      /* Fixed status bar at bottom of screen */
+      #ml-status-bar {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 50;
+        white-space: nowrap;
+      }
+
+      /* Glassmorphic status indicator pill */
+      .ml-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 99px;
+        padding: 8px 14px;
+        font-size: 13px;
+        color: var(--ml-muted);
+      }
+
+      /* Animated status dot indicator */
+      .ml-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ml-green);
+        animation: ml-dot-pulse 1.8s ease-in-out infinite;
+      }
+
+      /* Status dot breathing opacity animation */
+      @keyframes ml-dot-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* Separator between status pills */
+      .ml-status-sep {
+        color: var(--ml-muted);
+        font-size: 13px;
+      }
+
+      /* Mobile responsive: reduce SOS button size on small screens */
+      @media (max-width: 480px) {
+        .ml-sos-btn {
+          width: 180px;
+          height: 180px;
+        }
+
+        .ml-sos-label {
+          font-size: 42px;
+        }
+
+        .ml-modal-heading {
+          font-size: 18px;
+        }
+
+        .ml-condition-btn {
+          min-width: 120px;
+          font-size: 14px;
+        }
+      }
+
+      /* Mobile responsive: stack condition buttons vertically on very narrow screens */
+      @media (max-width: 360px) {
+        .ml-condition-row {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .ml-condition-btn {
+          width: 100%;
+          max-width: 200px;
+        }
+
+        .ml-modal-heading {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav id="ml-navbar">
+      <a href="index.html"><span class="ml-logo">Medilink AI</span></a>
+    </nav>
+
+    <!-- PRELOADER MODAL (full-screen, z-index: 1000) -->
+    <div
+      id="ml-preloader-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Select your current condition"
+    >
+      <div class="ml-modal-inner">
+        <p class="ml-modal-brand">Medilink AI</p>
+        <h1 class="ml-modal-heading">
+          Please select your current<br />condition to proceed
+        </h1>
+        <div class="ml-condition-row">
+          <button
+            class="ml-condition-btn"
+            data-condition="Normal"
+            aria-label="Normal condition"
+          >
+            🟢 Normal
+          </button>
+          <button
+            class="ml-condition-btn"
+            data-condition="Medium"
+            aria-label="Medium condition"
+          >
+            🟡 Medium
+          </button>
+          <button
+            class="ml-condition-btn"
+            data-condition="Critical"
+            aria-label="Critical condition"
+          >
+            🔴 Critical
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN SOS UI (hidden until permissions granted) -->
+    <main id="ml-main-ui" style="display: none">
+      <!-- SOS BUTTON (dead center) -->
+      <button
+        id="ml-sos-btn"
+        class="ml-sos-btn"
+        aria-label="SOS Emergency Button"
+      >
+        <span class="ml-sos-label">SOS</span>
+        <span class="ml-sos-sub">Press or say HELP</span>
+      </button>
+
+      <!-- FIND HOSPITAL BUTTON -->
+      <button
+        id="ml-hospital-btn"
+        class="ml-hospital-btn"
+        aria-label="Find nearest hospital"
+      >
+        🏥 Find Hospital
+      </button>
+    </main>
+
+    <!-- STATUS BAR (fixed bottom) -->
+    <div id="ml-status-bar" aria-live="polite">
+      <span class="ml-status-pill">
+        <span class="ml-status-dot"></span>
+        <span id="ml-status-mic">🎙️ Waiting...</span>
+      </span>
+      <span class="ml-status-sep">·</span>
+      <span class="ml-status-pill">
+        <span class="ml-status-dot"></span>
+        <span id="ml-status-gps">📍 Waiting...</span>
+      </span>
+    </div>
+
+    <script>
+      /* Medilink AI SOS Emergency - Application State Machine */
+      const AppState = {
+        current: "PRELOADER", // PRELOADER → PERMISSIONS → READY → TRIGGERED
+        selectedCondition: null, // 'Normal' | 'Medium' | 'Critical'
+        lat: null,
+        lng: null,
+        gpsWatchId: null,
+        recognition: null,
+        audioCtx: null,
+        isSOSTriggered: false,
+      };
+
+      /* Log and update the current application state */
+      function setState(newState) {
+        console.log(`[Medilink SOS] State: ${AppState.current} → ${newState}`);
+        AppState.current = newState;
+      }
+
+      /* Update a status bar indicator with new text */
+      function updateStatus(type, message) {
+        const el = document.getElementById(`ml-status-${type}`);
+        if (el) el.textContent = message;
+      }
+
+      /* Initialize the condition selection preloader modal */
+      function initPreloader() {
+        const modal = document.getElementById("ml-preloader-modal");
+
+        document.querySelectorAll(".ml-condition-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            // Clear previous selection
+            document
+              .querySelectorAll(".ml-condition-btn")
+              .forEach((b) => b.classList.remove("ml-selected"));
+            btn.classList.add("ml-selected");
+
+            // Save condition
+            AppState.selectedCondition = btn.dataset.condition;
+
+            // Brief visual confirm delay, then move to Phase 2
+            setTimeout(() => {
+              modal.style.opacity = "0";
+              modal.style.transition = "opacity 0.4s var(--ml-ease)";
+              setTimeout(() => {
+                modal.style.display = "none";
+                setState("PERMISSIONS");
+                initPermissions();
+              }, 400);
+            }, 350);
+          });
+        });
+      }
+
+      /* Request geolocation and microphone permissions sequentially */
+      async function initPermissions() {
+        // Show inline loading state on status bar
+        updateStatus("gps", "Requesting GPS...");
+        updateStatus("mic", "Waiting...");
+
+        // 1. Geolocation (requested first)
+        try {
+          await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                AppState.lat = pos.coords.latitude;
+                AppState.lng = pos.coords.longitude;
+                updateStatus("gps", "📍 GPS Active");
+                resolve();
+              },
+              (err) => {
+                console.warn("[Medilink SOS] GPS denied:", err.message);
+                updateStatus("gps", "GPS: Denied");
+                resolve(); // Resolve anyway — GPS is non-blocking for SOS reveal
+              },
+              { enableHighAccuracy: true, timeout: 10000 },
+            );
+          });
+
+          // Start continuous GPS watch after initial fix
+          AppState.gpsWatchId = navigator.geolocation.watchPosition(
+            (pos) => {
+              AppState.lat = pos.coords.latitude;
+              AppState.lng = pos.coords.longitude;
+            },
+            (err) =>
+              console.warn("[Medilink SOS] GPS watch error:", err.message),
+            { enableHighAccuracy: true },
+          );
+        } catch (e) {
+          console.error("[Medilink SOS] Geolocation error:", e);
+          updateStatus("gps", "GPS: Error");
+        }
+
+        // 2. Microphone (requested after GPS)
+        updateStatus("mic", "Requesting mic...");
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          stream.getTracks().forEach((track) => track.stop()); // Release stream immediately
+          updateStatus("mic", "🎙️ Listening");
+          initSpeechRecognition(); // Start speech engine
+        } catch (e) {
+          console.warn("[Medilink SOS] Mic denied:", e.message);
+          updateStatus("mic", "Mic: Denied");
+        }
+
+        // Reveal main SOS UI regardless of permission outcomes
+        setState("READY");
+        revealMainUI();
+      }
+
+      /* Fade-in reveal animation for the main SOS interface */
+      function revealMainUI() {
+        const main = document.getElementById("ml-main-ui");
+        main.style.opacity = "0";
+        main.style.transform = "scale(0.95)";
+        main.style.display = "flex";
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            main.style.transition =
+              "opacity 0.7s var(--ml-ease), transform 0.7s var(--ml-ease)";
+            main.style.opacity = "1";
+            main.style.transform = "scale(1)";
+          });
+        });
+      }
+
+      /* Initialize continuous speech recognition for HELP detection */
+      function initSpeechRecognition() {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+          console.warn(
+            "[Medilink SOS] SpeechRecognition API not supported on this browser.",
+          );
+          updateStatus("mic", "Mic: Not Supported");
+          return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true; // Keep listening indefinitely
+        recognition.interimResults = true; // Detect words as they are spoken
+        recognition.lang = "en-US"; // English detection for "help"
+        recognition.maxAlternatives = 1;
+
+        // Check transcripts for the trigger word "help"
+        recognition.onresult = (event) => {
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript
+              .toLowerCase()
+              .trim();
+            if (transcript.includes("help")) {
+              console.log('[Medilink SOS] Voice trigger detected: "help"');
+              triggerSOS();
+            }
+          }
+        };
+
+        // Auto-restart on recoverable errors
+        recognition.onerror = (event) => {
+          console.warn("[Medilink SOS] Speech recognition error:", event.error);
+          if (["network", "aborted"].includes(event.error)) {
+            setTimeout(() => recognition.start(), 1500);
+          }
+        };
+
+        // Auto-restart if SOS hasn't triggered to keep always listening
+        recognition.onend = () => {
+          if (!AppState.isSOSTriggered && AppState.current === "READY") {
+            try {
+              recognition.start();
+            } catch (e) {}
+          }
+        };
+
+        AppState.recognition = recognition;
+        try {
+          recognition.start();
+        } catch (e) {
+          console.warn("[Medilink SOS] Could not start recognition:", e);
+        }
+      }
+
+      /* Trigger SOS emergency: vibration, alarm, and SMS dispatch */
+      function triggerSOS() {
+        // Guard: prevent double-trigger
+        if (AppState.isSOSTriggered) return;
+        AppState.isSOSTriggered = true;
+        setState("TRIGGERED");
+
+        console.log(
+          "[Medilink SOS] SOS TRIGGERED. Condition:",
+          AppState.selectedCondition,
+        );
+
+        // Stop speech recognition to free resources
+        try {
+          AppState.recognition?.stop();
+        } catch (e) {}
+
+        // === ACTION 1: VIBRATION ===
+        if (navigator.vibrate) {
+          navigator.vibrate([1000, 500, 1000, 500, 1000]);
+        }
+
+        // === ACTION 2: AUDIO ALARM ===
+        playEmergencyAlarm();
+
+        // === ACTION 3: SMS DISPATCH ===
+        const lat = AppState.lat || "0";
+        const lng = AppState.lng || "0";
+        const condition = AppState.selectedCondition || "Unknown";
+        const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+        const smsBody = encodeURIComponent(
+          `EMERGENCY! Medilink AI Alert. Condition: ${condition}. Live Location: ${mapUrl}`,
+        );
+        window.location.href = `sms:999?body=${smsBody}`;
+
+        // Visual feedback: pulse SOS button red, change label
+        const sosBtn = document.getElementById("ml-sos-btn");
+        if (sosBtn) {
+          sosBtn.style.background = "var(--ml-red)";
+          sosBtn.style.animation = "none";
+          sosBtn.style.transform = "scale(1.08)";
+          sosBtn.querySelector(".ml-sos-label").textContent = "SENT!";
+        }
+      }
+
+      /* Generate a two-tone siren alarm using Web Audio API */
+      function playEmergencyAlarm() {
+        try {
+          AppState.audioCtx = new (
+            window.AudioContext || window.webkitAudioContext
+          )();
+          const ctx = AppState.audioCtx;
+
+          // Pattern: two alternating tones repeating 6 times
+          const tones = [880, 660]; // Hz — high and medium pitch
+          let time = ctx.currentTime;
+
+          for (let cycle = 0; cycle < 6; cycle++) {
+            tones.forEach((freq, i) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+
+              osc.type = "sawtooth"; // Harsh, alarm-like timbre
+              osc.frequency.setValueAtTime(freq, time + i * 0.25 + cycle * 0.5);
+
+              // Envelope: fast attack, quick decay
+              gain.gain.setValueAtTime(0, time + i * 0.25 + cycle * 0.5);
+              gain.gain.linearRampToValueAtTime(
+                0.75,
+                time + i * 0.25 + cycle * 0.5 + 0.02,
+              );
+              gain.gain.linearRampToValueAtTime(
+                0,
+                time + i * 0.25 + cycle * 0.5 + 0.23,
+              );
+
+              osc.start(time + i * 0.25 + cycle * 0.5);
+              osc.stop(time + i * 0.25 + cycle * 0.5 + 0.25);
+            });
+          }
+        } catch (e) {
+          console.warn("[Medilink SOS] AudioContext not supported:", e);
+          // Graceful degradation: alarm failure does not block SMS or vibration
+        }
+      }
+
+      /* Initialize Find Hospital button with GPS fallback logic */
+      function initFindHospital() {
+        const btn = document.getElementById("ml-hospital-btn");
+        if (!btn) return;
+
+        btn.addEventListener("click", () => {
+          // Use cached coordinates if available, otherwise get fresh fix
+          if (AppState.lat && AppState.lng) {
+            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=Nearest+Emergency+Hospital&origin=${AppState.lat},${AppState.lng}`;
+            window.open(mapsUrl, "_blank");
+          } else {
+            // Fresh geolocation request
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=Nearest+Emergency+Hospital&origin=${pos.coords.latitude},${pos.coords.longitude}`;
+                window.open(mapsUrl, "_blank");
+              },
+              () => {
+                // Fallback: open without origin coordinates
+                window.open(
+                  "https://www.google.com/maps/search/Emergency+Hospital+near+me",
+                  "_blank",
+                );
+              },
+              { enableHighAccuracy: true, timeout: 6000 },
+            );
+          }
+        });
+      }
+
+      /* Boot sequence: entry point when DOM is ready */
+      document.addEventListener("DOMContentLoaded", () => {
+        initPreloader(); // Phase 1: condition selector modal
+        initFindHospital(); // Attach hospital button listener (safe before READY state)
+
+        // Attach SOS button listener
+        const sosBtn = document.getElementById("ml-sos-btn");
+        if (sosBtn) {
+          sosBtn.addEventListener("click", triggerSOS);
+        }
+      });
+    </script>
+  </body>
+</html>

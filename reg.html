@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medilink AI — Onboarding</title>
+    <meta
+      name="description"
+      content="Personalize your healthcare journey with Medilink AI."
+    />
+
+    <!-- Fonts -->
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CDN (layout utilities only) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="reg.css" />
+  </head>
+  <body>
+    <div class="root-container">
+      <!-- ═══════════════════════════════════════
+         LEFT PANEL — Branding & Step Indicator
+         ═══════════════════════════════════════ -->
+      <aside class="left-panel" aria-label="Onboarding progress">
+        <div class="left-content">
+          <!-- Logo -->
+          <div class="logo reveal">
+            <div class="logo-icon" aria-hidden="true"></div>
+            <span class="logo-text"
+              >Medilink <span class="logo-ai">AI</span></span
+            >
+          </div>
+
+          <!-- Headline -->
+          <div class="headline-group reveal">
+            <h1 class="headline">Let's personalize your healthcare journey.</h1>
+            <p class="subtext">Four quick steps. Lifetime of smarter care.</p>
+          </div>
+
+          <!-- Vertical Step Indicator -->
+          <nav class="step-indicator reveal" aria-label="Registration steps">
+            <div class="step-item" data-step="1" data-state="active">
+              <div class="step-dot" aria-hidden="true"></div>
+              <div class="step-info">
+                <span class="step-label">Basic Information</span>
+                <span class="step-desc">Name, age, gender & blood type</span>
+              </div>
+            </div>
+            <div class="step-item" data-step="2" data-state="idle">
+              <div class="step-dot" aria-hidden="true"></div>
+              <div class="step-info">
+                <span class="step-label">Medical Profile</span>
+                <span class="step-desc">Pre-existing conditions</span>
+              </div>
+            </div>
+            <div class="step-item" data-step="3" data-state="idle">
+              <div class="step-dot" aria-hidden="true"></div>
+              <div class="step-info">
+                <span class="step-label">Allergies</span>
+                <span class="step-desc">Known drug & food allergies</span>
+              </div>
+            </div>
+            <div class="step-item" data-step="4" data-state="idle">
+              <div class="step-dot" aria-hidden="true"></div>
+              <div class="step-info">
+                <span class="step-label">Your Goal</span>
+                <span class="step-desc"
+                  >Primary reason for joining (optional)</span
+                >
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <!-- Decorative Blob -->
+        <div class="decorative-blob" aria-hidden="true"></div>
+      </aside>
+
+      <!-- ═══════════════════════════════════════
+         RIGHT PANEL — Form Card
+         ═══════════════════════════════════════ -->
+      <main class="right-panel">
+        <div class="form-card reveal">
+          <!-- Progress Header -->
+          <div class="progress-wrapper reveal">
+            <div class="step-counter">
+              Step <span id="stepNum">1</span> of 4
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <!-- Multi-Step Form -->
+          <form id="onboardingForm" novalidate>
+            <!-- ── STEP 1: Basic Information ── -->
+            <div class="form-step is-active" data-step="1">
+              <h2 class="step-title reveal">Basic Information</h2>
+              <p class="step-subtitle reveal">
+                Let's start with the essentials to build your health profile.
+              </p>
+
+              <div class="field-group reveal">
+                <label for="fullName">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  placeholder="e.g. Rashed Ahmed"
+                  autocomplete="name"
+                />
+                <span class="error-msg" id="error-fullName"></span>
+              </div>
+
+              <div class="field-group reveal">
+                <label for="age">Your Age</label>
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  min="1"
+                  max="120"
+                  placeholder="e.g. 28"
+                />
+                <span class="error-msg" id="error-age"></span>
+              </div>
+
+              <div class="field-group reveal">
+                <label>Gender</label>
+                <div
+                  class="chip-group"
+                  id="genderChips"
+                  data-key="gender"
+                  data-multi="false"
+                ></div>
+                <span class="error-msg" id="error-gender"></span>
+              </div>
+
+              <div class="field-group reveal">
+                <label>Blood Group</label>
+                <div
+                  class="chip-grid"
+                  id="bloodGroupChips"
+                  data-key="bloodGroup"
+                  data-multi="false"
+                ></div>
+                <span class="error-msg" id="error-bloodGroup"></span>
+              </div>
+            </div>
+
+            <!-- ── STEP 2: Medical Profile ── -->
+            <div class="form-step" data-step="2">
+              <h2 class="step-title reveal">
+                Do you have any pre-existing conditions?
+              </h2>
+              <p class="step-subtitle reveal">
+                Select all that apply. This helps Dr. Carno give you safer,
+                smarter advice.
+              </p>
+
+              <div class="field-group reveal">
+                <div
+                  class="chip-group"
+                  id="conditionsChips"
+                  data-key="conditions"
+                  data-multi="true"
+                ></div>
+                <span class="error-msg" id="error-conditions"></span>
+              </div>
+            </div>
+
+            <!-- ── STEP 3: Allergies ── -->
+            <div class="form-step" data-step="3">
+              <h2 class="step-title reveal">
+                Do you have any known allergies?
+              </h2>
+              <p class="step-subtitle reveal">
+                Critical for safe prescription and pharmacy recommendations.
+              </p>
+
+              <div class="field-group reveal">
+                <div class="chip-nka-wrapper">
+                  <button
+                    type="button"
+                    class="chip chip-nka"
+                    data-exclusive="true"
+                    data-value="No Known Allergies"
+                  >
+                    No Known Allergies
+                  </button>
+                </div>
+                <div
+                  class="chip-group"
+                  id="allergiesChips"
+                  data-key="allergies"
+                  data-multi="true"
+                ></div>
+                <span class="error-msg" id="error-allergies"></span>
+              </div>
+            </div>
+
+            <!-- ── STEP 4: Primary Goal (Optional) ── -->
+            <div class="form-step" data-step="4">
+              <h2 class="step-title reveal">What brings you to Medilink AI?</h2>
+              <p class="step-subtitle reveal">
+                We'll customize your dashboard based on your primary goal.
+                (Optional)
+              </p>
+
+              <div class="field-group reveal">
+                <div class="goal-cards" id="goalCards" data-key="primaryGoal">
+                  <button
+                    type="button"
+                    class="goal-card"
+                    data-value="Find a Doctor"
+                  >
+                    <div class="goal-check" aria-hidden="true"></div>
+                    <span class="goal-icon" aria-hidden="true">🩺</span>
+                    <h3 class="goal-title">Find a Doctor</h3>
+                    <p class="goal-desc">
+                      Browse verified specialists and book appointments
+                      instantly via WhatsApp.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="goal-card"
+                    data-value="Order Medicine"
+                  >
+                    <div class="goal-check" aria-hidden="true"></div>
+                    <span class="goal-icon" aria-hidden="true">💊</span>
+                    <h3 class="goal-title">Order Medicine</h3>
+                    <p class="goal-desc">
+                      Upload prescriptions and get medicines delivered to your
+                      doorstep.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="goal-card"
+                    data-value="Talk to AI Advisor"
+                  >
+                    <div class="goal-check" aria-hidden="true"></div>
+                    <span class="goal-icon" aria-hidden="true">🤖</span>
+                    <h3 class="goal-title">Talk to AI Advisor</h3>
+                    <p class="goal-desc">
+                      Chat with Dr. Carno AI for instant, reliable health
+                      guidance anytime.
+                    </p>
+                  </button>
+                </div>
+                <span class="error-msg" id="error-primaryGoal"></span>
+              </div>
+            </div>
+          </form>
+
+          <!-- Navigation -->
+          <div class="form-nav">
+            <button type="button" class="btn-back" id="btnBack">Back</button>
+            <button type="button" class="btn-skip" id="btnSkip">
+              Skip for now
+            </button>
+            <button type="button" class="btn-next" id="btnNext">Next</button>
+          </div>
+
+          <!-- Completion Overlay -->
+          <div
+            class="completion-overlay"
+            id="completionOverlay"
+            aria-hidden="true"
+          >
+            <div class="completion-content">
+              <div class="completion-icon" aria-hidden="true"></div>
+              <p class="completion-text">
+                Profile saved! Redirecting to your dashboard...
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="register.js"></script>
+  </body>
+</html>

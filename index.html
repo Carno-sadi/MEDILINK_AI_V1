@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medilink AI — Connecting You to the Best Healthcare</title>
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@600,700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  LOADING OVERLAY (Hidden by default)       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="loading-overlay" class="loading-overlay" aria-hidden="true">
+      <div class="loading-text">
+        <span class="loading-medilink">Medilink</span
+        ><span class="loading-ai">AI</span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  NAVBAR                                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <nav id="navbar" class="navbar">
+      <div class="nav-container">
+        <!-- Left: Logo -->
+        <a href="index.html" class="nav-logo" id="nav-logo">
+          <svg
+            class="nav-logo-icon"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              r="22"
+              stroke="currentColor"
+              stroke-width="2"
+              opacity="0.3"
+            />
+            <line
+              x1="24"
+              y1="12"
+              x2="24"
+              y2="36"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <line
+              x1="12"
+              y1="24"
+              x2="36"
+              y2="24"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <circle cx="24" cy="12" r="3" fill="currentColor" />
+            <circle cx="24" cy="36" r="3" fill="currentColor" />
+            <circle cx="12" cy="24" r="3" fill="currentColor" />
+            <circle cx="36" cy="24" r="3" fill="currentColor" />
+            <circle cx="24" cy="24" r="5" fill="currentColor" opacity="0.2" />
+          </svg>
+          <span class="nav-logo-text">
+            <span class="nav-logo-medilink">MEDILINK</span
+            ><span class="nav-logo-ai">AI</span>
+          </span>
+        </a>
+
+        <!-- Center: Links (Desktop) -->
+        <ul class="nav-links" id="nav-links">
+          <li class="nav-item">
+            <a href="find.html" class="nav-link"> Specialist</a>
+          </li>
+          <li class="nav-item">
+            <a href="eme.html" class="nav-link nav-link--emergency"
+              >Emergency</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="phy.html" class="nav-link">Pharmacy</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About Us</a>
+          </li>
+        </ul>
+
+        <!-- Right: CTA -->
+        <button class="nav-cta" id="nav-cta">Register</button>
+
+        <!-- Mobile Hamburger -->
+        <button
+          class="nav-hamburger"
+          id="nav-hamburger"
+          aria-label="Toggle menu"
+        >
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+      <!-- Mobile Drawer -->
+      <div class="mobile-drawer" id="mobile-drawer">
+        <ul class="mobile-links">
+          <li><a href="find.html" class="mobile-link">Specialist</a></li>
+          <li>
+            <a href="eme.html" class="mobile-link mobile-link--emergency"
+              >Emergency</a
+            >
+          </li>
+          <li><a href="phy.html" class="mobile-link">Pharmacy</a></li>
+          <li><a href="about.html" class="mobile-link">About Us</a></li>
+        </ul>
+        <button class="mobile-cta" id="mobile-cta">Register</button>
+      </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  HERO SECTION                              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="hero" class="hero">
+      <!-- Particle Background Canvas -->
+      <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+      <!-- DNA Container (Desktop Only) -->
+      <div id="dna-container" class="dna-container"></div>
+
+      <!-- DNA Tooltips -->
+      <div id="dna-tooltip" class="dna-tooltip">
+        <div class="dna-tooltip-inner">
+          <div class="dna-tooltip-dot" id="tooltip-dot"></div>
+          <span class="dna-tooltip-label" id="tooltip-label"></span>
+        </div>
+        <svg class="dna-tooltip-connector" viewBox="0 0 60 40">
+          <line
+            x1="0"
+            y1="40"
+            x2="60"
+            y2="0"
+            stroke="var(--connector-line)"
+            stroke-width="1.5"
+            stroke-dasharray="4 3"
+          />
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <!-- Left Column -->
+        <div class="hero-left">
+          <!-- Badge -->
+          <div class="hero-badge" id="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>AI-Powered Healthcare Network</span>
+          </div>
+
+          <!-- H1 -->
+          <h1 class="hero-title" id="hero-title">
+            <span class="hero-title-static">We connect you to the best</span>
+            <br />
+            <span class="hero-title-dynamic">
+              <span id="typewriter-text"></span
+              ><span class="typewriter-cursor">|</span>
+            </span>
+          </h1>
+
+          <!-- Description -->
+          <p class="hero-desc" id="hero-desc">
+            Medilink AI bridges the gap between patients and world-class
+            healthcare through intelligent matching, real-time availability, and
+            AI-driven diagnostics.
+          </p>
+
+          <!-- Buttons -->
+          <div class="hero-buttons" id="hero-buttons">
+            <a href="ai.html" class="hero-btn hero-btn--primary"
+              >Dr. Medilink</a
+            >
+            <a href="price.html" class="hero-btn hero-btn--outline"
+              >Subscription
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator" id="scroll-indicator">
+        <div class="scroll-dot"></div>
+      </div>
+    </section>
+
+    <section id="bento-features">
+      <div class="bento-container">
+        <!-- Section Header -->
+        <div class="bento-header reveal">
+          <p class="eyebrow">Platform Features</p>
+          <h2 class="section-title">Healthcare, Reimagined</h2>
+        </div>
+
+        <!-- Bento Grid -->
+        <div class="bento-grid">
+          <!-- ═══════ CARD 1 — AI Health Advisor (Particle Background + More Info) ═══════ -->
+          <div class="bento-card card-1 reveal" data-tilt>
+            <div class="card-1-strip"></div>
+            <canvas class="particle-canvas" id="particleCanvas"></canvas>
+            <div class="card-content">
+              <p class="eyebrow" style="margin-bottom: 12px">
+                Neural Intelligence
+              </p>
+              <h3 class="card-heading">Intelligent AI Health Advisor</h3>
+              <p class="card-body">
+                Instant, reliable medical insights and curated wellness routines
+                powered by advanced neural networks. Get personalized
+                recommendations tailored to your unique health profile.
+              </p>
+
+              <!-- Feature List -->
+              <div class="feature-list">
+                <div class="feature-item">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>24/7 Symptom Checker & Diagnosis</span>
+                </div>
+                <div class="feature-item">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>Personalized Wellness Plans</span>
+                </div>
+                <div class="feature-item">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>Medication & Lifestyle Reminders</span>
+                </div>
+                <div class="feature-item">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>Secure Health Data Encryption</span>
+                </div>
+              </div>
+
+              <!-- Stats Row -->
+              <div class="stats-row">
+                <div class="stat-item">
+                  <span class="stat-value">98.7%</span>
+                  <span class="stat-label">Diagnostic Accuracy</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">50K+</span>
+                  <span class="stat-label">Daily Consultations</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">&lt;2s</span>
+                  <span class="stat-label">Response Time</span>
+                </div>
+              </div>
+
+              <div class="cta-badge">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
+                  <path d="M12 2a10 10 0 0 1 10 10" />
+                  <path d="M12 12L2.5 12" />
+                </svg>
+                Powered by Dr. Medilink AI
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════ CARD 2 — Find a Doctor (NO background effect) ═══════ -->
+          <div class="bento-card card-2 reveal reveal-delay-1" data-tilt>
+            <div>
+              <p class="eyebrow" style="margin-bottom: 12px">
+                Specialist Network
+              </p>
+              <h3 class="card-heading">Find Your Doctor</h3>
+              <p class="card-body">
+                Locate and book highly verified medical specialists near you in
+                seconds.
+              </p>
+            </div>
+            <div class="search-mockup">
+              <div class="search-bar">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <span>Search specialists, clinics...</span>
+              </div>
+              <div class="pills-row">
+                <span class="pill">Cardiologist</span>
+                <span class="pill">Neurologist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════ CARD 3 — WhatsApp Pharmacy (NO background effect) ═══════ -->
+          <div class="bento-card card-3 reveal reveal-delay-2" data-tilt>
+            <div>
+              <p class="eyebrow" style="margin-bottom: 12px">
+                Instant Delivery
+              </p>
+              <h3 class="card-heading">WhatsApp Pharmacy</h3>
+              <p class="card-body">
+                Upload prescriptions directly. Rapid delivery to your door — no
+                app needed.
+              </p>
+            </div>
+            <div class="whatsapp-visual">
+              <div class="ripple-ring"></div>
+              <div class="ripple-ring"></div>
+              <div class="ripple-ring"></div>
+              <svg
+                class="whatsapp-icon"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       SECTION 1 — STATS
+       ═══════════════════════════════════════════════ -->
+    <section id="stats">
+      <div class="stats-container">
+        <!-- Section Header with staggered reveal -->
+        <div class="stats-header reveal-stagger">
+          <div class="reveal-child">
+            <div class="section-line reveal-line"></div>
+          </div>
+          <div class="reveal-child">
+            <span class="eyebrow-pill">Our Impact in Numbers</span>
+          </div>
+          <div class="reveal-child">
+            <h2 class="section-title">Medilink AI By The Numbers</h2>
+          </div>
+          <div class="reveal-child">
+            <p class="section-subtitle">
+              Trusted by patients, doctors, and caregivers across Bangladesh.
+            </p>
+          </div>
+        </div>
+
+        <!-- Stats Grid with directional reveals -->
+        <div class="stats-grid">
+          <div class="stat-item reveal reveal-left d-01">
+            <div class="stat-divider"></div>
+            <div class="stat-dot reveal reveal-scale d-02"></div>
+            <div
+              class="stat-number stat-number-1"
+              data-target="50000"
+              data-suffix="+"
+            >
+              0
+            </div>
+            <div class="stat-label reveal reveal-up d-03">
+              Satisfied Patients
+            </div>
+          </div>
+          <div class="stat-item reveal reveal-up d-02">
+            <div class="stat-divider"></div>
+            <div class="stat-dot reveal reveal-scale d-03"></div>
+            <div
+              class="stat-number stat-number-2"
+              data-target="500"
+              data-suffix="+"
+            >
+              0
+            </div>
+            <div class="stat-label reveal reveal-up d-04">Verified Doctors</div>
+          </div>
+          <div class="stat-item reveal reveal-right d-03">
+            <div class="stat-divider"></div>
+            <div class="stat-dot reveal reveal-scale d-04"></div>
+            <div
+              class="stat-number stat-number-3"
+              data-target="98"
+              data-suffix="%"
+            >
+              0
+            </div>
+            <div class="stat-label reveal reveal-up d-05">AI Accuracy Rate</div>
+          </div>
+          <div class="stat-item reveal reveal-up d-04">
+            <div class="stat-dot reveal reveal-scale d-05"></div>
+            <div
+              class="stat-number stat-number-4"
+              data-target="24"
+              data-suffix="/7"
+            >
+              0
+            </div>
+            <div class="stat-label reveal reveal-up d-06">Live AI Support</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       SECTION 2 — TESTIMONIALS
+       ═══════════════════════════════════════════════ -->
+    <section id="testimonials">
+      <div class="testimonials-container">
+        <!-- Section Header with staggered reveal -->
+        <div class="testimonials-header reveal-stagger">
+          <div class="reveal-child">
+            <div class="section-line reveal-line"></div>
+          </div>
+          <div class="reveal-child">
+            <span class="eyebrow-pill">Patient Stories</span>
+          </div>
+          <div class="reveal-child">
+            <h2 class="section-title">Trusted by Thousands</h2>
+          </div>
+          <div class="reveal-child">
+            <p class="section-subtitle">
+              Real experiences from real patients across Bangladesh.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marquee Wrapper -->
+      <div class="marquee-wrapper reveal reveal-scale">
+        <!-- Row 1 — Scrolls Left -->
+        <div class="marquee-track marquee-left" id="marqueeRow1"></div>
+
+        <div class="marquee-row-gap"></div>
+
+        <!-- Row 2 — Scrolls Right -->
+        <div class="marquee-track marquee-right" id="marqueeRow2"></div>
+      </div>
+    </section>
+
+    <section id="faq" class="py-[80px] lg:py-[120px]">
+      <div class="max-w-[760px] mx-auto px-6 lg:px-0">
+        <!-- Section Header -->
+        <div class="faq-header scroll-animate text-center mb-12 lg:mb-16">
+          <span class="eyebrow mb-4">Got Questions?</span>
+          <h2 class="section-title mt-4 mb-4">Frequently Asked Questions</h2>
+          <p class="font-body text-[16px]" style="color: var(--body)">
+            Everything you need to know about using Medilink AI.
+          </p>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="faq-list">
+          <!-- FAQ 1 -->
+          <div class="faq-item scroll-animate">
+            <div class="faq-question">
+              <h3 class="faq-question-text">How does Medilink AI work?</h3>
+              <div class="faq-icon">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <path d="M7 1v12M1 7h12" />
+                </svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-text pt-4">
+                Getting started is simple. Create your free Medilink AI account
+                to unlock the full platform experience — including your personal
+                health dashboard, AI-powered consultations with Dr. Medilink,
+                doctor discovery, and pharmacy ordering. Registration takes
+                under two minutes and gives you instant access to all features.
+              </p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="step-pill">Step 1 — Create Account</span>
+                <span class="step-pill">Step 2 — Complete Profile</span>
+                <span class="step-pill">Step 3 — Start Using</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item scroll-animate">
+            <div class="faq-question">
+              <h3 class="faq-question-text">
+                How does the Dr. Medilink AI Health Advisor work?
+              </h3>
+              <div class="faq-icon">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <path d="M7 1v12M1 7h12" />
+                </svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-text pt-4">
+                Dr. Medilink is Medilink AI's intelligent health assistant,
+                powered by advanced neural networks. After registering, simply
+                open the Dr. Medilink chat interface and describe your symptoms
+                or health concern. Dr. Medilink will analyze your input in real
+                time, provide medically-informed guidance, suggest relevant
+                specialists, and recommend next steps — available 24 hours a
+                day, 7 days a week.
+              </p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="step-pill">Register</span>
+                <span class="step-pill">Open Chat</span>
+                <span class="step-pill">Ask Anything</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item scroll-animate">
+            <div class="faq-question">
+              <h3 class="faq-question-text">
+                How do I book an appointment with a doctor?
+              </h3>
+              <div class="faq-icon">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <path d="M7 1v12M1 7h12" />
+                </svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-text pt-4">
+                Booking a specialist has never been easier. Navigate to the
+                Doctors section from your dashboard, browse our network of fully
+                verified medical specialists, and select the doctor that matches
+                your needs. From their profile page, tap the Book via WhatsApp
+                button — you will be connected directly to the doctor's
+                scheduling assistant on WhatsApp to confirm your preferred time
+                and date instantly.
+              </p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="step-pill">Go to Doctors</span>
+                <span class="step-pill">Select Specialist</span>
+                <span class="step-pill">Book via WhatsApp</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item scroll-animate">
+            <div class="faq-question">
+              <h3 class="faq-question-text">
+                How do I order medicines through the pharmacy?
+              </h3>
+              <div class="faq-icon">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <path d="M7 1v12M1 7h12" />
+                </svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-text pt-4">
+                Ordering your prescribed medicines is straightforward. Visit the
+                Pharmacy section, search for your required medicines, and add
+                them to your cart. When you are ready, proceed to Checkout —
+                choose your delivery address, confirm your order, and your
+                medicines will be dispatched promptly. Prescription upload is
+                also supported for controlled medications.
+              </p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="step-pill">Go to Pharmacy</span>
+                <span class="step-pill">Add to Cart</span>
+                <span class="step-pill">Checkout</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 2 — CTA ==================== -->
+    <section
+      id="cta"
+      class="py-[80px] lg:py-[120px] px-[5%]"
+      style="background: var(--surface-alt)"
+    >
+      <div class="max-w-[1200px] mx-auto">
+        <!-- Banner Card -->
+        <div class="cta-banner scroll-animate">
+          <div class="relative z-[2] flex flex-col lg:flex-row gap-12 lg:gap-8">
+            <!-- Left Column — 55% -->
+            <div class="lg:w-[55%] cta-left scroll-animate">
+              <span class="eyebrow mb-4">Start Your Health Journey</span>
+              <h2 class="cta-headline mt-4 mb-5">
+                Your Intelligent Health Partner — Available 24 / 7
+              </h2>
+              <p class="cta-subtext mb-6">
+                Join over 50,000 patients who trust Medilink AI for doctor
+                consultations, AI health advice, and instant pharmacy ordering.
+                Your health, simplified.
+              </p>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <span
+                  class="font-body font-medium text-[13px]"
+                  style="color: var(--primary)"
+                  >✓ Free to Register</span
+                >
+                <span style="color: var(--primary)">·</span>
+                <span
+                  class="font-body font-medium text-[13px]"
+                  style="color: var(--primary)"
+                  >✓ Verified Doctors</span
+                >
+                <span style="color: var(--primary)">·</span>
+                <span
+                  class="font-body font-medium text-[13px]"
+                  style="color: var(--primary)"
+                  >✓ AI-Powered</span
+                >
+              </div>
+            </div>
+
+            <!-- Right Column — 45% -->
+            <div class="lg:w-[45%] flex flex-col gap-[14px]">
+              <!-- Button 1: Find a Doctor -->
+              <a href="find.html">
+                <button class="action-btn btn-teal cta-btn scroll-animate">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+
+                  <span class="btn-label">Find a Doctor →</span>
+                </button></a
+              >
+
+              <!-- Button 2: Pharmacy (teal + pill icon) -->
+              <a href="phy.html">
+                <button class="action-btn btn-teal cta-btn scroll-animate">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"
+                    ></path>
+                    <path d="m8.5 8.5 7 7"></path>
+                  </svg>
+                  <span class="btn-label">Pharmacy →</span>
+                </button></a
+              >
+
+              <!-- Button 3: Emergency Support -->
+              <a href="eme.html">
+                <button class="action-btn btn-emergency cta-btn scroll-animate">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                    ></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <span class="btn-label">Emergency Support</span>
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 
+    ═══════════════════════════════════════════════════
+    FOOTER — Medilink AI
+    Standalone footer section only. No navbar, hero, or 
+    any other page sections included.
+    ═══════════════════════════════════════════════════
+  -->
+    <footer id="site-footer">
+      <!-- ═══════════════════════════════════════════════
+         LAYER 1 — Top Content Strip
+         5-column grid: Brand | Platform | Company | Support | Contact
+         ═══════════════════════════════════════════════ -->
+      <div class="footer-layer-1">
+        <div class="footer-grid">
+          <!-- Column 1: Brand Identity (2fr width) -->
+          <div class="footer-column reveal reveal-col-1">
+            <div class="brand-logo-wrap">
+              <div class="brand-circle" aria-hidden="true"></div>
+              <div class="brand-name">Medi<span>link</span> AI</div>
+            </div>
+            <p class="brand-tagline">Your Intelligent Health Partner</p>
+
+            <!-- Social Icons Row -->
+            <div class="social-row" aria-label="Social media links">
+              <!-- Facebook -->
+              <a
+                href="https://www.facebook.com/profile.php?id=61587520773135"
+                class="social-icon"
+                aria-label="Facebook"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                  />
+                </svg>
+              </a>
+
+              <!-- Instagram -->
+              <a
+                href="https://www.instagram.com/sylhetroboticsclub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                class="social-icon"
+                aria-label="Instagram"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="5"
+                    ry="5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <line
+                    x1="17.5"
+                    y1="6.5"
+                    x2="17.51"
+                    y2="6.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Column 2: Platform -->
+          <div class="footer-column reveal reveal-col-2">
+            <h3 class="footer-col-heading">Platform</h3>
+            <nav aria-label="Platform navigation">
+              <a href="#navbar" class="footer-link">Home</a>
+              <a href="find.html" class="footer-link">Find a Doctor</a>
+              <a href="ai.html" class="footer-link">AI Health Advisor</a>
+              <a href="phy.html" class="footer-link">Pharmacy</a>
+            </nav>
+          </div>
+
+          <!-- Column 3: Company -->
+          <div class="footer-column reveal reveal-col-3">
+            <h3 class="footer-col-heading">Company</h3>
+            <nav aria-label="Company navigation">
+              <a href="about.html" class="footer-link">About Us</a>
+              <a href="about.html#team-section" class="footer-link"
+                >Meet the Team</a
+              >
+              <a href="cont.html" class="footer-link">Contact</a>
+            </nav>
+          </div>
+
+          <!-- Column 4: Support -->
+          <div class="footer-column reveal reveal-col-4">
+            <h3 class="footer-col-heading">Support</h3>
+            <nav aria-label="Support navigation">
+              <a href="privacy.html" class="footer-link">Privacy Policy</a>
+              <a href="terms.html" class="footer-link">Terms of Service</a>
+            </nav>
+          </div>
+
+          <!-- Column 5: Contact -->
+          <div class="footer-column reveal reveal-col-5">
+            <h3 class="footer-col-heading">Get in Touch</h3>
+
+            <div class="contact-line contact-whatsapp">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+                />
+              </svg>
+              <span>+880 1811-389672</span>
+            </div>
+
+            <div class="contact-line contact-email">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              <span>medilink123@gmail.com</span>
+            </div>
+
+            <div class="contact-line contact-emergency">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <span>Emergency: 999</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+         LAYER 2 — Bottom Copyright Bar
+         ═══════════════════════════════════════════════ -->
+      <div class="footer-layer-2 reveal-copyright">
+        <div class="copyright-inner">
+          <p class="copyright-text">
+            Disclaimer: Medilink AI is an assistive technology, not a substitute
+            for professional medical advice. Always consult a doctor in
+            emergencies. Built with ❤️ by Sylhet Robotic Club. | © 2026 Medilink
+            AI.
+          </p>
+          <div class="copyright-links">
+            <a href="privacy.html" class="copyright-link">Privacy</a>
+            <a href="terms.html" class="copyright-link">Terms</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+         LAYER 3 — Oversized Architectural Typography Canvas
+         The signature ghost watermark effect.
+         ═══════════════════════════════════════════════ -->
+      <div class="footer-layer-3">
+        <div class="giant-text reveal-giant" aria-hidden="true">
+          MEDILINK AI
+        </div>
+      </div>
+    </footer>
+    <script src="logic.js"></script>
+  </body>
+</html>

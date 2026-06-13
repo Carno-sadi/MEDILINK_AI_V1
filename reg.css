@@ -1,0 +1,911 @@
+/* ═══════════════registation page css code start════════════════════════════════
+   MEDILINK AI — ONBOARDING STYLES
+
+
+/* ── 0. Design Tokens ── */
+:root {
+  --bg: #f0fdf4;
+  --surface: #ffffff;
+  --surface-alt: #f7fffe;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(13, 148, 136, 0.18);
+  --glass-border-inner: rgba(20, 184, 166, 0.1);
+  --primary: #0d9488;
+  --primary-dark: #0b7d72;
+  --primary-light: #14b8a6;
+  --primary-xlight: rgba(13, 148, 136, 0.08);
+  --primary-glow: rgba(13, 148, 136, 0.25);
+  --accent: #2563eb;
+  --accent-xlight: rgba(37, 99, 235, 0.08);
+  --navy: #1e3a6e;
+  --violet: #7c3aed;
+  --heading: #0f2e2a;
+  --body: #52706c;
+  --muted: #94a3b8;
+  --placeholder: #a8c4be;
+  --label: #0d9488;
+  --label-bg: rgba(13, 148, 136, 0.1);
+  --input-border: rgba(13, 148, 136, 0.2);
+  --input-focus: #0d9488;
+  --input-focus-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+  --input-bg: #ffffff;
+  --input-bg-filled: rgba(13, 148, 136, 0.04);
+  --chip-idle-bg: rgba(13, 148, 136, 0.06);
+  --chip-idle-border: rgba(13, 148, 136, 0.2);
+  --chip-idle-text: #52706c;
+  --chip-active-bg: #0d9488;
+  --chip-active-border: #0d9488;
+  --chip-active-text: #ffffff;
+  --chip-active-glow: 0 4px 16px -4px rgba(13, 148, 136, 0.4);
+  --card-idle-bg: #ffffff;
+  --card-idle-border: rgba(13, 148, 136, 0.18);
+  --card-active-bg: rgba(13, 148, 136, 0.06);
+  --card-active-border: #0d9488;
+  --card-active-glow: 0 8px 28px -8px rgba(13, 148, 136, 0.3);
+  --error: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.06);
+  --error-border: rgba(220, 38, 38, 0.3);
+  --success: #16a34a;
+  --success-bg: rgba(22, 163, 74, 0.08);
+  --progress-track: rgba(13, 148, 136, 0.12);
+  --progress-fill: linear-gradient(90deg, #0d9488, #2563eb);
+  --shadow-soft: 0 40px 80px -15px rgba(13, 148, 136, 0.12);
+  --shadow-card: 0 24px 50px -12px rgba(13, 148, 136, 0.1);
+  --shadow-card-hover: 0 32px 64px -12px rgba(13, 148, 136, 0.2);
+  --shadow-btn: 0 12px 28px -6px rgba(13, 148, 136, 0.35);
+  --shadow-btn-hover: 0 16px 36px -6px rgba(13, 148, 136, 0.45);
+  --panel-gradient: linear-gradient(
+    160deg,
+    #f0fdf4 0%,
+    #ccfbf1 50%,
+    #e0f2fe 100%
+  );
+  --step-active-dot: #0d9488;
+  --step-done-dot: #16a34a;
+  --step-idle-dot: rgba(13, 148, 136, 0.2);
+  --step-line: rgba(13, 148, 136, 0.15);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── 1. Reset & Base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: "Satoshi", sans-serif;
+  background: var(--bg);
+  color: var(--body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 2. Reveal Animation (with fallback) ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* If JS is disabled, show content immediately */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── 3. Root Layout ── */
+.root-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── 4. Left Panel ── */
+.left-panel {
+  width: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-gradient);
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+  max-width: 320px;
+  z-index: 2;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--navy);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--heading);
+}
+
+.logo-ai {
+  color: var(--primary);
+}
+
+.headline-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.headline {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 800;
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--heading);
+  line-height: 1.2;
+}
+
+.subtext {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--body);
+  line-height: 1.6;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  margin-bottom: 40px;
+  will-change: transform, opacity;
+}
+
+.step-item:last-child {
+  margin-bottom: 0;
+}
+
+.step-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 9.5px;
+  top: 20px;
+  width: 1px;
+  height: 40px;
+  background: var(--step-line);
+}
+
+.step-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  transition: all 0.3s var(--ease);
+  z-index: 2;
+}
+
+.step-item[data-state="idle"] .step-dot {
+  background: var(--step-idle-dot);
+  border-color: var(--step-line);
+}
+
+.step-item[data-state="active"] .step-dot {
+  background: var(--step-active-dot);
+  border-color: var(--step-active-dot);
+  box-shadow: 0 0 0 4px var(--primary-xlight);
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+.step-item[data-state="done"] .step-dot {
+  background: var(--step-done-dot);
+  border-color: var(--step-done-dot);
+  color: #fff;
+  font-size: 10px;
+}
+
+.step-item[data-state="done"] .step-dot::after {
+  content: "✓";
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 1px;
+}
+
+.step-label {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--body);
+  transition: color 0.3s var(--ease);
+}
+
+.step-desc {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.step-item[data-state="active"] .step-label {
+  color: var(--heading);
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+.step-item[data-state="done"] .step-label {
+  color: var(--success);
+}
+
+.decorative-blob {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--primary-xlight);
+  filter: blur(60px);
+  bottom: -40px;
+  left: -40px;
+  z-index: 1;
+}
+
+/* ── 5. Right Panel ── */
+.right-panel {
+  width: 65%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-alt);
+  padding: 80px 48px 48px;
+  overflow-y: auto;
+}
+
+.form-card {
+  width: 90%;
+  max-width: 580px;
+  background: var(--surface);
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  padding: 48px;
+  position: relative;
+  will-change: transform, opacity;
+}
+
+/* ── 6. Progress Bar ── */
+.progress-wrapper {
+  margin-bottom: 32px;
+}
+
+.step-counter {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--progress-track);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: 99px;
+  width: 25%;
+  transition: width 0.6s var(--ease);
+  will-change: width;
+}
+
+/* ── 7. Form Steps ── */
+.form-step {
+  display: none;
+}
+
+.form-step.is-active {
+  display: block;
+}
+
+.form-step.is-exit,
+.form-step.is-exit-back,
+.form-step.is-enter,
+.form-step.is-enter-back,
+.form-step.is-enter-active {
+  display: block;
+}
+
+.form-step.is-exit {
+  animation: stepExit 0.45s var(--ease) forwards;
+}
+
+.form-step.is-exit-back {
+  animation: stepExitBack 0.45s var(--ease) forwards;
+}
+
+.form-step.is-enter {
+  transform: translateX(28px);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.form-step.is-enter-back {
+  transform: translateX(-28px);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.form-step.is-enter-active,
+.form-step.is-enter-back.is-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  filter: blur(0);
+  transition: all 0.55s var(--ease);
+}
+
+.step-title {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 2.5vw, 30px);
+  color: var(--heading);
+  margin-bottom: 8px;
+}
+
+.step-subtitle {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--body);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+/* ── 8. Form Fields ── */
+.field-group {
+  margin-bottom: 24px;
+}
+
+.field-group label {
+  display: block;
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--heading);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--heading);
+  font-family: "Satoshi", sans-serif;
+  font-size: 15px;
+  transition: all 0.3s var(--ease);
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--placeholder);
+}
+
+input:focus {
+  border-color: var(--input-focus);
+  box-shadow: var(--input-focus-shadow);
+}
+
+input.is-filled {
+  background: var(--input-bg-filled);
+}
+
+input.has-error {
+  border-color: var(--error-border);
+  background: var(--error-bg);
+}
+
+.error-msg {
+  display: block;
+  font-family: "Satoshi", sans-serif;
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 6px;
+  min-height: 18px;
+}
+
+/* ── 9. Chips ── */
+.chip-group,
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--chip-idle-border);
+  background: var(--chip-idle-bg);
+  color: var(--chip-idle-text);
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  user-select: none;
+  outline: none;
+  will-change: transform, opacity;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+}
+
+.chip.is-active {
+  background: var(--chip-active-bg);
+  border-color: var(--chip-active-border);
+  color: var(--chip-active-text);
+  box-shadow: var(--chip-active-glow);
+  transform: scale(1.05);
+}
+
+.chip-nka-wrapper {
+  margin-bottom: 16px;
+}
+
+.chip-nka {
+  width: 100%;
+  background: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.chip-nka.is-active {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+  box-shadow: none;
+  transform: scale(1);
+}
+
+.chip-group.has-nka .chip:not(.is-active) {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.chip-group.has-error .chip,
+.chip-grid.has-error .chip {
+  border-color: var(--error-border);
+}
+
+/* ── 10. Goal Cards ── */
+.goal-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--card-idle-border);
+  background: var(--card-idle-bg);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.35s var(--ease);
+  position: relative;
+  width: 100%;
+  outline: none;
+  will-change: transform, opacity;
+}
+
+.goal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.goal-card.is-active {
+  border: 2px solid var(--card-active-border);
+  background: var(--card-active-bg);
+  box-shadow: var(--card-active-glow);
+}
+
+.goal-check {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.3s var(--ease);
+}
+
+.goal-check::after {
+  content: "✓";
+  font-size: 12px;
+}
+
+.goal-card.is-active .goal-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.goal-icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.goal-title {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--heading);
+}
+
+.goal-desc {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.6;
+}
+
+/* ── 11. Navigation Buttons ── */
+.form-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  gap: 12px;
+}
+
+.btn-back {
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--body);
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  outline: none;
+  will-change: transform, opacity;
+}
+
+.btn-back:hover {
+  background: var(--surface-alt);
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.btn-skip {
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  outline: none;
+  will-change: transform, opacity;
+  margin-left: auto;
+}
+
+.btn-skip:hover {
+  color: var(--primary);
+  background: var(--primary-xlight);
+}
+
+.btn-next {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 32px;
+  border-radius: 12px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: all 0.4s var(--ease);
+  outline: none;
+  will-change: transform, opacity;
+}
+
+.btn-next:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-btn-hover);
+}
+
+.btn-next::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transition: left 0.6s var(--ease);
+}
+
+.btn-next:hover::after {
+  left: 100%;
+}
+
+/* ── 12. Completion Overlay ── */
+.completion-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s var(--ease);
+  z-index: 10;
+}
+
+.completion-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.completion-content {
+  text-align: center;
+}
+
+.completion-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--success);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  font-size: 28px;
+}
+
+.completion-icon::after {
+  content: "✓";
+}
+
+.completion-text {
+  font-family: "Satoshi", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--success);
+}
+
+/* ── 13. Animations ── */
+@keyframes dotPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px var(--primary-xlight);
+  }
+  50% {
+    box-shadow: 0 0 0 8px var(--primary-xlight);
+  }
+}
+
+@keyframes stepExit {
+  to {
+    transform: translateX(-28px);
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@keyframes stepExitBack {
+  to {
+    transform: translateX(28px);
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@keyframes completionSpring {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.form-card.is-complete {
+  animation: completionSpring 0.8s var(--ease);
+}
+
+/* ── 14. Responsive ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .root-container {
+    flex-direction: column;
+  }
+  .left-panel {
+    width: 100%;
+    height: auto;
+    padding: 20px 32px;
+  }
+  .left-content {
+    max-width: 100%;
+  }
+  .logo,
+  .headline-group,
+  .decorative-blob {
+    display: none;
+  }
+  .step-indicator {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .step-indicator::before {
+    content: "";
+    position: absolute;
+    top: 9.5px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: var(--step-line);
+    z-index: 0;
+  }
+  .step-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0;
+    gap: 6px;
+    flex: 1;
+    z-index: 1;
+  }
+  .step-item:not(:last-child)::after {
+    display: none;
+  }
+  .step-dot {
+    margin: 0 auto;
+  }
+  .step-desc {
+    display: none;
+  }
+  .right-panel {
+    width: 100%;
+    padding: 60px 24px 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .left-panel {
+    display: none;
+  }
+  .right-panel {
+    width: 100%;
+    padding: 40px 16px 16px;
+  }
+  .form-card {
+    padding: 24px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .goal-card {
+    padding: 20px;
+  }
+  .form-nav {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  .btn-back,
+  .btn-skip,
+  .btn-next {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+}
+/* registation page css end */
