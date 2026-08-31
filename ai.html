@@ -103,18 +103,36 @@
           </div>
         </div>
 
-        <!-- Locked Bottom Tray: Predefined Action Chips -->
-        <div class="bottom-tray">
-          <div class="flex flex-wrap gap-2" id="chipContainer">
-            <!-- Chips rendered by advisor.js -->
-          </div>
-          <div
-            class="text-xs text-slate-400 mt-2 font-body text-center select-none"
-          >
-            Dr. Medilink can make mistakes. Always consult a real doctor in
-            emergencies.
-          </div>
-        </div>
+<!-- AI Chat Input -->
+<div class="bottom-tray">
+
+  <div class="flex flex-wrap gap-2 mb-3" id="chipContainer">
+    <!-- Suggested questions will appear here -->
+  </div>
+
+  <div class="flex gap-2">
+    <input
+      id="aiQuestionInput"
+      type="text"
+      placeholder="Ask MediLink AI a health question..."
+      class="flex-1 px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-800 outline-none focus:ring-2 focus:ring-teal-500"
+    />
+
+    <button
+      id="aiSendButton"
+      type="button"
+      class="px-5 py-3 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700"
+    >
+      Send
+    </button>
+  </div>
+
+  <div class="text-xs text-slate-400 mt-2 font-body text-center select-none">
+    MediLink AI can make mistakes. Always consult a qualified doctor
+    for medical emergencies.
+  </div>
+
+</div>
       </section>
 
       <!-- RIGHT PANEL: Analytical Data Dashboard -->
