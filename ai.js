@@ -2412,43 +2412,79 @@ function getAnswer(type) {
 /* ==========================================
    6. CHIP INTERACTION HANDLER
    ========================================== */
-function handleChipClick(index) {
-  const userPlan = localStorage.getItem('medilink_user_plan') || 'basic';
-  let chatCount = parseInt(localStorage.getItem('medilink_chat_count')) || 0;
+async function handleChipClick(index) {
+  const userPlan = localStorage.getItem("medilink_user_plan") || "basic";
+  let chatCount = parseInt(localStorage.getItem("medilink_chat_count")) || 0;
 
-  if (userPlan === 'basic' && chatCount >= 1) {
-      document.getElementById('chatCanvas').classList.add('opacity-50', 'pointer-events-none');
-      const limitModal = document.getElementById('limit-modal');
-      if(limitModal) limitModal.style.display = 'flex';
-      return;
+  if (userPlan === "basic" && chatCount >= 1) {
+    document.getElementById("chatCanvas").classList.add(
+      "opacity-50",
+      "pointer-events-none"
+    );
+
+    const limitModal = document.getElementById("limit-modal");
+    if (limitModal) limitModal.style.display = "flex";
+
+    return;
   }
 
   const chip = CHIPS[index];
   if (!chip) return;
 
-  // Render user question in chat canvas
+  // Show the user's question
   addMessage(chip.question, "user");
 
-  // Lock all chips during processing
+  // Disable all chips while AI is responding
   const allChips = els.chipContainer.querySelectorAll(".chip");
   allChips.forEach((c) => (c.disabled = true));
 
-  // Show animated thinking state
+  // Show thinking message
   showThinking();
 
-  // Resolve answer after 1-second simulated cognition
-  setTimeout(() => {
+  try {
+    const response = await fetch(
+      "https://medilink-ai-v1.onrender.com/api/medical-ai",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: chip.question,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
     removeThinking();
-    const answer = getAnswer(chip.type);
-    addMessage(answer, "bot");
-    allChips.forEach((c) => (c.disabled = false));
-    
-    // Increment chat count for basic plan
-    if (userPlan === 'basic') {
-        chatCount++;
-        localStorage.setItem('medilink_chat_count', chatCount);
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed.");
     }
-  }, 1000);
+
+    // Show Groq's answer
+    addMessage(data.answer, "bot");
+
+    // Count basic-plan chat
+    if (userPlan === "basic") {
+      chatCount++;
+      localStorage.setItem("medilink_chat_count", chatCount);
+    }
+
+  } catch (error) {
+    console.error("MediLink AI error:", error);
+
+    removeThinking();
+
+    addMessage(
+      "Sorry, I couldn't connect to MediLink AI right now. Please try again in a moment.",
+      "bot"
+    );
+  } finally {
+    // Re-enable the buttons
+    allChips.forEach((c) => (c.disabled = false));
+  }
 }
 
 function renderChips(locked = true) {
