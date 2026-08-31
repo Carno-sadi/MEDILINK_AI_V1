@@ -2771,3 +2771,74 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// ==========================================
+// DIRECT AI CHAT — GROQ VIA RENDER
+// ==========================================
+
+const aiQuestionInput = document.getElementById("aiQuestionInput");
+const aiSendButton = document.getElementById("aiSendButton");
+
+async function sendAIQuestion() {
+  const question = aiQuestionInput.value.trim();
+
+  if (!question) return;
+
+  addMessage(question, "user");
+
+  aiQuestionInput.value = "";
+  aiSendButton.disabled = true;
+  aiSendButton.textContent = "Thinking...";
+
+  showThinking();
+
+  try {
+    const response = await fetch(
+      "https://medilink-ai-v1.onrender.com/api/medical-ai",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question: question
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    removeThinking();
+
+    if (!response.ok) {
+      addMessage(
+        data.error || "Sorry, I could not process your question.",
+        "bot"
+      );
+      return;
+    }
+
+    addMessage(data.answer, "bot");
+
+  } catch (error) {
+    console.error("AI connection error:", error);
+
+    removeThinking();
+
+    addMessage(
+      "Sorry, I could not connect to MediLink AI. Please try again.",
+      "bot"
+    );
+
+  } finally {
+    aiSendButton.disabled = false;
+    aiSendButton.textContent = "Send";
+  }
+}
+
+aiSendButton.addEventListener("click", sendAIQuestion);
+
+aiQuestionInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    sendAIQuestion();
+  }
+});
