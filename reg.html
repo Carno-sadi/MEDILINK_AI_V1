@@ -39,7 +39,7 @@
           <!-- Headline -->
           <div class="headline-group reveal">
             <h1 class="headline">Let's personalize your healthcare journey.</h1>
-            <p class="subtext">Four quick steps. Lifetime of smarter care.</p>
+            <p class="subtext">Three quick steps. Lifetime of smarter care.</p>
           </div>
 
           <!-- Vertical Step Indicator -->
@@ -48,30 +48,21 @@
               <div class="step-dot" aria-hidden="true"></div>
               <div class="step-info">
                 <span class="step-label">Basic Information</span>
-                <span class="step-desc">Name, age, gender & blood type</span>
+                <span class="step-desc">Name, age & gender</span>
               </div>
             </div>
             <div class="step-item" data-step="2" data-state="idle">
               <div class="step-dot" aria-hidden="true"></div>
               <div class="step-info">
                 <span class="step-label">Medical Profile</span>
-                <span class="step-desc">Pre-existing conditions</span>
+                <span class="step-desc">Type your conditions & diseases</span>
               </div>
             </div>
             <div class="step-item" data-step="3" data-state="idle">
               <div class="step-dot" aria-hidden="true"></div>
               <div class="step-info">
-                <span class="step-label">Allergies</span>
-                <span class="step-desc">Known drug & food allergies</span>
-              </div>
-            </div>
-            <div class="step-item" data-step="4" data-state="idle">
-              <div class="step-dot" aria-hidden="true"></div>
-              <div class="step-info">
-                <span class="step-label">Your Goal</span>
-                <span class="step-desc"
-                  >Primary reason for joining (optional)</span
-                >
+                <span class="step-label">Allergies & Finish</span>
+                <span class="step-desc">Type your known allergies</span>
               </div>
             </div>
           </nav>
@@ -89,7 +80,7 @@
           <!-- Progress Header -->
           <div class="progress-wrapper reveal">
             <div class="step-counter">
-              Step <span id="stepNum">1</span> of 4
+              Step <span id="stepNum">1</span> of 3
             </div>
             <div class="progress-track" aria-hidden="true">
               <div class="progress-fill" id="progressFill"></div>
@@ -102,11 +93,16 @@
             <div class="form-step is-active" data-step="1">
               <h2 class="step-title reveal">Basic Information</h2>
               <p class="step-subtitle reveal">
-                Let's start with the essentials to build your health profile.
+                Let's start with the essentials to build your personalized health profile.
               </p>
 
               <div class="field-group reveal">
-                <label for="fullName">Full Name</label>
+                <label for="fullName" class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  <span>Full Name</span>
+                </label>
                 <input
                   type="text"
                   id="fullName"
@@ -118,7 +114,12 @@
               </div>
 
               <div class="field-group reveal">
-                <label for="age">Your Age</label>
+                <label for="age" class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span>Your Age</span>
+                </label>
                 <input
                   type="number"
                   id="age"
@@ -131,7 +132,12 @@
               </div>
 
               <div class="field-group reveal">
-                <label>Gender</label>
+                <label class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
+                  <span>Gender</span>
+                </label>
                 <div
                   class="chip-group"
                   id="genderChips"
@@ -140,36 +146,32 @@
                 ></div>
                 <span class="error-msg" id="error-gender"></span>
               </div>
-
-              <div class="field-group reveal">
-                <label>Blood Group</label>
-                <div
-                  class="chip-grid"
-                  id="bloodGroupChips"
-                  data-key="bloodGroup"
-                  data-multi="false"
-                ></div>
-                <span class="error-msg" id="error-bloodGroup"></span>
-              </div>
             </div>
 
             <!-- ── STEP 2: Medical Profile ── -->
             <div class="form-step" data-step="2">
               <h2 class="step-title reveal">
-                Do you have any pre-existing conditions?
+                Pre-existing Conditions & Diseases
               </h2>
               <p class="step-subtitle reveal">
-                Select all that apply. This helps Dr. Carno give you safer,
-                smarter advice.
+                Type any medical conditions or health issues you currently manage.
               </p>
 
               <div class="field-group reveal">
-                <div
-                  class="chip-group"
-                  id="conditionsChips"
-                  data-key="conditions"
-                  data-multi="true"
-                ></div>
+                <label for="customDisease" class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  </svg>
+                  <span>Type Your Medical Conditions (Custom Input)</span>
+                </label>
+                <input
+                  type="text"
+                  id="customDisease"
+                  name="customDisease"
+                  placeholder="e.g. Type 2 Diabetes, High Blood Pressure, Asthma, Migraine..."
+                  class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-800 outline-none focus:ring-2 focus:ring-teal-500 font-body text-sm shadow-sm"
+                />
+                <p class="text-xs text-slate-500 mt-1.5">Type any condition so Dr. MediLink AI can evaluate your exact health context.</p>
                 <span class="error-msg" id="error-conditions"></span>
               </div>
             </div>
@@ -177,98 +179,50 @@
             <!-- ── STEP 3: Allergies ── -->
             <div class="form-step" data-step="3">
               <h2 class="step-title reveal">
-                Do you have any known allergies?
+                Known Food & Drug Allergies
               </h2>
               <p class="step-subtitle reveal">
-                Critical for safe prescription and pharmacy recommendations.
+                Critical for safe prescription, diet, and clinical contraindications.
               </p>
 
               <div class="field-group reveal">
-                <div class="chip-nka-wrapper">
-                  <button
-                    type="button"
-                    class="chip chip-nka"
-                    data-exclusive="true"
-                    data-value="No Known Allergies"
-                  >
-                    No Known Allergies
-                  </button>
-                </div>
-                <div
-                  class="chip-group"
-                  id="allergiesChips"
-                  data-key="allergies"
-                  data-multi="true"
-                ></div>
+                <label for="customAllergy" class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  <span>Type Your Allergies (Custom Input)</span>
+                </label>
+                <input
+                  type="text"
+                  id="customAllergy"
+                  name="customAllergy"
+                  placeholder="e.g. Penicillin, Peanuts, Dust, Shellfish, Latex..."
+                  class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-800 outline-none focus:ring-2 focus:ring-teal-500 font-body text-sm shadow-sm"
+                />
+                <p class="text-xs text-slate-500 mt-1.5">Type your allergies so Dr. MediLink AI avoids contraindications (or type "None").</p>
                 <span class="error-msg" id="error-allergies"></span>
               </div>
             </div>
 
-            <!-- ── STEP 4: Primary Goal (Optional) ── -->
-            <div class="form-step" data-step="4">
-              <h2 class="step-title reveal">What brings you to Medilink AI?</h2>
-              <p class="step-subtitle reveal">
-                We'll customize your dashboard based on your primary goal.
-                (Optional)
-              </p>
-
-              <div class="field-group reveal">
-                <div class="goal-cards" id="goalCards" data-key="primaryGoal">
-                  <button
-                    type="button"
-                    class="goal-card"
-                    data-value="Find a Doctor"
-                  >
-                    <div class="goal-check" aria-hidden="true"></div>
-                    <span class="goal-icon" aria-hidden="true">🩺</span>
-                    <h3 class="goal-title">Find a Doctor</h3>
-                    <p class="goal-desc">
-                      Browse verified specialists and book appointments
-                      instantly via WhatsApp.
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="goal-card"
-                    data-value="Order Medicine"
-                  >
-                    <div class="goal-check" aria-hidden="true"></div>
-                    <span class="goal-icon" aria-hidden="true">💊</span>
-                    <h3 class="goal-title">Order Medicine</h3>
-                    <p class="goal-desc">
-                      Upload prescriptions and get medicines delivered to your
-                      doorstep.
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="goal-card"
-                    data-value="Talk to AI Advisor"
-                  >
-                    <div class="goal-check" aria-hidden="true"></div>
-                    <span class="goal-icon" aria-hidden="true">🤖</span>
-                    <h3 class="goal-title">Talk to AI Advisor</h3>
-                    <p class="goal-desc">
-                      Chat with Dr. Carno AI for instant, reliable health
-                      guidance anytime.
-                    </p>
-                  </button>
-                </div>
-                <span class="error-msg" id="error-primaryGoal"></span>
+            <!-- AI Health Insight Preview Badge -->
+            <div id="aiInsightBox" class="mt-4 p-3.5 rounded-xl bg-teal-50 border border-teal-200 text-teal-900 text-xs font-body flex items-start gap-2.5 shadow-sm transition-all hidden">
+              <div class="p-1 rounded-lg bg-teal-600 text-white shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-heading font-bold text-teal-900 mb-0.5">AI Clinical Health Insight</div>
+                <div id="aiInsightText" class="text-teal-800 leading-relaxed">Dr. MediLink AI is ready to analyze your medical inputs...</div>
               </div>
             </div>
-          </form>
 
-          <!-- Navigation -->
-          <div class="form-nav">
-            <button type="button" class="btn-back" id="btnBack">Back</button>
-            <button type="button" class="btn-skip" id="btnSkip">
-              Skip for now
-            </button>
-            <button type="button" class="btn-next" id="btnNext">Next</button>
-          </div>
+            <!-- Navigation Buttons Stacked Vertically -->
+            <div class="form-nav mt-6">
+              <button type="button" class="btn-next" id="btnNext">Next</button>
+              <button type="button" class="btn-back" id="btnBack">Back</button>
+            </div>
+          </form>
 
           <!-- Completion Overlay -->
           <div

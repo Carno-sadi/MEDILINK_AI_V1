@@ -19,6 +19,8 @@
     />
     <!-- Unified Design System -->
     <link rel="stylesheet" href="ai.css" />
+    <!-- Marked.js for rendering AI Markdown responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -34,58 +36,189 @@
         },
       };
     </script>
-    <base target="_blank" />
   </head>
-  <body class="h-screen overflow-hidden flex flex-col bg-[#F0FDF4]">
+  <body class="h-[100dvh] min-h-[100dvh] h-screen overflow-hidden flex flex-col bg-[#F0FDF4]">
     <!-- ==========================================
        FIXED TOP NAVIGATION BAR
        ========================================== -->
     <nav
-      class="fixed top-0 left-0 right-0 h-16 glass-nav z-50 flex items-center justify-between px-6"
+      class="fixed top-0 left-0 right-0 h-14 sm:h-16 glass-nav z-50 flex items-center justify-between px-3 sm:px-6"
     >
       <a href="index.html"
-        ><div class="flex items-center gap-3">
+        ><div class="flex items-center gap-2 sm:gap-3">
           <div
-            class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold font-heading shadow-lg shadow-primary/20"
+            class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold font-heading shadow-md shadow-primary/20 text-sm sm:text-base"
           >
             M
           </div>
           <span
-            class="font-heading text-lg font-bold text-slate-800 tracking-tight"
-            >Medilink AI Advisor</span
+            class="font-heading text-base sm:text-lg font-bold text-slate-800 tracking-tight"
+            ><span class="hidden sm:inline">Medilink AI Advisor</span><span class="sm:hidden">Medilink AI</span></span
           >
         </div></a
       >
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-1.5 sm:gap-2.5">
+        <!-- History Drawer Button -->
+        <button
+          id="btnHistoryToggle"
+          title="Open Consultation History"
+          class="btn-animate inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-300 text-xs font-bold hover:bg-slate-200 transition-all shadow-sm"
+        >
+          <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="hidden sm:inline">History</span>
+        </button>
+
+        <!-- Target Language Selector -->
+        <div class="relative flex items-center">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600 absolute left-2 sm:left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 002.5-2.5V7a2 2 0 00-2-2h-1.5a2 2 0 01-2-2V3.055M11 20.945V19a2 2 0 012-2h1a2 2 0 002-2v-1.5a2.5 2.5 0 00-2.5-2.5H14"/>
+          </svg>
+          <select
+            id="aiLanguageSelect"
+            title="Select Target Response Language"
+            class="pl-6 sm:pl-8 pr-1.5 sm:pr-2 py-1.5 rounded-xl border border-teal-300 bg-white text-[11px] sm:text-xs font-bold text-teal-800 outline-none focus:ring-2 focus:ring-teal-500 shadow-sm cursor-pointer max-w-[95px] sm:max-w-none"
+          >
+            <option value="English">English</option>
+            <option value="Bangla">🇧🇩 বাংলা</option>
+            <option value="Spanish">🇪🇸 Español</option>
+            <option value="French">🇫🇷 Français</option>
+            <option value="Arabic">🇦🇪 العربية</option>
+          </select>
+        </div>
+
+        <!-- AI Model Switcher -->
+        <select
+          id="aiModelSelect"
+          title="Select AI Execution Engine"
+          class="px-2 sm:px-2.5 py-1.5 rounded-xl border border-teal-300 bg-white text-[11px] sm:text-xs font-bold text-teal-800 outline-none focus:ring-2 focus:ring-teal-500 shadow-sm cursor-pointer max-w-[100px] sm:max-w-none"
+        >
+          <option value="med1-pro">🧠 Med1 Pro</option>
+          <option value="med1-flash">⚡ Med1 Flash</option>
+        </select>
+
+        <!-- New Consultation Button (Desktop) -->
+        <button
+          id="btnNewConsultation"
+          title="Start a new consultation"
+          class="btn-animate hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 text-xs font-bold hover:bg-teal-100 transition-all shadow-sm"
+        >
+          <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>New Chat</span>
+        </button>
+
+        <!-- Download PDF Button (Desktop) -->
+        <button
+          id="btnPDFDownload"
+          title="Download or Save Consultation PDF Report"
+          class="btn-animate hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 text-teal-800 border border-teal-200 text-xs font-bold hover:bg-teal-100 transition-all shadow-sm"
+        >
+          <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Download PDF</span>
+        </button>
+
+        <!-- Nearby ER Finder (Desktop) -->
+        <button
+          id="btnNearbyER"
+          title="Find nearby emergency rooms and hospitals"
+          class="btn-animate hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold hover:bg-red-100 transition-all shadow-sm"
+        >
+          <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span>Nearby ER</span>
+        </button>
+
         <div
           id="profileGreeting"
-          class="font-body text-sm text-slate-600 font-medium"
+          class="font-body text-xs sm:text-sm text-slate-600 font-medium hidden md:block"
         >
           Welcome
         </div>
-        <div id="bloodBadge" class="blood-badge">O+</div>
+        <div id="bloodBadge" class="blood-badge text-[11px] sm:text-xs">Patient</div>
       </div>
     </nav>
 
+    <!-- Mobile Viewport Segmented Control (Chat vs Health Matrix) -->
+    <div class="md:hidden pt-14 flex items-center justify-center px-3 py-2 bg-emerald-50/95 backdrop-blur border-b border-teal-200/70 z-40 shrink-0">
+      <div class="flex p-1 bg-slate-200/90 rounded-xl w-full max-w-xs shadow-inner">
+        <button
+          id="mobileTabChat"
+          type="button"
+          class="flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 bg-white text-teal-800 shadow-sm flex items-center justify-center gap-1"
+        >
+          <span>💬 AI Chat</span>
+        </button>
+        <button
+          id="mobileTabMatrix"
+          type="button"
+          class="flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1"
+        >
+          <span>📊 Health Matrix</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- History Drawer Backdrop & Panel -->
+    <div id="historyBackdrop" class="history-backdrop"></div>
+    <aside id="historyDrawer" class="history-drawer">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80 backdrop-blur">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <h3 class="font-heading font-bold text-slate-800 text-base">Consultation History</h3>
+        </div>
+        <button id="btnCloseHistory" class="p-1 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-4 border-b border-slate-100">
+        <button
+          id="btnDrawerNewChat"
+          class="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow transition-all btn-animate"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Start New Consultation
+        </button>
+      </div>
+
+      <!-- Thread Items List Container -->
+      <div id="threadListContainer" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Injected dynamically by ai.js -->
+      </div>
+    </aside>
+
     <!-- ==========================================
-       MAIN WORKSPACE: 50/50 SPLIT GRID
+       MAIN WORKSPACE: 50/50 SPLIT GRID (Adaptive on Mobile)
        ========================================== -->
     <main
       id="mainWorkspace"
-      class="flex-1 min-h-0 pt-16 grid grid-cols-2 h-full main-grid phase-1"
+      class="flex-1 min-h-0 pt-0 md:pt-16 grid grid-cols-1 md:grid-cols-2 h-full main-grid phase-1"
     >
       <!-- LEFT PANEL: Guided Click-to-Query Chatbot -->
       <section id="leftPanel" class="left-panel flex flex-col h-full relative">
         <button
           id="btnShowMore"
-          class="md:hidden absolute top-4 right-4 z-[60] bg-white/90 backdrop-blur border border-primary/20 text-primary px-4 py-2 rounded-full text-sm font-bold shadow-md hover:bg-primary hover:text-white transition-colors"
+          class="md:hidden absolute top-3 right-3 z-30 bg-white/95 backdrop-blur border border-teal-200 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-md hover:bg-teal-600 hover:text-white transition-all flex items-center gap-1"
         >
-          Show more detail
+          <span>📊 Details &rarr;</span>
         </button>
         <!-- Scrollable Chat History Canvas -->
         <div
           id="chatCanvas"
-          class="chat-canvas flex-1 overflow-y-auto p-6 space-y-4"
+          class="chat-canvas flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-3 sm:space-y-4"
         >
           <!-- Dynamic messages injected by advisor.js -->
         </div>
@@ -103,44 +236,74 @@
           </div>
         </div>
 
-<!-- AI Chat Input -->
-<div class="bottom-tray">
+        <!-- Floating PDF Download Action Button (Small Screens Only) -->
+        <button
+          id="btnFloatingPDF"
+          title="Download Consultation PDF Report"
+          class="md:hidden absolute bottom-24 right-3 z-30 w-10 h-10 rounded-full bg-teal-600/95 hover:bg-teal-700 text-white shadow-lg shadow-teal-900/25 border border-teal-400/40 backdrop-blur flex items-center justify-center btn-animate active:scale-95 transition-all"
+          aria-label="Download PDF Report"
+        >
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </button>
 
-  <div class="flex gap-2">
-    <input
-      id="aiQuestionInput"
-      type="text"
-      placeholder="Ask MediLink AI a health question..."
-      class="flex-1 px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-800 outline-none focus:ring-2 focus:ring-teal-500"
-    />
+        <!-- AI Chat Input -->
+        <div class="bottom-tray">
+          <!-- Query Chips Container (Horizontal scrolling on mobile) -->
+          <div
+            id="chipContainer"
+            class="flex flex-nowrap md:flex-wrap gap-2 mb-2.5 overflow-x-auto md:overflow-x-visible pb-1.5 md:pb-0 scroll-smooth no-scrollbar"
+          ></div>
 
-    <button
-      id="aiSendButton"
-      type="button"
-      class="px-5 py-3 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700"
-    >
-      Send
-    </button>
-  </div>
+          <div class="flex gap-1.5 sm:gap-2 items-center">
+            <!-- Image / Prescription Attachment Button -->
+            <label
+              title="Upload Prescription or Medical Report Image"
+              class="cursor-pointer p-2.5 sm:px-3.5 sm:py-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-600 transition-all flex items-center justify-center btn-animate shadow-sm shrink-0"
+            >
+              <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <input id="aiImageInput" type="file" accept="image/*" class="hidden" />
+            </label>
 
-  <div class="text-xs text-slate-400 mt-2 font-body text-center select-none">
-    MediLink AI can make mistakes. Always consult a qualified doctor
-    for medical emergencies.
-  </div>
+            <input
+              id="aiQuestionInput"
+              type="text"
+              placeholder="Ask Dr. MediLink..."
+              class="flex-1 min-w-0 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-300 bg-white text-slate-800 outline-none focus:ring-2 focus:ring-teal-500 shadow-sm text-sm sm:text-base font-body"
+            />
 
-</div>
+            <button
+              id="aiSendButton"
+              type="button"
+              class="px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700 shadow-md transition-all flex items-center gap-1.5 btn-animate whitespace-nowrap text-xs sm:text-sm shrink-0"
+            >
+              <span class="hidden sm:inline">Send</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="text-[10px] sm:text-xs text-slate-400 mt-1.5 font-body text-center select-none truncate">
+            MediLink AI is an assistive tool. Always consult a licensed physician.
+          </div>
+        </div>
       </section>
 
       <!-- RIGHT PANEL: Analytical Data Dashboard -->
       <section
         id="rightPanel"
-        class="right-panel h-full overflow-y-auto p-6 relative"
+        class="right-panel h-full overflow-y-auto p-4 sm:p-6 relative"
       >
         <button
           id="btnBackToChat"
-          class="md:hidden sticky top-0 left-0 mb-4 z-[60] bg-white/90 backdrop-blur border border-primary/20 text-primary px-4 py-2 rounded-full text-sm font-bold shadow-md hover:bg-primary hover:text-white transition-colors"
+          class="md:hidden sticky top-0 left-0 mb-3 z-30 bg-white/95 backdrop-blur border border-teal-200 text-teal-800 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-md hover:bg-teal-600 hover:text-white transition-all flex items-center gap-1"
         >
-          &larr; Back to Chat
+          &larr; <span>Back to Chat</span>
         </button>
         <!-- PHASE 1: Prevention Guidelines Viewport -->
         <div id="preventionPanel" class="prevention-panel">
@@ -226,48 +389,76 @@
             <div id="hero3Content"></div>
           </div>
         </div>
+
+        <!-- GUEST EMERGENCY PANEL: Shown only when user is NOT registered -->
+        <div id="guestEmergencyPanel" class="hidden space-y-6">
+          <!-- Emergency Notice Header -->
+          <div class="glass-card p-6 border-l-4 border-emergency">
+            <div class="flex items-center gap-3 mb-3 text-emergency font-heading text-xl font-bold">
+              <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              National Emergency Helpline Center
+            </div>
+            <p class="font-body text-slate-700 text-sm leading-relaxed mb-1">
+              You are currently using MediLink AI as an <strong>Unregistered Guest User</strong>.
+            </p>
+            <p class="font-body text-slate-600 text-xs leading-relaxed">
+              Personalized health analytics and medication matrices are reserved for registered profiles. For urgent medical emergencies, call national hotlines below.
+            </p>
+          </div>
+
+          <!-- Helpline 1: National Emergency 999 -->
+          <div class="glass-card p-6 border border-red-200 bg-red-50/50">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-red-600 text-white font-bold flex items-center justify-center text-lg flex-shrink-0">🚨</div>
+                <div>
+                  <h3 class="font-heading font-bold text-slate-800 text-base">999 — National Emergency</h3>
+                  <p class="text-xs text-slate-500 font-body">Ambulance, Police & Fire Service (24/7 Toll-Free)</p>
+                </div>
+              </div>
+              <a href="tel:999" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm shadow-md transition-all whitespace-nowrap">Call 999</a>
+            </div>
+          </div>
+
+          <!-- Helpline 2: Health Line 16263 -->
+          <div class="glass-card p-6 border border-teal-200 bg-teal-50/50">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-teal-600 text-white font-bold flex items-center justify-center text-lg flex-shrink-0">🩺</div>
+                <div>
+                  <h3 class="font-heading font-bold text-slate-800 text-base">16263 — Shastho Batayon</h3>
+                  <p class="text-xs text-slate-500 font-body">24/7 Government Medical Telemedicine Hotline</p>
+                </div>
+              </div>
+              <a href="tel:16263" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold text-sm shadow-md transition-all whitespace-nowrap">Call 16263</a>
+            </div>
+          </div>
+
+          <!-- Helpline 3: IEDCR 10655 -->
+          <div class="glass-card p-6 border border-blue-200 bg-blue-50/50">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-lg flex-shrink-0">🏥</div>
+                <div>
+                  <h3 class="font-heading font-bold text-slate-800 text-base">10655 — IEDCR Helpline</h3>
+                  <p class="text-xs text-slate-500 font-body">Epidemiology & Infectious Disease Control Hotline</p>
+                </div>
+              </div>
+              <a href="tel:10655" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition-all whitespace-nowrap">Call 10655</a>
+            </div>
+          </div>
+
+          <!-- Account Registration Callout -->
+          <div class="glass-card p-6 text-center border border-dashed border-primary/40">
+            <h4 class="font-heading font-bold text-slate-800 mb-1">Want Personal Health Dashboard?</h4>
+            <p class="text-xs text-slate-600 font-body mb-3">Register your profile to unlock custom medication matrices, allergy guards, and personalized care guidelines.</p>
+            <a href="reg.html" class="inline-block px-5 py-2.5 bg-primary text-white font-bold text-xs rounded-xl shadow hover:bg-primary-light transition-all">Register Account</a>
+          </div>
+        </div>
       </section>
     </main>
-
-    <!-- Limit Modal -->
-    <div
-      id="limit-modal"
-      class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
-    >
-      <div
-        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onclick="this.parentElement.style.display = 'none'"
-      ></div>
-      <div
-        class="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl z-10 text-center"
-      >
-        <svg
-          class="w-16 h-16 text-warning mx-auto mb-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-          />
-        </svg>
-        <h2 class="text-2xl font-bold text-slate-800 mb-2">
-          Daily Limit Reached
-        </h2>
-        <p class="text-slate-600 mb-6">
-          Basic plan users are limited to 1 chat per day. Upgrade to Ultra Care
-          for unlimited AI Advisor access and more premium features!
-        </p>
-        <a
-          href="price.html"
-          class="block w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-lg hover:shadow-lg transition-all"
-          >Upgrade to Ultra Care</a
-        >
-      </div>
-    </div>
 
     <!-- Core Application Logic -->
     <script src="ai.js"></script>

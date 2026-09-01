@@ -2216,27 +2216,133 @@ const DEFAULT_PROFILE = {
 function loadUserProfile() {
   try {
     const stored = localStorage.getItem("medilink_user_profile");
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && (parsed.fullName || parsed.name || parsed.disease || parsed.allergy)) {
+        return parsed;
+      }
+    }
   } catch (e) {
     console.warn("Failed to parse stored profile:", e);
   }
-  // Redirect to registration if no profile exists
-  window.location.href = "reg.html";
-  return { ...DEFAULT_PROFILE };
+  return null;
 }
 
-const userProfile = loadUserProfile();
-const userName = userProfile.fullName || userProfile.name;
-const userDisease = userProfile.disease || (userProfile.conditions && userProfile.conditions.length > 0 ? userProfile.conditions[0] : "None of the above");
-const userAllergy = userProfile.allergy || (userProfile.allergies && userProfile.allergies.length > 0 ? userProfile.allergies[0] : "No Known Allergies");
-const userBlood = userProfile.bloodGroup || userProfile.blood || "O+";
+function getUserProfile() {
+  const profile = loadUserProfile();
+  if (profile) return profile;
+  return {
+    fullName: "Guest",
+    name: "Guest",
+    disease: "None of the above",
+    allergy: "No Known Allergies",
+    bloodGroup: "O+",
+    age: 30
+  };
+}
 
-const diseaseData =
-  medilinkAIDatabase.diseases[userDisease] ||
-  medilinkAIDatabase.diseases["None of the above"];
-const allergyData =
-  medilinkAIDatabase.allergies[userAllergy] ||
-  medilinkAIDatabase.allergies["No Known Allergies"];
+function getUserName() {
+  const p = getUserProfile();
+  return p.fullName || p.name || "Patient";
+}
+
+function getUserDisease() {
+  const p = getUserProfile();
+  if (p.disease && p.disease !== "None of the above") return p.disease;
+  if (p.conditions && Array.isArray(p.conditions) && p.conditions.length > 0 && p.conditions[0] !== "None of the above") {
+    return p.conditions[0];
+  }
+  return "None of the above";
+}
+
+function getUserAllergy() {
+  const p = getUserProfile();
+  if (p.allergy && p.allergy !== "No Known Allergies") return p.allergy;
+  if (p.allergies && Array.isArray(p.allergies) && p.allergies.length > 0 && p.allergies[0] !== "No Known Allergies") {
+    return p.allergies[0];
+  }
+  return "No Known Allergies";
+}
+
+function getUserBlood() {
+  const p = getUserProfile();
+  return p.bloodGroup || p.blood || "O+";
+}
+
+function getDiseaseData() {
+  const dName = getUserDisease();
+  if (medilinkAIDatabase && medilinkAIDatabase.diseases) {
+    if (medilinkAIDatabase.diseases[dName]) {
+      return medilinkAIDatabase.diseases[dName];
+    }
+    const lower = dName.toLowerCase();
+    for (const key of Object.keys(medilinkAIDatabase.diseases)) {
+      if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+        return medilinkAIDatabase.diseases[key];
+      }
+    }
+  }
+  if (dName && dName !== "None of the above") {
+    return {
+      prevention: `Maintain a tailored healthy regimen for ${dName}. Monitor active symptoms daily and maintain adequate hydration and sleep.`,
+      primaryCare: `Log daily symptoms for ${dName}, adhere to non-pharmacological care routines, and avoid known environmental triggers.`,
+      mediumCare: `Consult your primary physician regarding targeted therapeutics for ${dName} and perform routine baseline diagnostic checks.`,
+      advancedCare: `Specialist intervention and diagnostic monitoring if ${dName} symptoms escalate or impair daily activities.`,
+      doList: [
+        `Keep a daily symptom log for ${dName}.`,
+        "Maintain balanced nutrition and adequate hydration.",
+        "Consult your physician before taking new over-the-counter drugs.",
+        "Seek emergency medical services if severe acute symptoms arise."
+      ],
+      dontList: [
+        "Do not ignore worsening or acute symptoms.",
+        "Do not alter prescribed dosages without clinical advice.",
+        "Do not delay seeking in-person clinical evaluation when needed."
+      ],
+      warningSigns: [
+        `Severe sudden escalation of ${dName} symptoms.`,
+        "Difficulty breathing, chest tightness, or severe dizziness.",
+        "High persistent fever or severe unmanageable pain."
+      ],
+      specialist: "Clinical Specialist / General Physician",
+      specialistReason: `Provides targeted diagnostic evaluation and clinical management for ${dName}.`
+    };
+  }
+  return (medilinkAIDatabase && medilinkAIDatabase.diseases && medilinkAIDatabase.diseases["None of the above"]) || {};
+}
+
+function getAllergyData() {
+  const aName = getUserAllergy();
+  if (medilinkAIDatabase && medilinkAIDatabase.allergies) {
+    if (medilinkAIDatabase.allergies[aName]) {
+      return medilinkAIDatabase.allergies[aName];
+    }
+    const lower = aName.toLowerCase();
+    for (const key of Object.keys(medilinkAIDatabase.allergies)) {
+      if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+        return medilinkAIDatabase.allergies[key];
+      }
+    }
+  }
+  if (aName && aName !== "No Known Allergies") {
+    return {
+      trigger: aName,
+      severity: "Moderate to High",
+      crossReactivity: `Cross-reactivity may occur with compound analogs related to ${aName}.`,
+      emergencyAction: `If exposed to ${aName} and experiencing swelling or difficulty breathing, use emergency epinephrine if prescribed and call 999 immediately.`
+    };
+  }
+  return (medilinkAIDatabase && medilinkAIDatabase.allergies && medilinkAIDatabase.allergies["No Known Allergies"]) || {};
+}
+
+// Bind dynamic property getters to window scope
+Object.defineProperty(window, "userProfile", { get: getUserProfile, configurable: true });
+Object.defineProperty(window, "userName", { get: getUserName, configurable: true });
+Object.defineProperty(window, "userDisease", { get: getUserDisease, configurable: true });
+Object.defineProperty(window, "userAllergy", { get: getUserAllergy, configurable: true });
+Object.defineProperty(window, "userBlood", { get: getUserBlood, configurable: true });
+Object.defineProperty(window, "diseaseData", { get: getDiseaseData, configurable: true });
+Object.defineProperty(window, "allergyData", { get: getAllergyData, configurable: true });
 
 /* ==========================================
    2. DOM REFERENCES
@@ -2301,17 +2407,216 @@ const CHIPS = [
 /* ==========================================
    4. CHAT ENGINE
    ========================================== */
-function addMessage(content, sender = "bot") {
+function getSelectedModel() {
+  const select = document.getElementById("aiModelSelect");
+  return select ? select.value : (localStorage.getItem("medilink_selected_model") || "med1-pro");
+}
+
+function getSelectedLanguage() {
+  const select = document.getElementById("aiLanguageSelect");
+  return select ? select.value : "English";
+}
+
+function addMessage(content, sender = "bot", modelName = null) {
   const div = document.createElement("div");
-  div.className = `message ${sender}`;
+  div.className = `message ${sender} markdown-body`;
   if (typeof content === "string") {
-    div.textContent = content;
+    if (sender === "bot" && window.marked) {
+      div.innerHTML = marked.parse(content);
+    } else {
+      div.textContent = content;
+    }
   } else {
     div.appendChild(content);
   }
+
+  // Attach interactive Copy, Text-to-Speech, and Model Badge for bot messages
+  if (sender === "bot" && typeof content === "string") {
+    const actionsDiv = document.createElement("div");
+    actionsDiv.className = "msg-actions";
+
+    const currentModel = modelName || (getSelectedModel() === "med1-flash" ? "Med1 Flash" : "Med1 Pro");
+    const isFlash = currentModel.toLowerCase().includes("flash");
+
+    const badge = document.createElement("span");
+    badge.className = `inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold ${
+      isFlash
+        ? "bg-amber-100 text-amber-800 border border-amber-300"
+        : "bg-teal-100 text-teal-800 border border-teal-300"
+    }`;
+    badge.innerHTML = isFlash ? "⚡ Med1 Flash" : "🧠 Med1 Pro";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "msg-action-btn btn-animate";
+    copyBtn.innerHTML = `
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      </svg>
+      <span>Copy</span>
+    `;
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(div.innerText.replace(/Copy|Listen|Copied!|Med1 Flash|Med1 Pro/g, "").trim());
+      const label = copyBtn.querySelector("span");
+      if (label) label.textContent = "Copied!";
+      setTimeout(() => { if (label) label.textContent = "Copy"; }, 2000);
+    };
+
+    const speakBtn = document.createElement("button");
+    speakBtn.className = "msg-action-btn btn-animate";
+    speakBtn.innerHTML = `
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+      </svg>
+      <span>Listen</span>
+    `;
+    speakBtn.onclick = () => {
+      const targetLang = getSelectedLanguage();
+      const rawText = (typeof content === "string" && content.trim()) ? content : div.innerText;
+      speakCleanText(rawText, targetLang, speakBtn);
+    };
+
+    actionsDiv.appendChild(badge);
+    actionsDiv.appendChild(copyBtn);
+    actionsDiv.appendChild(speakBtn);
+    div.appendChild(actionsDiv);
+  }
+
   els.chatCanvas.appendChild(div);
   scrollToBottom();
   return div;
+}
+
+// ==========================================
+// CRYSTAL-CLEAR NATURAL TEXT-TO-SPEECH ENGINE
+// ==========================================
+
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
+}
+
+function cleanTextForSpeech(rawText) {
+  if (!rawText) return "";
+  let text = String(rawText);
+
+  // Strip UI artifacts & model names
+  text = text.replace(/Copy|Listen|Copied!|Speaking\.\.\.|Stop|Med1 Flash|Med1 Pro/gi, " ");
+
+  // Strip markdown headers (###, ##, #)
+  text = text.replace(/^#+\s+/gm, "");
+
+  // Strip markdown table borders & dividers
+  text = text.replace(/\|[\s-:]+\|/g, " ");
+  text = text.replace(/\|/g, ". ");
+
+  // Strip bold, italic, strikethrough, backticks
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2");
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2");
+  text = text.replace(/~~(.*?)~~/g, "$1");
+  text = text.replace(/`([^`]+)`/g, "$1");
+
+  // Strip markdown links [label](url) -> label
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+
+  // Strip bullet markers (*, -, +, numbered lists)
+  text = text.replace(/^[\*\-\+]\s+/gm, "");
+  text = text.replace(/^\d+\.\s+/gm, "");
+
+  // Strip blockquote symbols
+  text = text.replace(/^>\s+/gm, "");
+
+  // Strip emojis & decorative symbols that cause TTS glitches
+  text = text.replace(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/gu, " ");
+
+  // Replace clinical symbols with natural spoken words
+  text = text.replace(/&/g, " and ");
+  text = text.replace(/\+/g, " plus ");
+  text = text.replace(/\//g, " or ");
+
+  // Clean redundant whitespace & punctuation
+  text = text.replace(/\s+/g, " ").replace(/\s*([,\.;:\?!])\s*/g, "$1 ").trim();
+
+  return text;
+}
+
+function speakCleanText(rawText, langCode, buttonEl) {
+  if (!("speechSynthesis" in window)) {
+    alert("Speech synthesis is not supported on this device/browser.");
+    return;
+  }
+
+  // Toggle stop if already speaking
+  if (window.speechSynthesis.speaking && buttonEl && buttonEl.dataset.speaking === "true") {
+    window.speechSynthesis.cancel();
+    resetSpeakBtn(buttonEl);
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const textToSpeak = cleanTextForSpeech(rawText);
+  if (!textToSpeak) return;
+
+  const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+  // Map chosen language to BCP-47 language tag
+  const langMap = {
+    "Bangla": "bn-BD",
+    "Spanish": "es-ES",
+    "French": "fr-FR",
+    "Arabic": "ar-SA",
+    "English": "en-US"
+  };
+
+  const bcp47 = langMap[langCode] || "en-US";
+  utterance.lang = bcp47;
+
+  // Find the clearest matching voice
+  const voices = window.speechSynthesis.getVoices();
+  if (voices && voices.length > 0) {
+    const langPrefix = bcp47.split("-")[0];
+    const matchingVoice = voices.find(v => v.lang === bcp47) ||
+                          voices.find(v => v.lang.startsWith(langPrefix)) ||
+                          voices.find(v => v.lang.startsWith("en"));
+    if (matchingVoice) utterance.voice = matchingVoice;
+  }
+
+  // Optimized doctor pace & pitch for maximum clarity
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+
+  if (buttonEl) {
+    buttonEl.dataset.speaking = "true";
+    buttonEl.classList.add("bg-teal-600", "text-white");
+    const span = buttonEl.querySelector("span");
+    if (span) span.textContent = "Stop";
+  }
+
+  utterance.onend = () => {
+    resetSpeakBtn(buttonEl);
+  };
+
+  utterance.onerror = (e) => {
+    console.warn("SpeechSynthesis error:", e);
+    resetSpeakBtn(buttonEl);
+  };
+
+  // Chrome resume bug fix
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume();
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function resetSpeakBtn(buttonEl) {
+  if (!buttonEl) return;
+  buttonEl.dataset.speaking = "false";
+  buttonEl.classList.remove("bg-teal-600", "text-white");
+  const span = buttonEl.querySelector("span");
+  if (span) span.textContent = "Listen";
 }
 
 function scrollToBottom() {
@@ -2325,7 +2630,7 @@ function showThinking() {
   const div = document.createElement("div");
   div.className = "message thinking";
   div.id = "thinkingMsg";
-  div.innerHTML = `<span class="animate-pulse">Dr. Carno is thinking</span>`;
+  div.innerHTML = `<span class="animate-pulse">🩺 Dr. MediLink is evaluating your question...</span>`;
   els.chatCanvas.appendChild(div);
   scrollToBottom();
   return div;
@@ -2334,6 +2639,191 @@ function showThinking() {
 function removeThinking() {
   const t = document.getElementById("thinkingMsg");
   if (t) t.remove();
+}
+
+/* ==========================================
+   6. MULTI-THREAD CHAT HISTORY ENGINE
+   ========================================== */
+let threads = {};
+let activeThreadId = null;
+
+function loadThreadsFromStorage() {
+  try {
+    const saved = localStorage.getItem("medilink_chat_threads");
+    if (saved) threads = JSON.parse(saved);
+    const activeId = localStorage.getItem("medilink_active_thread_id");
+    if (activeId && threads[activeId]) {
+      activeThreadId = activeId;
+    }
+  } catch (e) {
+    console.warn("Failed to load threads from storage:", e);
+  }
+
+  if (!activeThreadId || !threads[activeThreadId]) {
+    createNewThread("General Medical Consultation");
+  }
+}
+
+function saveThreadsToStorage() {
+  try {
+    localStorage.setItem("medilink_chat_threads", JSON.stringify(threads));
+    if (activeThreadId) {
+      localStorage.setItem("medilink_active_thread_id", activeThreadId);
+    }
+  } catch (e) {
+    console.warn("Failed to save threads to storage:", e);
+  }
+}
+
+function createNewThread(customTitle = null) {
+  const id = "thread_" + Date.now();
+  const lang = getSelectedLanguage();
+  const model = getSelectedModel();
+
+  threads[id] = {
+    id: id,
+    title: customTitle || ("Consultation " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+    language: lang,
+    model: model,
+    messages: [],
+    createdAt: new Date().toISOString()
+  };
+
+  activeThreadId = id;
+  saveThreadsToStorage();
+
+  if (els.chatCanvas) els.chatCanvas.innerHTML = "";
+
+  const langGreetings = {
+    "Bangla": "🔄 নতুন বাংলা পরামর্শ শুরু হয়েছে। হ্যালো, আমি ড. মেডিলিংক — একজন নিরপেক্ষ ক্লিনিক্যাল চিকিৎসক। আপনার স্বাস্থ্য বিষয়ক যেকোনো প্রশ্ন বাংলায় জিজ্ঞাসা করুন।",
+    "Spanish": "🔄 Nueva consulta en Español iniciada. Hola, soy el Dr. MediLink, su médico clínico. ¿En qué puedo ayudarle hoy?",
+    "French": "🔄 Nouvelle consultation en Français démarrée. Bonjour, je suis le Dr. MediLink, votre médecin clinique. Comment puis-je vous aider?",
+    "Arabic": "🔄 تم بدء استشارة جديدة باللغة العربية. مرحباً، أنا الدكتور ميديلينك، طبيبك السريري المحايد. كيف يمكنني مساعدتك اليوم؟",
+    "English": "🔄 New consultation initialized. Hello, I am Dr. MediLink — a neutral clinical medical advisor. How can I assist you today?"
+  };
+
+  const greeting = langGreetings[lang] || langGreetings["English"];
+  addMessage(greeting, "bot");
+
+  renderThreadList();
+  closeHistoryDrawer();
+}
+
+function switchThread(threadId) {
+  if (!threads[threadId]) return;
+  activeThreadId = threadId;
+  saveThreadsToStorage();
+
+  const thread = threads[threadId];
+
+  const langSelect = document.getElementById("aiLanguageSelect");
+  const modelSelect = document.getElementById("aiModelSelect");
+  if (langSelect && thread.language) langSelect.value = thread.language;
+  if (modelSelect && thread.model) modelSelect.value = thread.model;
+
+  if (els.chatCanvas) els.chatCanvas.innerHTML = "";
+
+  if (!thread.messages || thread.messages.length === 0) {
+    addMessage(
+      `Hello, I am Dr. MediLink. I am ready to evaluate your health questions strictly in ${thread.language || 'English'}. How can I assist you today?`,
+      "bot"
+    );
+  } else {
+    thread.messages.forEach((msg) => {
+      addMessage(msg.content, msg.role === "user" ? "user" : "bot", msg.modelUsed);
+    });
+  }
+
+  renderThreadList();
+  closeHistoryDrawer();
+}
+
+function deleteThread(threadId, event) {
+  if (event) event.stopPropagation();
+  delete threads[threadId];
+
+  const threadIds = Object.keys(threads);
+  if (threadIds.length === 0) {
+    createNewThread();
+  } else {
+    switchThread(threadIds[threadIds.length - 1]);
+  }
+}
+
+function getActiveThreadMessages() {
+  if (activeThreadId && threads[activeThreadId] && Array.isArray(threads[activeThreadId].messages)) {
+    return threads[activeThreadId].messages;
+  }
+  return [];
+}
+
+function recordMessageToActiveThread(role, content, modelUsed = null) {
+  if (!activeThreadId || !threads[activeThreadId]) {
+    createNewThread();
+  }
+  const thread = threads[activeThreadId];
+  thread.messages.push({ role, content, modelUsed, time: new Date().toISOString() });
+
+  if (role === "user" && thread.messages.length <= 2) {
+    thread.title = content.length > 26 ? content.substring(0, 26) + "..." : content;
+  }
+
+  saveThreadsToStorage();
+  renderThreadList();
+}
+
+function renderThreadList() {
+  const container = document.getElementById("threadListContainer");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const threadIds = Object.keys(threads).sort((a, b) => threads[b].createdAt.localeCompare(threads[a].createdAt));
+
+  threadIds.forEach((id) => {
+    const thread = threads[id];
+    const isActive = id === activeThreadId;
+
+    const item = document.createElement("div");
+    item.className = `thread-item ${isActive ? 'active' : ''} flex items-center justify-between gap-2 btn-animate`;
+    item.onclick = () => switchThread(id);
+
+    const timeStr = new Date(thread.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    item.innerHTML = `
+      <div class="flex-1 min-w-0">
+        <div class="font-heading font-bold text-xs truncate ${isActive ? 'text-white' : 'text-slate-800'}">${thread.title}</div>
+        <div class="text-[10px] thread-time mt-0.5 ${isActive ? 'text-teal-100' : 'text-slate-500'} flex items-center gap-1.5">
+          <span>${timeStr}</span>
+          <span class="px-1.5 py-0.2 rounded bg-black/10 text-[9px] uppercase font-mono font-bold">${thread.language || 'EN'}</span>
+        </div>
+      </div>
+      <button class="delete-thread-btn p-1.5 rounded-lg hover:bg-red-500 hover:text-white transition-colors ${isActive ? 'text-white/80' : 'text-slate-400'}" title="Delete Thread">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </button>
+    `;
+
+    const delBtn = item.querySelector(".delete-thread-btn");
+    delBtn.onclick = (e) => deleteThread(id, e);
+
+    container.appendChild(item);
+  });
+}
+
+function openHistoryDrawer() {
+  const drawer = document.getElementById("historyDrawer");
+  const backdrop = document.getElementById("historyBackdrop");
+  if (drawer) drawer.classList.add("open");
+  if (backdrop) backdrop.classList.add("open");
+  renderThreadList();
+}
+
+function closeHistoryDrawer() {
+  const drawer = document.getElementById("historyDrawer");
+  const backdrop = document.getElementById("historyBackdrop");
+  if (drawer) drawer.classList.remove("open");
+  if (backdrop) backdrop.classList.remove("open");
 }
 
 /* ==========================================
@@ -2410,67 +2900,69 @@ function getAnswer(type) {
 }
 
 /* ==========================================
-   6. CHIP INTERACTION HANDLER
+   6. CHIP INTERACTION HANDLER & MEMORY
    ========================================== */
-async function handleChipClick(index) {
-  const userPlan = localStorage.getItem("medilink_user_plan") || "basic";
-  let chatCount = parseInt(localStorage.getItem("medilink_chat_count")) || 0;
+let chatHistory = [];
 
-  if (userPlan === "basic" && chatCount >= 1) {
-    document.getElementById("chatCanvas").classList.add(
-      "opacity-50",
-      "pointer-events-none"
-    );
-
-    const limitModal = document.getElementById("limit-modal");
-    if (limitModal) limitModal.style.display = "flex";
-
-    return;
+try {
+  const savedHistory = localStorage.getItem("medilink_chat_history");
+  if (savedHistory) {
+    chatHistory = JSON.parse(savedHistory);
   }
+} catch (e) {
+  console.warn("Failed to load chat history:", e);
+}
 
+function saveChatHistory() {
+  try {
+    localStorage.setItem("medilink_chat_history", JSON.stringify(chatHistory.slice(-20)));
+  } catch (e) {
+    console.warn("Failed to save chat history:", e);
+  }
+}
+
+async function handleChipClick(index) {
   const chip = CHIPS[index];
   if (!chip) return;
 
-  // Show the user's question
+  // Show the user's question & record memory
   addMessage(chip.question, "user");
+  chatHistory.push({ role: "user", content: chip.question });
+  saveChatHistory();
 
   // Disable all chips while AI is responding
-  const allChips = els.chipContainer.querySelectorAll(".chip");
-  allChips.forEach((c) => (c.disabled = true));
+  if (els.chipContainer) {
+    const allChips = els.chipContainer.querySelectorAll(".chip");
+    allChips.forEach((c) => (c.disabled = true));
+  }
 
   // Show thinking message
   showThinking();
 
   try {
-    const response = await fetch(
-      "https://medilink-ai-v1.onrender.com/api/medical-ai",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: chip.question,
-        }),
+    const payload = {
+      question: chip.question,
+      messages: chatHistory,
+      model: getSelectedModel(),
+      language: getSelectedLanguage(),
+      userProfile: {
+        name: getUserName(),
+        fullName: getUserName(),
+        age: getUserProfile().age,
+        gender: getUserProfile().gender,
+        disease: getUserDisease(),
+        allergy: getUserAllergy()
       }
-    );
+    };
 
-    const data = await response.json();
+    const data = await callMedicalAI(payload);
 
     removeThinking();
 
-    if (!response.ok) {
-      throw new Error(data.error || "AI request failed.");
-    }
-
-    // Show Groq's answer
-    addMessage(data.answer, "bot");
-
-    // Count basic-plan chat
-    if (userPlan === "basic") {
-      chatCount++;
-      localStorage.setItem("medilink_chat_count", chatCount);
-    }
+    // Show Groq's answer & record memory
+    addMessage(data.answer, "bot", data.modelUsed);
+    chatHistory.push({ role: "assistant", content: data.answer });
+    saveChatHistory();
 
   } catch (error) {
     console.error("MediLink AI error:", error);
@@ -2483,11 +2975,15 @@ async function handleChipClick(index) {
     );
   } finally {
     // Re-enable the buttons
-    allChips.forEach((c) => (c.disabled = false));
+    if (els.chipContainer) {
+      const allChips = els.chipContainer.querySelectorAll(".chip");
+      allChips.forEach((c) => (c.disabled = false));
+    }
   }
 }
 
 function renderChips(locked = true) {
+  if (!els.chipContainer) return;
   els.chipContainer.innerHTML = "";
   CHIPS.forEach((chip, idx) => {
     const btn = document.createElement("button");
@@ -2692,36 +3188,64 @@ const ORB_TEXTS = [
   "Finalizing personalized recommendations...",
 ];
 
-function startPhase1() {
-  if (!userName) { window.location.href = "reg.html"; return; }
-  els.greeting.textContent = `Hello, ${userName} (${userProfile.age || 'N/A'})`;
-  els.bloodBadge.textContent = userBlood;
+function checkUserRegistrationStatus() {
+  const profile = loadUserProfile();
+  const isRegistered = !!profile;
+  const guestEmergencyPanel = document.getElementById("guestEmergencyPanel");
+  const preventionPanel = document.getElementById("preventionPanel");
+  const heroPanel = document.getElementById("heroPanel");
 
-  // Initial Chat Greeting
+  if (!isRegistered) {
+    if (preventionPanel) preventionPanel.classList.add("hidden");
+    if (heroPanel) heroPanel.classList.add("hidden");
+    if (guestEmergencyPanel) guestEmergencyPanel.classList.remove("hidden");
+  } else {
+    if (guestEmergencyPanel) guestEmergencyPanel.classList.add("hidden");
+    if (preventionPanel) preventionPanel.classList.remove("hidden");
+    if (heroPanel) heroPanel.classList.remove("hidden");
+  }
+  return isRegistered;
+}
+
+function startPhase1() {
+  const isRegistered = checkUserRegistrationStatus();
+
+  if (!isRegistered) {
+    // Guest User Setup (registration is optional)
+    els.orbOverlay.classList.add("hidden");
+    els.mainWorkspace.classList.remove("phase-1");
+    els.mainWorkspace.classList.add("phase-2");
+    els.greeting.textContent = "Welcome, Guest User";
+    els.bloodBadge.textContent = "Guest";
+
+    addMessage(
+      "Hello, I am Dr. MediLink, a neutral clinical medical advisor. I am here to provide objective medical guidance, symptom evaluations, and general health information. How can I assist you with your health today?",
+      "bot",
+    );
+    renderChips(false);
+    return;
+  }
+
+  // Registered User Setup
+  const displayName = userName || "Patient";
+  els.greeting.textContent = `Hello, ${displayName} (${userProfile.age || 'N/A'})`;
+  els.bloodBadge.textContent = `${userProfile.gender || 'Patient'}`;
+
+  // Initial Chat Greeting — include custom disease & allergy context
+  const diseaseContext = userDisease && userDisease !== "None of the above" ? userDisease : "no specific pre-existing conditions";
+  const allergyContext = userAllergy && userAllergy !== "No Known Allergies" ? userAllergy : "no known allergies";
   addMessage(
-    `Hello ${userName}, I am Dr. Carno, your AI health advisor. I have loaded your profile for ${userDisease} and noted your ${userAllergy} allergy. Please wait while I analyze your complete health matrix.`,
+    `Hello ${displayName}, I am Dr. MediLink, your clinical health advisor. I have loaded your health profile: conditions noted — **${diseaseContext}**; allergies noted — **${allergyContext}**. Please wait while I load your personalized care matrix.`,
     "bot",
   );
 
   // Render Prevention Guidelines in Right Panel
   renderPrevention();
 
-  // Rotate orb sequence text every 1.5 seconds
-  let orbIdx = 0;
-  els.orbText.textContent = ORB_TEXTS[0];
-  const orbInterval = setInterval(() => {
-    orbIdx = (orbIdx + 1) % ORB_TEXTS.length;
-    els.orbText.style.animation = "none";
-    void els.orbText.offsetWidth; // force reflow
-    els.orbText.style.animation = "";
-    els.orbText.textContent = ORB_TEXTS[orbIdx];
-  }, 1500);
-
-  // Transition to Phase 2 at exactly 5 seconds
+  // Fast 1.5 second transition to Phase 2
   setTimeout(() => {
-    clearInterval(orbInterval);
     transitionToPhase2();
-  }, 5000);
+  }, 1500);
 }
 
 function transitionToPhase2() {
@@ -2748,39 +3272,222 @@ function transitionToPhase2() {
 }
 
 /* ==========================================
-   9. APPLICATION BOOT
+   9. APPLICATION BOOT & ADVANCED ACTIONS
    ========================================== */
+function clearChatHistory() {
+  chatHistory = [];
+  localStorage.removeItem("medilink_chat_history");
+  if (els.chatCanvas) els.chatCanvas.innerHTML = "";
+  addMessage(
+    "🔄 New consultation thread initialized. Hello, I am Dr. MediLink, your neutral clinical medical advisor. How can I assist you today?",
+    "bot"
+  );
+}
+
+function downloadPDFSummary() {
+  const messages = getActiveThreadMessages();
+  const thread = activeThreadId && threads[activeThreadId];
+  const title = thread ? thread.title : "MediLink Consultation";
+  const lang = thread ? (thread.language || "English") : "English";
+
+  let htmlContent = `<!DOCTYPE html><html><head>
+  <meta charset="UTF-8"/>
+  <title>MediLink — ${title}</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; color: #1e293b; line-height: 1.6; }
+    h1 { color: #0d9488; font-size: 22px; margin-bottom: 4px; }
+    .meta { color: #64748b; font-size: 12px; margin-bottom: 24px; }
+    .msg { margin-bottom: 16px; padding: 12px 16px; border-radius: 10px; }
+    .msg.user { background: #f0fdf4; border-left: 4px solid #0d9488; }
+    .msg.bot { background: #f8fafc; border-left: 4px solid #6366f1; }
+    .msg-role { font-weight: bold; font-size: 11px; text-transform: uppercase; margin-bottom: 4px; color: #64748b; }
+    .msg-content { font-size: 14px; white-space: pre-wrap; }
+    .footer { margin-top: 32px; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+  </style>
+  </head><body>
+  <h1>🏥 MediLink AI — Clinical Consultation Summary</h1>
+  <div class="meta">Thread: ${title} &nbsp;|&nbsp; Language: ${lang} &nbsp;|&nbsp; Date: ${new Date().toLocaleDateString()}</div>`;
+
+  messages.forEach((msg) => {
+    const role = msg.role === "user" ? "You (Patient)" : "Dr. MediLink AI";
+    const cls = msg.role === "user" ? "user" : "bot";
+    const content = (msg.content || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    htmlContent += `<div class="msg ${cls}"><div class="msg-role">${role}</div><div class="msg-content">${content}</div></div>`;
+  });
+
+  htmlContent += `<div class="footer">MediLink AI — This clinical summary is AI-generated and does not replace advice from a qualified medical doctor.</div></body></html>`;
+
+  const printWin = window.open("", "_blank");
+  if (printWin) {
+    printWin.document.write(htmlContent);
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(() => { printWin.print(); }, 600);
+  }
+}
+
+function findNearbyHospitals() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const url = `https://www.google.com/maps/search/hospitals+near+me/@${pos.coords.latitude},${pos.coords.longitude},14z`;
+        window.open(url, "_blank");
+      },
+      () => {
+        window.open("https://www.google.com/maps/search/hospitals+near+me", "_blank");
+      }
+    );
+  } else {
+    window.open("https://www.google.com/maps/search/hospitals+near+me", "_blank");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Load conversation threads from storage
+  loadThreadsFromStorage();
+
   // Ensure workspace starts in Phase 1 state
   els.mainWorkspace.classList.add("phase-1");
   startPhase1();
 
-  // Mobile responsive toggle logic
-  const btnShowMore = document.getElementById("btnShowMore");
-  const btnBackToChat = document.getElementById("btnBackToChat");
-  
-  if (btnShowMore && btnBackToChat) {
-    btnShowMore.addEventListener("click", () => {
-      els.mainWorkspace.classList.add("show-details");
-    });
-    btnBackToChat.addEventListener("click", () => {
-      els.mainWorkspace.classList.remove("show-details");
+  // History Drawer Controls
+  const btnHistoryToggle = document.getElementById("btnHistoryToggle");
+  const btnCloseHistory = document.getElementById("btnCloseHistory");
+  const historyBackdrop = document.getElementById("historyBackdrop");
+  const btnDrawerNewChat = document.getElementById("btnDrawerNewChat");
+
+  if (btnHistoryToggle) btnHistoryToggle.addEventListener("click", openHistoryDrawer);
+  if (btnCloseHistory) btnCloseHistory.addEventListener("click", closeHistoryDrawer);
+  if (historyBackdrop) historyBackdrop.addEventListener("click", closeHistoryDrawer);
+  if (btnDrawerNewChat) btnDrawerNewChat.addEventListener("click", () => createNewThread());
+
+  // Language Selection Listener
+  const aiLanguageSelect = document.getElementById("aiLanguageSelect");
+  if (aiLanguageSelect) {
+    aiLanguageSelect.addEventListener("change", (e) => {
+      if (activeThreadId && threads[activeThreadId]) {
+        threads[activeThreadId].language = e.target.value;
+        saveThreadsToStorage();
+        renderThreadList();
+      }
     });
   }
+
+  // Model Selection Listener
+  const aiModelSelect = document.getElementById("aiModelSelect");
+  if (aiModelSelect) {
+    const savedModel = localStorage.getItem("medilink_selected_model");
+    if (savedModel) aiModelSelect.value = savedModel;
+
+    aiModelSelect.addEventListener("change", (e) => {
+      localStorage.setItem("medilink_selected_model", e.target.value);
+      if (activeThreadId && threads[activeThreadId]) {
+        threads[activeThreadId].model = e.target.value;
+        saveThreadsToStorage();
+      }
+    });
+  }
+
+  // Action Buttons
+  const btnNewConsultation = document.getElementById("btnNewConsultation");
+  const btnPDFDownload = document.getElementById("btnPDFDownload");
+  const btnFloatingPDF = document.getElementById("btnFloatingPDF");
+  const btnNearbyER = document.getElementById("btnNearbyER");
+  const aiImageInput = document.getElementById("aiImageInput");
+
+  if (btnNewConsultation) btnNewConsultation.addEventListener("click", () => createNewThread());
+  if (btnPDFDownload) btnPDFDownload.addEventListener("click", downloadPDFSummary);
+  if (btnFloatingPDF) btnFloatingPDF.addEventListener("click", downloadPDFSummary);
+  if (btnNearbyER) btnNearbyER.addEventListener("click", findNearbyHospitals);
+
+  if (aiImageInput) {
+    aiImageInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        addMessage(`📷 Attachment uploaded: ${file.name}. Dr. MediLink is scanning document text...`, "user");
+        recordMessageToActiveThread("user", `📷 Attachment uploaded: ${file.name}`);
+        addMessage(`📋 **Prescription / Document Scanner Preview:** Document "${file.name}" received. Dr. MediLink will cross-reference this report with your active health record.`, "bot");
+        recordMessageToActiveThread("assistant", `📋 Prescription / Document Scanner Preview: Document "${file.name}" received.`);
+      }
+    });
+  }
+
+  // Mobile responsive toggle & segmented switcher logic
+  const btnShowMore = document.getElementById("btnShowMore");
+  const btnBackToChat = document.getElementById("btnBackToChat");
+  const mobileTabChat = document.getElementById("mobileTabChat");
+  const mobileTabMatrix = document.getElementById("mobileTabMatrix");
+
+  function switchToMobileChat() {
+    if (els.mainWorkspace) els.mainWorkspace.classList.remove("show-details");
+    if (mobileTabChat) {
+      mobileTabChat.className = "flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 bg-white text-teal-800 shadow-sm flex items-center justify-center gap-1";
+    }
+    if (mobileTabMatrix) {
+      mobileTabMatrix.className = "flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1";
+    }
+  }
+
+  function switchToMobileMatrix() {
+    if (els.mainWorkspace) els.mainWorkspace.classList.add("show-details");
+    if (mobileTabMatrix) {
+      mobileTabMatrix.className = "flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 bg-white text-teal-800 shadow-sm flex items-center justify-center gap-1";
+    }
+    if (mobileTabChat) {
+      mobileTabChat.className = "flex-1 py-1.5 px-2.5 rounded-lg text-xs font-bold font-heading transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1";
+    }
+  }
+
+  if (btnShowMore) btnShowMore.addEventListener("click", switchToMobileMatrix);
+  if (btnBackToChat) btnBackToChat.addEventListener("click", switchToMobileChat);
+  if (mobileTabChat) mobileTabChat.addEventListener("click", switchToMobileChat);
+  if (mobileTabMatrix) mobileTabMatrix.addEventListener("click", switchToMobileMatrix);
 });
+
 // ==========================================
-// DIRECT AI CHAT — GROQ VIA RENDER
+// DIRECT AI CHAT — GROQ VIA RENDER WITH MULTI-THREAD MEMORY & STRICT LANGUAGE
 // ==========================================
 
 const aiQuestionInput = document.getElementById("aiQuestionInput");
 const aiSendButton = document.getElementById("aiSendButton");
+
+async function callMedicalAI(payload) {
+  const endpoints = [];
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:") {
+    endpoints.push("http://localhost:3000/api/medical-ai");
+    endpoints.push("http://localhost:5000/api/medical-ai");
+  }
+  endpoints.push("https://medilink-ai-v1.onrender.com/api/medical-ai");
+
+  let lastError = null;
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) return await res.json();
+      const errData = await res.json().catch(() => ({}));
+      lastError = errData.error || `Server returned status ${res.status}`;
+    } catch (e) {
+      lastError = e.message;
+    }
+  }
+  throw new Error(lastError || "Could not connect to MediLink AI server.");
+}
 
 async function sendAIQuestion() {
   const question = aiQuestionInput.value.trim();
 
   if (!question) return;
 
+  const targetLang = getSelectedLanguage();
+  const targetModel = getSelectedModel();
+
+  // Render & record user message in active thread
   addMessage(question, "user");
+  recordMessageToActiveThread("user", question);
 
   aiQuestionInput.value = "";
   aiSendButton.disabled = true;
@@ -2789,32 +3496,28 @@ async function sendAIQuestion() {
   showThinking();
 
   try {
-    const response = await fetch(
-      "https://medilink-ai-v1.onrender.com/api/medical-ai",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          question: question
-        })
+    const payload = {
+      question: question,
+      messages: getActiveThreadMessages(),
+      model: targetModel,
+      language: targetLang,
+      userProfile: {
+        name: getUserName(),
+        fullName: getUserName(),
+        age: getUserProfile().age,
+        gender: getUserProfile().gender,
+        disease: getUserDisease(),
+        allergy: getUserAllergy()
       }
-    );
+    };
 
-    const data = await response.json();
+    const data = await callMedicalAI(payload);
 
     removeThinking();
 
-    if (!response.ok) {
-      addMessage(
-        data.error || "Sorry, I could not process your question.",
-        "bot"
-      );
-      return;
-    }
-
-    addMessage(data.answer, "bot");
+    // Render & record assistant response memory
+    addMessage(data.answer, "bot", data.modelUsed);
+    recordMessageToActiveThread("assistant", data.answer, data.modelUsed);
 
   } catch (error) {
     console.error("AI connection error:", error);
@@ -2822,7 +3525,7 @@ async function sendAIQuestion() {
     removeThinking();
 
     addMessage(
-      "Sorry, I could not connect to MediLink AI. Please try again.",
+      error.message || "Sorry, I could not connect to MediLink AI. Please try again.",
       "bot"
     );
 

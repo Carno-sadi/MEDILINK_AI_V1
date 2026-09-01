@@ -110,24 +110,15 @@ const dom = {
 
 // ── 4. Initialization ──
 function init() {
-  // Render all chip grids
+  // Render gender chips
   renderChips("genderChips", GENDERS, "gender", false);
-  renderChips("bloodGroupChips", BLOOD_GROUPS, "bloodGroup", false);
-  renderChips(
-    "conditionsChips",
-    [...DISEASES, "None of the above"],
-    "conditions",
-    true,
-  );
-  renderChips("allergiesChips", ALLERGIES, "allergies", true);
 
   // Setup interactive elements
-  setupNKAChip();
   setupGoalCards();
   setupInputListeners();
   setupNavigation();
 
-  // CRITICAL FIX: Reveal all content immediately so page is not blank
+  // Reveal initial content
   revealAllInitialContent();
 
   // Sync UI to step 1
@@ -287,10 +278,12 @@ function setupGoalCards() {
   });
 }
 
-// ── 10. Input Listeners ──
+// // ── 10. Input Listeners & AI Real-Time Insight Preview ──
 function setupInputListeners() {
   const fullName = document.getElementById("fullName");
   const age = document.getElementById("age");
+  const customDisease = document.getElementById("customDisease");
+  const customAllergy = document.getElementById("customAllergy");
 
   if (fullName) {
     fullName.addEventListener("input", () => {
@@ -307,6 +300,45 @@ function setupInputListeners() {
       if (age.value) clearError("age");
     });
   }
+
+  if (customDisease) {
+    customDisease.addEventListener("input", () => {
+      const val = customDisease.value.trim() || "None";
+      userData.conditions = [val];
+      userData.disease = val;
+      clearError("conditions");
+      updateAIInsight();
+    });
+  }
+
+  if (customAllergy) {
+    customAllergy.addEventListener("input", () => {
+      const val = customAllergy.value.trim() || "None";
+      userData.allergies = [val];
+      userData.allergy = val;
+      clearError("allergies");
+      updateAIInsight();
+    });
+  }
+}
+
+function updateAIInsight() {
+  const box = document.getElementById("aiInsightBox");
+  const text = document.getElementById("aiInsightText");
+  if (!box || !text) return;
+
+  const d = userData.disease || "";
+  const a = userData.allergy || "";
+
+  if (d || a) {
+    box.classList.remove("hidden");
+    let msg = "Dr. MediLink AI Insight: ";
+    if (d && d !== "None") msg += `Analyzing condition "${d}". Tailoring care recommendations. `;
+    if (a && a !== "None") msg += `Allergy shield active for "${a}" (contraindications will be checked).`;
+    text.textContent = msg;
+  } else {
+    box.classList.add("hidden");
+  }
 }
 
 // ── 11. Navigation ──
@@ -317,14 +349,9 @@ function setupNavigation() {
     }
   });
 
-  dom.btnSkip.addEventListener("click", () => {
-    // Step 4 is optional — skip and finish immediately
-    finishOnboarding();
-  });
-
   dom.btnNext.addEventListener("click", () => {
     if (validateStep(userData.step)) {
-      if (userData.step < 4) {
+      if (userData.step < 3) {
         goToStep(userData.step + 1);
       } else {
         finishOnboarding();
@@ -422,37 +449,22 @@ function validateStep(step) {
     } else {
       clearError("gender");
     }
-
-    if (!userData.bloodGroup) {
-      showError("bloodGroup", "Please select your blood group");
-      isValid = false;
-    } else {
-      clearError("bloodGroup");
-    }
   }
 
   if (step === 2) {
-    if (userData.conditions.length === 0) {
-      showError("conditions", "Please select at least one option");
-      isValid = false;
-    } else {
-      clearError("conditions");
-    }
+    const customDisease = document.getElementById("customDisease");
+    const val = customDisease ? customDisease.value.trim() : "";
+    userData.conditions = [val || "None"];
+    userData.disease = val || "None";
+    clearError("conditions");
   }
 
   if (step === 3) {
-    if (userData.allergies.length === 0) {
-      showError("allergies", "Please select at least one option");
-      isValid = false;
-    } else {
-      clearError("allergies");
-    }
-  }
-
-  if (step === 4) {
-    // Step 4 (Primary Goal) is OPTIONAL
-    // No validation required
-    clearError("primaryGoal");
+    const customAllergy = document.getElementById("customAllergy");
+    const val = customAllergy ? customAllergy.value.trim() : "";
+    userData.allergies = [val || "None"];
+    userData.allergy = val || "None";
+    clearError("allergies");
   }
 
   return isValid;
@@ -503,7 +515,7 @@ function updateStepIndicator(currentStep) {
 
 function animateProgressBar(step) {
   if (dom.progressFill) {
-    const width = (step / 4) * 100;
+    const width = (step / 3) * 100;
     dom.progressFill.style.width = `${width}%`;
   }
 }
@@ -513,12 +525,10 @@ function updateButtons(step) {
     dom.btnBack.style.visibility = step === 1 ? "hidden" : "visible";
   }
 
-  if (step === 4) {
-    if (dom.btnNext) dom.btnNext.textContent = "Finish";
-    if (dom.btnSkip) dom.btnSkip.style.display = "inline-flex";
+  if (step === 3) {
+    if (dom.btnNext) dom.btnNext.textContent = "Finish & Start AI Advisor";
   } else {
     if (dom.btnNext) dom.btnNext.textContent = "Next";
-    if (dom.btnSkip) dom.btnSkip.style.display = "none";
   }
 }
 
@@ -526,7 +536,6 @@ function updateButtons(step) {
 function finishOnboarding() {
   saveToLocalStorage();
 
-  // Set default plan to basic if it doesn't exist
   if (!localStorage.getItem('medilink_user_plan')) {
     localStorage.setItem('medilink_user_plan', 'basic');
   }
@@ -534,14 +543,24 @@ function finishOnboarding() {
   if (dom.formCard) dom.formCard.classList.add("is-complete");
   if (dom.completionOverlay) dom.completionOverlay.classList.add("is-visible");
 
-  // Redirect to AI Advisor page immediately or after animation
   setTimeout(() => {
     window.location.href = "ai.html";
-  }, 1800);
+  }, 1200);
 }
 
 function saveToLocalStorage() {
-  localStorage.setItem("medilink_user_profile", JSON.stringify(userData));
+  const profile = {
+    name: userData.fullName || "Patient",
+    fullName: userData.fullName || "Patient",
+    age: userData.age || 30,
+    gender: userData.gender || "Not specified",
+    disease: userData.disease || (userData.conditions && userData.conditions[0]) || "None",
+    conditions: [userData.disease || "None"],
+    allergy: userData.allergy || (userData.allergies && userData.allergies[0]) || "None",
+    allergies: [userData.allergy || "None"],
+    registeredAt: new Date().toISOString()
+  };
+  localStorage.setItem("medilink_user_profile", JSON.stringify(profile));
 }
 
 // ── 17. Boot ──

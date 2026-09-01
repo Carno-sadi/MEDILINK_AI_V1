@@ -56,11 +56,23 @@
 html,
 body {
   height: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
   overflow: hidden;
   background-color: var(--bg);
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* --------------------------------------------
@@ -110,9 +122,9 @@ body {
    -------------------------------------------- */
 .chat-canvas {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 1.5rem;
-  padding-bottom: 7rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -120,7 +132,7 @@ body {
 }
 
 /* --------------------------------------------
-   Chat Bubbles
+   Chat Bubbles & Markdown Formatting
    -------------------------------------------- */
 .message {
   max-width: 88%;
@@ -151,6 +163,129 @@ body {
   border-bottom-left-radius: 0.25rem;
 }
 
+.message.markdown-body h1,
+.message.markdown-body h2,
+.message.markdown-body h3,
+.message.markdown-body h4 {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 0.75rem;
+  margin-bottom: 0.375rem;
+}
+
+.message.markdown-body h3 {
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+
+.message.markdown-body p {
+  margin-bottom: 0.5rem;
+}
+
+.message.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.message.markdown-body ul,
+.message.markdown-body ol {
+  margin-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.message.markdown-body li {
+  margin-bottom: 0.25rem;
+}
+
+.message.markdown-body strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.message.markdown-body code {
+  background: rgba(13, 148, 136, 0.1);
+  color: var(--primary);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+}
+
+/* Table Styles for Markdown Responses (Fully Scrollable on Mobile) */
+.message.markdown-body table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.8125rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 0.625rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--glass-border);
+}
+
+.message.markdown-body th {
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
+.message.markdown-body td {
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid rgba(13, 148, 136, 0.1);
+  color: #334155;
+}
+
+.message.markdown-body tr:nth-child(even) {
+  background: rgba(240, 253, 244, 0.6);
+}
+
+.message.markdown-body blockquote {
+  border-left: 4px solid var(--primary);
+  background: rgba(13, 148, 136, 0.08);
+  padding: 0.625rem 0.875rem;
+  margin: 0.625rem 0;
+  border-radius: 0.375rem;
+  color: #0f766e;
+  font-weight: 500;
+}
+
+/* Interactive Bot Message Action Bar */
+.msg-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(13, 148, 136, 0.2);
+}
+
+.msg-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(13, 148, 136, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.msg-action-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
 .message.thinking {
   align-self: flex-start;
   background: transparent;
@@ -174,9 +309,8 @@ body {
   border-top: 1px solid var(--glass-border);
   padding: 1rem 1.25rem;
   z-index: 10;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  flex-shrink: 0;
   width: 100%;
 }
 
@@ -679,5 +813,295 @@ body {
   }
   .main-grid.show-details {
     transform: translateX(-100vw);
+  }
+}
+
+/* --------------------------------------------
+   History Drawer Slide-Over & Micro-Animations
+   -------------------------------------------- */
+.history-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background: var(--surface);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  z-index: 90;
+  transform: translateX(-100%);
+  transition: transform 0.35s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+
+.history-drawer.open {
+  transform: translateX(0);
+}
+
+.history-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 85;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+}
+
+.history-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thread-item {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--glass-border);
+  background: var(--surface-alt);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.thread-item:hover {
+  background: rgba(13, 148, 136, 0.08);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.thread-item.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.thread-item.active .thread-desc,
+.thread-item.active .thread-time {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Micro interaction scale effect */
+.btn-animate {
+  transition: all 0.2s var(--ease);
+}
+
+.btn-animate:hover {
+  transform: scale(1.03);
+}
+
+.btn-animate:active {
+  transform: scale(0.97);
+}
+
+/* =============================================
+   Multi-Device & Smartphone Responsive Design System
+   ============================================= */
+
+/* Base main grid layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Tablets (<= 1024px) */
+@media (max-width: 1024px) {
+  nav {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Mobile Devices & Smartphones (<= 768px) */
+@media (max-width: 768px) {
+  /* Viewport & Container */
+  html, body {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  /* Two-screen slide rail layout */
+  .main-grid {
+    display: flex !important;
+    width: 200vw !important;
+    height: calc(100dvh - 3.5rem - 45px) !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateX(0);
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    flex: 0 0 100vw !important;
+    height: 100% !important;
+    border: none !important;
+    overflow-x: hidden;
+  }
+
+  /* Slide transition to show health matrix */
+  .main-grid.show-details {
+    transform: translateX(-100vw) !important;
+  }
+
+  /* Chat Canvas */
+  .chat-canvas {
+    padding: 0.75rem 0.875rem !important;
+    gap: 0.75rem !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Message Bubbles */
+  .message {
+    max-width: 92% !important;
+    padding: 0.75rem 0.95rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.875rem !important;
+  }
+
+  /* Bot action buttons inside message */
+  .msg-actions {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .msg-action-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    min-height: 32px;
+  }
+
+  /* Bottom Input Tray with iPhone Notch/Home Bar Safe Area */
+  .bottom-tray {
+    padding: 0.625rem 0.75rem calc(0.625rem + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Query Chips: Smooth horizontal scroll rail */
+  #chipContainer {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 0.45rem !important;
+    padding-bottom: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #chipContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: 0 0 auto !important;
+    scroll-snap-align: start;
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.75rem !important;
+    min-height: 32px;
+  }
+
+  /* Right Panel Dashboard */
+  .right-panel {
+    padding: 0.875rem !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .glass-card {
+    padding: 1rem !important;
+    border-radius: 0.875rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .hero-title {
+    font-size: 0.95rem !important;
+  }
+
+  /* Emergency cards on mobile */
+  .emergency-card {
+    padding: 0.875rem !important;
+  }
+}
+
+/* Compact Smartphones (<= 480px, e.g. iPhone 13/14/15, Pixel) */
+@media (max-width: 480px) {
+  /* Navigation Bar */
+  nav {
+    height: 3.5rem !important; /* 56px */
+    padding-left: 0.625rem !important;
+    padding-right: 0.625rem !important;
+  }
+
+  #aiLanguageSelect {
+    font-size: 11px !important;
+    padding: 5px 6px 5px 22px !important;
+    max-width: 82px !important;
+  }
+
+  #aiModelSelect {
+    font-size: 11px !important;
+    padding: 5px 6px !important;
+    max-width: 90px !important;
+  }
+
+  #bloodBadge {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+  }
+
+  /* Chat Input */
+  #aiQuestionInput {
+    font-size: 16px !important; /* Prevents auto-zoom in iOS Safari */
+    padding: 8px 10px !important;
+    border-radius: 0.75rem !important;
+  }
+
+  #aiSendButton {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: 0.75rem !important;
+  }
+
+  /* History slide-over drawer */
+  .history-drawer {
+    width: 85vw !important;
+    max-width: 300px !important;
+  }
+}
+
+/* Small / Narrow Smartphones (<= 360px, e.g. iPhone SE 1st gen, Galaxy Fold outer) */
+@media (max-width: 360px) {
+  nav {
+    padding-left: 0.4rem !important;
+    padding-right: 0.4rem !important;
+  }
+
+  #aiLanguageSelect,
+  #aiModelSelect {
+    font-size: 10px !important;
+    max-width: 76px !important;
+  }
+
+  .message {
+    max-width: 96% !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .bottom-tray {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
   }
 }
