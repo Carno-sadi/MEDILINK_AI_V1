@@ -2706,9 +2706,6 @@ function startPhase1() {
   // Render Prevention Guidelines in Right Panel
   renderPrevention();
 
-  // Render chips in locked state
-  renderChips(true);
-
   // Rotate orb sequence text every 1.5 seconds
   let orbIdx = 0;
   els.orbText.textContent = ORB_TEXTS[0];
