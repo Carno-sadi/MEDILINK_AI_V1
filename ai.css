@@ -1109,3 +1109,63 @@ body {
     padding-right: 0.5rem !important;
   }
 }
+/* MOBILE CHAT INPUT FIX */
+@media (max-width: 768px) {
+  html,
+  body {
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .main-grid {
+    height: calc(100dvh - 3.5rem) !important;
+    min-height: 0 !important;
+  }
+
+  .left-panel {
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .chat-canvas {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+  }
+
+  .bottom-tray {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    z-index: 100 !important;
+    box-sizing: border-box !important;
+    padding-bottom: calc(
+      0.625rem + env(safe-area-inset-bottom, 0px)
+    ) !important;
+  }
+
+  #aiQuestionInput {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  #aiSendButton {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
