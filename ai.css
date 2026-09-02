@@ -932,7 +932,7 @@ body {
   .main-grid {
     display: flex !important;
     width: 200vw !important;
-    height: calc(100dvh - 3.5rem - 45px) !important;
+    height: calc(100dvh - 4rem) !important;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translateX(0);
   }
@@ -981,12 +981,16 @@ body {
 
   /* Bottom Input Tray with iPhone Notch/Home Bar Safe Area */
   .bottom-tray {
-    padding: 0.625rem 0.75rem calc(0.625rem + env(safe-area-inset-bottom, 0px)) !important;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
-  }
+  padding: 0.625rem 0.75rem calc(0.625rem + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 30 !important;
+}
 
   /* Query Chips: Smooth horizontal scroll rail */
   #chipContainer {
