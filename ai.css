@@ -919,20 +919,20 @@ body {
 
 /* Mobile Devices & Smartphones (<= 768px) */
 @media (max-width: 768px) {
-  /* Viewport & Container */
-  html, body {
-    height: 100dvh;
-    min-height: 100dvh;
+  html,
+  body {
+    height: 100%;
+    min-height: 100%;
     overflow: hidden;
-    position: fixed;
     width: 100%;
+    position: static;
   }
-
+}
   /* Two-screen slide rail layout */
   .main-grid {
     display: flex !important;
     width: 200vw !important;
-    height: calc(100dvh - 4rem) !important;
+    height: calc(100dvh - 3.5rem) !important;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translateX(0);
   }
